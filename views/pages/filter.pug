@@ -1,0 +1,24 @@
+doctype html
+head
+    title Movie Database
+    link(rel='stylesheet' href='css/filter.css')
+    link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')
+header
+  include ../partials/navbar.pug
+  
+body
+    main
+      article
+        | Filter movies by 
+        br
+        input#title(type="text" placeholder="Movie Title")
+        br
+        input#year(type="text" placeholder="Year")
+        br
+        input#genre(type="text" placeholder="Genre")
+        br
+        input#minrating(type="text" placeholder="Minimum Rating")
+        br
+        button(type="button" onclick="generateQueryString()") Search
+
+    script(src="clientjs/filter.js")

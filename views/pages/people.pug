@@ -1,0 +1,15 @@
+doctype html
+head
+  title Movie Database
+  link(rel='stylesheet' href='css/people.css')
+  link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')
+header
+  include ../partials/navbar.pug
+  
+main
+  article#myArticle
+    each person in people
+        span.person
+          img(src="/images/blankpfp.png" width=50 height=50)
+          a(href="/people/"+person)=person 
+        br

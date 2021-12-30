@@ -1,0 +1,121 @@
+article{
+    font-size:2vw;
+    font-family: 'Lato', sans-serif;
+    position:absolute;
+    background: whitesmoke;
+    top:15vh;
+    left:10vw;
+    width:80vw;
+    height:100vh;
+    overflow: scroll;
+    opacity: 0.8;
+}
+
+article a{
+    text-decoration: none;
+}
+
+article a:hover{
+    font-size:x-large;
+    transition:all 0.3s ease 0s;
+}
+
+.label{
+    display:flex;
+}
+
+
+
+img{
+    width:30%;
+    height:20%;
+}
+
+.label{
+    color: #0f0f5e;
+    font-weight: bold;
+    font-size: 2.5vw;
+}
+
+#review{
+    width:50%;
+    height:30vh;
+    font-size: 1.5vw;
+}
+
+article input[type="submit"]{
+    width:20%;
+    font-size: 2vw;
+}
+
+#contributor-options{
+    position:relative;
+    left:5px;
+    bottom:0.5px;
+    width:100px;
+    height:40px;
+    border:0;
+    /* outline:0; */
+    background-color: white;
+}
+
+.input-fields input[type="text"]{
+    border:0;
+    border-top-left-radius:0;
+    border-bottom-left-radius:0;
+    background-color:white;
+    height:40px;
+    width:500px;
+    padding:20px;
+    /* outline:none; */
+    box-sizing:border-box;
+    text-align: center;
+    font-family: 'Lato', sans-serif;
+    border:2px solid silver;
+}
+
+
+#person-input-fields{
+    display:none;
+}
+
+article input[type="button"]{
+    background-color:#070101;
+    color: white;
+    height:40px;
+    width:200px;
+    box-shadow:0 2px #061135;
+    margin:10px;
+    margin-left:1px;
+    border:none;
+    font-family: 'Lato', sans-serif;
+    font-size: 1.5vw;
+    border-bottom:1px solid silver;
+    border-radius:20px;
+    text-align: center;
+    outline: none;
+}
+
+article input[type="button"]:hover{
+    cursor:pointer;
+}
+
+article input[type="button"]:active{
+    transform: translateY(2px);
+}
+
+label{
+    color:brown;
+    font-weight: bold;
+    font-size: 1.5vw;
+}
+
+article p{
+    font-size: 1.5vw;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+textarea{
+    font-size:1.25vw;
+}
+

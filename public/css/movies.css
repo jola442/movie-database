@@ -1,0 +1,37 @@
+article{
+    font-size:2vw;
+    font-family: 'Lato', sans-serif;
+    position:absolute;
+    background: whitesmoke;
+    top:15vh;
+    left:10vw;
+    width:80vw;
+    height:100vh;
+    overflow: scroll;
+    opacity: 0.8;
+}
+
+article a{
+    text-decoration: none;
+    font-family: 'Sansita Swashed', cursive;
+    width: 100%;
+}
+
+article a:hover{
+    /* position: absolute; */
+    font-size:2.5vw;
+    transition:all 0.3s ease 0s;
+}
+
+span{
+    display:inline-block;
+}
+
+.movie{
+    width:100%;
+    /* border-bottom:2px solid black; */
+    background-color:#ebe5e5;
+    
+}
+
+

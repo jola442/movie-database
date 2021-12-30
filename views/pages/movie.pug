@@ -1,0 +1,151 @@
+doctype html
+head
+  title Movie Database
+  link(rel='stylesheet' href='/css/movie.css')
+  link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')
+header
+  include ../partials/navbar.pug
+
+body(onload = "init()")
+  main
+    article#myArticle
+      #movieimage
+        if(movie.poster)
+          img(src=movie.poster width=300 height=398)
+        else
+          img(src="/images/blankmovie.jpg" width=300 height=398)
+      #movieInfo
+        #title
+          span.label Title: 
+          span= movie.title
+        #year
+          span.label Year: 
+          span= movie.year
+        #rated
+          span.label Rated: 
+          span= movie.rated
+        #runtime
+          span.label Runtime:
+          span= movie.runtime + " mins"
+        #genre
+          span.label Genre: 
+          //- span=movie.genres
+          -var count = 0;
+          each genre in movie.genres
+            -count++;
+            
+            if count === movie.genres.length
+              a(href="/movies?genre="+genre)= genre
+            else
+              a(href="/movies?genre="+genre)= genre + ", "
+        #director
+          -var count = 0;
+          span.label Director: 
+          each director in movie.directors
+            -count++;
+            if count === movie.directors.length
+              a(href="/people/"+director)= director 
+            else
+              a(href="/people/"+director)= director + ", "
+          if username
+            if(users[username].contributor == true)
+              button(id="add-director" type='button')
+                i.fa.fa-plus
+
+        #writer
+          -var count = 0;
+          span.label Writers: 
+          each writer in movie.writers
+            -count++;
+            if count === movie.writers.length
+              a(href="/people/"+writer)= writer 
+            else
+              a(href="/people/"+writer)= writer + ", "
+          if username
+            if(users[username].contributor == true)
+                button(id="add-writer" type='button')
+                  i.fa.fa-plus
+        #actors
+          -var count = 0;
+          span.label Actors: 
+          each actor in movie.actors
+            -count++;
+            if count === movie.actors.length
+              a(href="/people/"+actor)= actor
+            else
+              a(href="/people/"+actor)= actor + ", "
+          if username
+            if(users[username].contributor == true)
+                button(id="add-actor" type='button')
+                  i.fa.fa-plus
+        #plot
+          span.label Plot: 
+          span= movie.plot
+
+        #averageRating
+          span.label Average Rating:
+          - var roundedRating = movie.averageRating.toFixed(1); 
+          span= roundedRating
+        #similar-movies
+          -var count = 0;
+          span.label Similar Movies: 
+          if movie.similarMovies.length == 0
+            span
+              |None
+          else
+            each similarMovie in movie.similarMovies
+              -count++;
+              if count === movie.similarMovies.length || count == 10
+                a(href="/movies/"+similarMovie)= similarMovie
+                -break
+              else
+                a(href="/movies/"+similarMovie)= similarMovie + ", "
+        br
+
+        #reviews
+          h3 Reviews
+          if(movie.reviews.length === 0)
+              p No Reviews Yet
+          else
+            each review in movie.reviews
+              .review
+                .reviewer
+                  span.label Reviewer: 
+                  span.value
+                    a(href="/users/"+reviews[review].reviewer)=reviews[review].reviewer
+                .score
+                  span.label Score:
+                  span.value= reviews[review].rating
+                if(reviews[review].basic === false)
+                  .summary
+                    span.label Summary:
+                    span.value= reviews[review].summary
+                  .reviewText
+                    span.label Review Text:
+                    span.value= reviews[review].reviewText
+                    br
+                    br
+                else
+                  br 
+                  br
+      
+    
+      br
+      br
+      #makereview
+        label(for="rating") Score:
+        input(type="textbox" id="rating", placeholder="Specify a score out of 10")
+        br
+        label(for='review-text') Review
+        br
+        textarea#review-text(name='review-text' cols='50' rows='10' placeholder='Thoughts on this movie?')
+        br
+        //- input(type='button' value='Post')
+
+        label(for='review-summary') Summary
+        br
+        textarea#review-summary(name='review-summary' cols='30' rows='10' placeholder='A brief summary of your review')
+        br
+        input(type='button' value='Post Review', onclick="makeReview()")
+      
+    script(src='/clientjs/movie.js')

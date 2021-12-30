@@ -1,0 +1,67 @@
+doctype html
+head
+  title Movie Database
+  link(rel='stylesheet' href='/css/person.css')
+  link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')
+header
+  include ../partials/navbar.pug
+
+
+.infoPanel
+  #pfp
+    img(src='/images/blankpfp.png')
+    span#name #{person.name}
+    #role
+    if person.actor && person.director && person.writer
+        p Writer, Actor, Director
+    else if person.actor && person.director
+        p Actor, Director
+    else if person.actor && person.writer
+        p Actor, Writer
+    else if person.writer && person.director
+        p Writer, Director
+    else if person.actor
+        p Actor
+    else if person.writer
+        p Writer
+    else if person.director
+        p Director
+  br
+  .profileItems
+    .profileItem
+      .icon
+        i.fa.fa-film
+      .label
+        | Movies
+      #movies.value #{person.works.length}
+    .profileItem
+      .icon
+        i.fa.fa-user-circle
+      .label
+        | Worked with
+      #workedwith.value #{Object.keys(person.collaborators).length}
+
+  if username  
+    -var following = users[username].peopleFollowing.indexOf(person.name) > -1
+    if following == true
+        #unfollow.button
+            input(type='button' value='Unfollow', onclick = "unfollow()")
+    else
+        #follow.button
+            input(type='button' value='Follow' onclick = "follow()")
+
+.mainPane
+    h2 Movies
+    each movie in person.works
+        a(href="/movies/"+movie)=movie 
+        br
+    h2 Most Frequent Collaborators
+    each coworker in person.mostFrequentCollaborators
+        a(href="/people/"+coworker)=coworker
+        if(person.collaborators[coworker] > 1)  
+          span=" ("+ person.collaborators[coworker] + " times)"
+        else
+          span= " ("+ person.collaborators[coworker] + " time)"
+        br
+script(src="/clientjs/person.js")
+

@@ -1,0 +1,124 @@
+@import url('https://fonts.googleapis.com/css2?family=Nerko+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sansita+Swashed:wght@500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,700;1,500&display=swap');
+
+h2{
+    font-family: 'Roboto', sans-serif;
+    color: #301c1c;
+}
+
+.infoPanel{
+    position:absolute;
+    top:15vh;
+    left:2vw;
+    display:inline-block;
+    background: white;
+    width:25vw;
+    height:75vh;
+    border-radius: 20px;
+    font-size:20px;
+    border-bottom: 1px solid silver;
+    background:whitesmoke;
+    opacity:0.8;
+    font-family: 'Roboto', sans-serif;
+    color: #301c1c;
+}
+
+.infoPanel input[type="button"]{
+    height:10vh;
+    width:20vw;
+    border-radius:20px;
+    outline:none;
+    font-family: 'Lato', sans-serif;
+    background-color:#0e0909;
+    color: whitesmoke;
+    height:40px; 
+    margin-left:8%;
+    margin-bottom: 5%;
+    box-shadow:0 2px #000000;
+    font-family: 'Roboto', sans-serif;
+    color: white;
+    font-size: 1.5vw;
+}
+
+.button{
+    position:absolute;
+    bottom: 1vh;
+    width:100%;
+}
+
+#pfp{
+    border-bottom: 1px solid silver;
+    text-align: center;
+ 
+}
+#pfp img{
+    display:block;
+    margin-left:auto;
+    margin-right:auto;
+    width:60%;
+    height:30vh;
+    border-radius:20vw;
+    
+}
+
+.mainPane{
+    text-align: center;
+    position: absolute;
+    top:15vh;
+    right:5vw;
+    display:inline-block;
+    width:60vw;
+    height:100%;
+    overflow:scroll;
+    background: whitesmoke;
+    font-family: 'Lato', sans-serif;
+    border-radius: 20px;
+    opacity:0.8;
+    font-family: 'Sansita Swashed', cursive;
+}
+
+.mainPane h2{
+    border-bottom: 3px solid silver;
+}
+
+.mainPane a{
+    text-decoration: none;
+    text-decoration: none;
+    font-size:1.5vw;
+}
+.profileItems{
+    position:relative;
+    bottom:4vh;
+    width:100%;
+    display:flex;
+    justify-content:space-evenly;
+    text-align: center;
+    border-bottom: 1px solid silver;
+}
+
+input[type="button"]:hover{
+    cursor: pointer;
+}
+
+input[type="button"]:active{
+    transform: translateY(2px);
+}
+
+.label{
+    font-size:1.5vw;
+}
+
+.value{
+    font-size:1.5vw;
+}
+
+#name{
+    font-size: 2vw;
+}
+
+#loggedInUser{
+    display:none;
+}
+
+

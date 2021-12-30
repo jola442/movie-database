@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Movie Database</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+    <header>
+        <div id = "logo">
+         <a href="/home">JAYMovies</a>  
+        </div>
+        <nav>
+            <ul class= "navbar">
+                <!-- <li><input type="text"></li> -->
+                <li>
+                    <select name="search-options" id="search-options">
+                        <option value="title">Movie Title</option>
+                        <option value="genre">Movie Genre</option>
+                        <option value="minRating">Min Rating</option>
+                        <option value="year">Movie Year</option>
+                        <option value="users">Users</option>
+                        <option value="people">People</option>
+                    </select>
+                    <input type="text" id = "searchbar" name="searchbar" placeholder="Search...">
+                    <button type="submit" onclick=search()><i class="fa fa-search"></i></button>
+                </li>
+                <li><a href = "/index.html">Home</a></li>
+                <li><a href = "/movies">Movies</a></li>
+                <li><a href="/filter">Filter</a></li>
+                
+            </ul>
+        </nav>
+    </header>
+    <div class = "loginPanel">
+        <h1>Welcome</h1>
+        <!-- <form onsubmit() ="./index.html"> -->
+   
+            <input type="text" id = "username" name="username" placeholder="Username" required> 
+            <br><br>
+        
+            <input type="password" id= "password" name="password" placeholder="Password"required>
+            <br><br>
+
+       <input type="button" id="sign-in" value = "Sign In" onclick = verifyAccount()>
+
+ 
+    
+        <span>Not a member?</span>
+        
+        <input type="button" id="register" value = "Register" onclick = register()> <br>
+        
+    <!-- </form> -->
+    </div>
+    <link rel="stylesheet" href="/css/login.css">
+    <script src = "/clientjs/login.js"></script>
+
+</body>
+</html>

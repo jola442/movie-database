@@ -1,0 +1,91 @@
+head
+    title Movie Database
+    link(rel='stylesheet' href='css/contributor.css')
+    link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')
+
+    header
+        include ../partials/navbar.pug
+    main
+        article
+            | Add a movie, person, actor, writer or director
+            select#contributor-options(name="contributor-options" onchange="show()")
+                option(value="movie") Movie
+                option(value="person") Person
+                option(value="actor") Actor
+                option(value="director") Director
+                option(value="writer") Writer
+            span
+                input(type="button", id="autofill" value = "Autofill" onclick = "autofill()")
+            .input-fields
+                #person-input-fields
+                    #person-field
+                        p A person can only be added if they are not already in the database
+                        input(type="text" placeholder="Person Name")
+                    #actor-field
+                        p The actor must already exist in the database
+                        input(type="text" placeholder="Movie Title")
+                        input(type="text" placeholder="Actor Name")
+                    #director-field
+                        p The director must already exist in the database
+                        input(type="text" placeholder="Movie Title")
+                        input(type="text" placeholder="Director Name")
+                    #writer-field
+                        p The writer must already exist in the database
+                        input(type="text" placeholder="Movie Title")
+                        input(type="text" placeholder="Writer Name")
+                #movie-input-fields
+                    p Separate genres, actors, directors and writers with commas
+                    p New actors, writers or directors are allowed
+                    table
+                        tr
+                            #title-field
+                                td
+                                    label(for="title") Movie Title:
+                                td
+                                    input(type="text", id="title-text")
+                        tr
+                            #year-field
+                                td
+                                    label(for="year") Year:
+                                td
+                                    input(type="text", id="year-text")
+                        tr
+                            #rated-field
+                                td
+                                    label(for="rated") Rated:
+                                td
+                                    input(type="text", id="rated-text" placeholder = "PG-13, PG, G, R, UR, NR etc.")
+                        tr
+                            #runtime-field
+                                td
+                                    label(for="runtime") Runtime:
+                                td
+                                    input(type="text", id="runtime-text" placeholder = "in minutes")
+                        tr
+                            #genre-field
+                                td
+                                    label(for="genre") Genres:
+                                td
+                                    input(type="text" id="genre-text")
+                        tr
+                            #movie-director-field
+                                td
+                                    label(for="movie-director") Directors:
+                                td
+                                    input(type="text" id="director-text")
+                        tr
+                            #movie-writer-field
+                                td
+                                    label(for="movie-writer") Writers:
+                                td
+                                    input(type="text" id="writer-text")
+                        tr
+                            #movie-actor-field
+                                td
+                                    label(for="movie-actor") Actors:
+                                td
+                                    input(type="text" id="actor-text")
+                    textarea#plot-text(name="plot" cols="100" rows="10" placeholder="Movie Plot")
+                input#add(type="button" value="Add" onclick="add()")
+    body
+        script(src="clientjs/contributor.js")

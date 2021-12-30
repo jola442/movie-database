@@ -1,0 +1,21 @@
+doctype html
+head
+  title Movie Database
+  link(rel='stylesheet' href='/css/index.css')
+  link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')
+header
+  include ../partials/navbar.pug
+        
+main
+  article
+    h1 Featured Movies
+    .featured-movies
+      each movie in movies
+        .featured-movie
+            .label
+                a(href="/movies/"+movie.title) #{movie.title}
+            if movie.poster
+              img(src=movie.poster alt='')
+            else
+              img(src="images/blankmovie.jpg" width=300 height=398)
+

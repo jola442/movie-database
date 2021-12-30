@@ -1,0 +1,103 @@
+@import url('https://fonts.googleapis.com/css2?family=Sansita+Swashed:wght@500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bangers&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@700&display=swap');
+html{
+    background:url("/images/moviebg.jpg") no-repeat center center fixed;
+    -webkit-background-size:cover;
+    -moz-background-size:cover;
+    -o-background-size:cover;
+    background-size: cover;
+}
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    list-style:none;
+}
+
+.navbar li a{
+    font-family: 'Sansita Swashed', cursive;
+    font-weight:500;
+    color:#edf0f1;
+    text-decoration: none;
+    font-size:20px;
+}
+
+#logo a{
+    font-weight:500;
+    text-decoration:none;
+    font-size:30px;
+    font-family: 'Bangers', cursive;
+    color:#edf0f1;
+    text-decoration: none;
+}
+
+header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:20px 10%;
+    background-color:#330d0d;
+    height:60px;
+    opacity:0.8; 
+}
+
+.navbar ul{
+    list-style:none;
+    
+}
+
+.navbar li{
+    display: inline-block;
+    padding:0px 10px;
+
+}
+
+.navbar li a{
+    transition:all 0.3s ease 0s;
+}
+
+.navbar li a:hover{
+    color:#2696aa;
+}
+
+
+#searchbar{
+    border:0;
+    border-top-left-radius:0;
+    border-bottom-left-radius:0;
+    background-color: whitesmoke;
+    height:40px;
+    width:250px;
+    outline:none;
+    box-sizing:border-box;
+    text-align: center;
+    font-family: 'Lato', sans-serif;
+    border-left:none;
+}
+
+.navbar button{
+    float:right;
+    width:40px;
+    height:40px;
+    border-top-right-radius:20px;
+    border-bottom-right-radius:20px;
+    border-left: none;   
+    background: whitesmoke;
+    border: 0;
+}
+
+#search-options{
+    position:relative;
+    left:5px;
+    bottom:0.5px;
+    width:120px;
+    height:40px;
+    border:0;
+    outline:0;
+}
+
+#hiddenusername{
+    display: none;
+}

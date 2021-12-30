@@ -1,0 +1,33 @@
+#logo
+    a(href="/home") JAYMovies
+nav
+    ul.navbar
+        li
+                //form.searchbar
+                select#search-options(name='search-options')
+                    option(value='title') Movie Title
+                    option(value='genre') Movie Genre
+                    option(value='minrating') Min Rating
+                    option(value='year') Movie Year
+                    option(value='users') Users
+                    option(value='people') People
+                input#searchbar(type='text' name='searchbar' placeholder='Search...')
+                button(type='button' onclick = "search()")
+                    i.fa.fa-search
+        li
+            a(href='/home') Home
+        li
+            a(href='/movies') Movies
+        li
+            a(href="/filter") Filter
+        if(username)
+            li
+                a(href='/users/'+username) Profile
+        li
+            if (username)
+                a(href='/login.html' onclick="signOut()") Sign Out
+            else
+                a(href='/login.html') Sign In
+        #hiddenusername= username
+script(src = "/clientjs/navbar.js")
+link(rel="stylesheet" href="/css/navbar.css")

@@ -1,0 +1,22 @@
+doctype html
+head
+  title Movie Database
+  link(rel='stylesheet' href='/css/movies.css')
+  link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')
+header
+  include ../partials/navbar.pug
+  
+main
+  //- #{movies}
+  article#myArticle
+    if movies.length == 0
+      |This movie is not in the database
+    else
+      each movie in movies
+          span.movie
+            if modelMovies[movie].poster
+              img(src=modelMovies[movie].poster width=50 height = 50)
+            else
+              img(src="/images/blankmovie.jpg" width=50 height=50)
+            a(href="/movies/"+movie)=movie
+          br

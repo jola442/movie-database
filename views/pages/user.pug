@@ -1,0 +1,93 @@
+doctype html
+head
+    title Movie Database
+    link(rel='stylesheet' href='/css/user.css')
+    link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')
+header
+    include ../partials/navbar.pug
+
+  
+.infoPanel
+    #pfp
+        img(src='/images/blankpfp.png')
+        span#username #{user.username}
+    br
+    .profileItems
+        .profileItem
+            .icon 
+                i.fa.fa-users
+            .label Followers 
+            #followers.value #{user.followers.length}
+        .profileItem
+            .icon 
+                i.fa.fa-users
+            .label Following
+            #following.value #{user.usersFollowing.length + user.peopleFollowing.length}
+        .profileItem
+            .icon 
+                i.fa.fa-user-circle
+            .label Account Type
+            #accountType.value 
+                if user.contributor === true
+                    |Contributor
+                else
+                    |Normal
+
+    if username  
+        if username === user.username
+            if users[username].contributor == true
+                #contributor-options
+                    a(href="/contributor-options") Contributor Options
+            #changeAccountType.button
+                input(type='button' value='Change Account Type', onclick = "changeAccountType()")
+        else
+            -var following = users[username].usersFollowing.indexOf(user.username) > -1
+            if following === true
+                #unfollow.button
+                    input(type='button' value='Unfollow', onclick = "unfollow()")
+            else
+                #follow.button
+                    input(type='button' value='Follow' onclick = "follow()")
+       
+
+
+.mainPane
+    h2 Recommended Movies
+    -count = 0;
+    each movie in user.recommendedMovies
+      
+        if count == 10
+            -break
+        li
+          a(href="/movies/"+movie) #{movie}
+        -count++;
+    h2 Followers
+    each follower in user.followers
+      li
+        a(href="/users/"+follower) #{follower}
+    h2 Users Following
+    each following in user.usersFollowing
+      li
+        a(href="/users/"+following) #{following}
+    h2 People Following
+    each person in user.peopleFollowing
+      li
+        a(href="/people/"+person) #{person}
+    h2 Reviews
+    each review in user.reviews
+        .reviewItem
+            li
+                .label= "Movie"
+                a(href="/movies/"+reviews[review].movieTitle)=  reviews[review].movieTitle
+
+                .label= "Score"
+                p= reviews[review].rating
+                if(reviews[review].basic == false)
+                    .label= "Review"
+                    p= reviews[review].reviewText
+                    .label= "Summary"
+                    p= reviews[review].summary
+
+                
+        
+script(src='/clientjs/user.js')

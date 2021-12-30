@@ -1,0 +1,18 @@
+doctype html
+head
+  title Movie Database
+  link(rel='stylesheet' href='css/users.css')
+  link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')
+header
+  include ../partials/navbar.pug
+  
+main
+  article#myArticle
+    if users.length == 0
+        |This user is not in the database
+    else
+        each user in users
+            span.user
+              img(src="/images/blankpfp.png" width = 50 height = 50)
+              a(href="/users/"+user)=user 
+              br

@@ -1,0 +1,54 @@
+article{
+    font-size:2vw;
+    font-family: 'Sansita Swashed', cursive;
+    position:absolute;
+    background: whitesmoke;
+    height:60vh;
+    width:20vw;
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); 
+    opacity: 0.8;
+    text-align: center;
+}
+
+article input[type="text"]{
+    /* position: absolute; */
+    display: flex;
+    justify-content: center;
+    padding:10px;
+    margin: auto;
+    width:18vw;
+    left:10%;
+    border-radius:20px;
+    background-color:whitesmoke;
+    outline:none;
+}
+
+article button{
+    background-color:#0e0909;
+    color: white;
+    height:40px;
+    width:200px;
+    box-shadow:0 2px #000000;
+    margin:10px;
+    margin-left:1px;
+    border:none;
+    font-family: 'Lato', sans-serif;
+    border-bottom:1px solid silver;
+    border-radius:20px;
+    text-align: center;
+    outline: none;
+    width:97%;
+}
+
+article button:hover{
+    cursor:pointer;
+}
+
+article button:active{
+    transform: translateY(2px);
+}
+

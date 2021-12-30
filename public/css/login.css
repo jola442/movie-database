@@ -1,0 +1,174 @@
+@import url('https://fonts.googleapis.com/css2?family=Sansita+Swashed:wght@500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bangers&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nerko+One&display=swap');
+
+html{
+    background:url("/images/moviebg.jpg") no-repeat center center fixed;
+    -webkit-background-size:cover;
+    -moz-background-size:cover;
+    -o-background-size:cover;
+    background-size: cover;
+}
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+.navbar li a{
+    font-family: 'Sansita Swashed', cursive;
+    font-weight:500;
+    color:#edf0f1;
+    text-decoration: none;
+    font-size:20px;
+}
+
+#logo a{
+    font-weight:500;
+    text-decoration:none;
+    font-size:30px;
+    font-family: 'Bangers', cursive;
+    color:#edf0f1;
+    text-decoration: none;
+}
+
+header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:30px 10%;
+    background-color:#270903;
+    height:60px;
+    opacity:0.8; 
+}
+
+.navbar ul{
+    list-style:none;
+    
+}
+
+.navbar li{
+    display: inline-block;
+    padding:0px 20px;
+
+}
+
+.navbar li a{
+    transition:all 0.3s ease 0s;
+}
+
+.navbar li a:hover{
+    color:#2696aa;
+}
+
+
+#searchbar{
+    border:0;
+    border-top-left-radius:0;
+    border-bottom-left-radius:0;
+    background-color: whitesmoke;
+    height:40px;
+    width:250px;
+    outline:none;
+    box-sizing:border-box;
+    text-align: center;
+    font-family: 'Lato', sans-serif;
+    border-left:none;
+}
+
+.navbar button{
+    float:right;
+    width:40px;
+    height:40px;
+    border-top-right-radius:20px;
+    border-bottom-right-radius:20px;
+    border-left: none;   
+    background: whitesmoke;
+    border: 0;
+}
+
+#search-options{
+    position:relative;
+    left:5px;
+    bottom:0.5px;
+    width:120px;
+    height:40px;
+    border:0;
+    outline:0;
+}
+
+.loginPanel{
+    position: absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    font-family: 'Lato', sans-serif;
+    background: white;
+    border-radius: 20px;
+    height:70vh;
+    padding:30px;
+    width:25vw;
+    font-size:1.25vw;
+    opacity: 0.8;
+}
+
+.loginPanel h1{
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+    border-bottom:1px solid silver;
+    padding:0 0 20px 0;
+    font-family: 'Sansita Swashed', cursive;    
+}
+
+.loginPanel a{
+    text-decoration: none;
+}
+
+.loginPanel input{
+    position: relative;
+    /* border-bottom:2px solid #adadad; */
+    margin:10px;
+    margin-left:1px;
+    border:none;
+    font-family: 'Lato', sans-serif;
+    height:30px;
+    width:100%;
+    border-bottom:1px solid silver;
+    border-radius:20px;
+    text-align: center;
+    outline: none;
+}
+
+
+#sign-in{
+    background-color:#0e0909;
+    color: white;
+    height:40px;
+    box-shadow:0 2px #000000;
+}
+
+#sign-in:hover{
+    cursor:pointer;
+}
+
+#sign-in:active{
+    transform: translateY(2px);
+}
+
+#register{
+    height:40px;
+    color:white;
+    box-shadow:0 2px #08083f;
+    background-color: #ad2b14;
+}
+
+#register:hover{
+    cursor:pointer;
+}
+
+#register:active{
+    transform: translateY(2px);
+}
+
