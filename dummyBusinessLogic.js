@@ -510,40 +510,66 @@ Output: Boolean representing whether the moviewas successfully added or not
 */
 function addMovie(username, movieObj){
     if(!isValidUser(users[username])){
+        // console.log(username, "is not a valid user");
+        // console.log(1);
         return false;
     }
   
 
-    if(!users[username].contributor && movieObj.hasOwnProperty(movieObj.title) && movies.hasOwnProperty(movieObj.title)){
+    if(!users[username].contributor || movies.hasOwnProperty(movieObj.title)){
+        // console.log(2);
+        return false;
+    }
+
+    if(!validRatings.includes(movieObj.rated)){
+        // console.log("valid ratings does not include", movieObj.rated);
         return false;
     }
 
     //return false if the actors, writers and genre attributes are not arrays
     //or if they are empty arrays
-    if(Array.isArray(movieObj.directors) && Array.isArray(movieObj.actors) && Array.isArray(movieObj.writers) && Array.isArray(movieObj.genre)){
-        if(movieObj.actors.length < 1 || movieObj.writers.length < 1|| movieObj.genre.length < 1){
+    if(Array.isArray(movieObj.directors) && Array.isArray(movieObj.actors) && Array.isArray(movieObj.writers) && Array.isArray(movieObj.genres)){
+        if(movieObj.actors.length < 1 || movieObj.writers.length < 1|| movieObj.genres.length < 1){
+            // console.log(3);
             return false;
         }
         actors = removeDuplicates(movieObj.actors);
         writers = removeDuplicates(movieObj.writers);
-        genre = removeDuplicates(movieObj.genre);
+        genres = removeDuplicates(movieObj.genres);
     }
 
     else{
+        // console.log(4);
         return false;
     }
 
     //Add each actor, writer and director to the movie'spersonnel list
     //and update each person's works and collaborator lists
     //provided the user gives enough information
+
+    // console.log(typeof(movieObj.rated));
+    // console.log(typeof(movieObj.plot));
+    // console.log(typeof(movieObj).runtime);
+    // console.log(typeof(movieObj).year);
+
+    try{
+        movieObj.runtime = Number(movieObj.runtime);
+        movieObj.year = Number(movieObj.year);
+    }
+
+    catch{
+        // console.log("failed because of type checking");
+        return false;
+    }
+
     if(movieObj.year && movieObj.runtime && movieObj.plot && movieObj.rated
-        && typeof(movieObj.rated) === "string" && typeof(movieObj.year) ==="string" && typeof(movieObj.runtime) === "string" &&
-         typeof(movieObj.plot) === "string"){
+        && typeof(movieObj.rated) === "string" && typeof(movieObj.plot) === "string"){
+        movieObj.personnel = [];
         for(directorName of movieObj.directors){
-            if(!isValidPerson(people[directorName])){
-                return false;
+            if(!people.hasOwnProperty(directorName)){
+                addPerson(users[username], {name:directorName});
             }
-            movieObj.personnel = [];
+            
             movieObj.personnel.push(directorName);
             people[directorName].director = true;
             if(!people[directorName].works.includes(movieObj.title)){
@@ -553,8 +579,13 @@ function addMovie(username, movieObj){
  
         
         for(actorName of movieObj.actors){
-            if(!isValidPerson(people[actorName])){
-                return false;
+            // if(!isValidPerson(people[actorName])){
+            //     // console.log(6);
+            //     return false;
+            // }
+
+            if(!people.hasOwnProperty(actorName)){
+                addPerson(users[username], {name:actorName});
             }
 
             people[actorName].actor = true;
@@ -569,8 +600,8 @@ function addMovie(username, movieObj){
         }
         
         for(writerName of movieObj.writers){
-            if(!isValidPerson(people[writerName])){
-                return false;
+            if(!people.hasOwnProperty(writerName)){
+                addPerson(users[username], {name:writerName});
             }
 
             people[writerName].writer = true;
@@ -589,9 +620,6 @@ function addMovie(username, movieObj){
         //Updating the collaborators of every person involved in the movie
         for(let i = 0; i < movieObj.personnel.length; i++){
             let personOneName = movieObj.personnel[i];
-            let actorsList = movieObj.actors;
-            let writersList = movieObj.writers;
-            let directorsList = movieObj.directors;
             for(let j = 0; j < movieObj.personnel.length; j++){
                 let personTwoName = movieObj.personnel[j];
                 if(personOneName === personTwoName){
@@ -610,6 +638,7 @@ function addMovie(username, movieObj){
         //Updating the most frequent collaborators of each person in the movie
         for(let i = 0; i < movieObj.personnel.length; i++){
             updateMostFrequentCollaborators(movieObj.personnel[i]);
+            // console.log(people[movieObj.personnel[i]], people[movieObj.personnel[i]].collaborators);
         }
 
         movieObj.numRatings = 0;
@@ -619,12 +648,25 @@ function addMovie(username, movieObj){
         movieObj.similarMovies = [];
         movies[movieObj.title] = movieObj;
         updateSimilarMovies();
+
+        
+        for(let i = 0; i < movieObj.personnel.length; i++){
+            for(let j = 0; j < people[movieObj.personnel[i]].followers.length; j++){;
+                let followerName = people[movieObj.personnel[i]].followers[j];
+                users[followerName].notifications.push(movieObj.personnel[i] + " was added to "+ movieObj.title);
+                // console.log(users[followerName].notifications);
+            }
+        }
         return true;
     }
-    console.log(7);
+    // console.log("type of", movieObj.rated, typeof(movieObj.rated));
+    // console.log("type of", movieObj.plot, typeof(movieObj.plot));
+    // console.log("movie.rated", movieObj.rated);
+    // console.log("movie.runtime", movieObj.runtime);
+    // console.log("movie.plot", movieObj.plot);
+    // console.log("movie.year", movieObj.year);
     return false;
 }
-
 
 /*
 This function retrieves a review object if it is part of the database
