@@ -13,7 +13,7 @@ let movieSchema = Schema({
             ref: 'Person', 
             }],
         required:true,
-        validate: [function(){return this.writers.length >= 1}]
+        // validate: [function(){return this.writers.length >= 1}]
 
     },
 
@@ -23,14 +23,14 @@ let movieSchema = Schema({
             ref: 'Person', 
             }],
         required:true,
-        validate: [function(){return this.actors.length >= 1}]
+        // validate: [function(){return this.actors.length >= 1}]
 
     },
 
     genres: {
         type:[String],
         required: true,
-        validate: [function(){return this.genres.length >= 1}]
+        // validate: [function(){return this.genres.length >= 1}]
     },
 
 
@@ -44,7 +44,7 @@ let movieSchema = Schema({
         required:true
     },
     runtime: {
-        type:Number,
+        type:String,
         required:true
     },
     plot: {
@@ -57,7 +57,7 @@ let movieSchema = Schema({
     }, 
     poster: {
         type:String,
-        required: true
+        // required: true
     }
 });
 

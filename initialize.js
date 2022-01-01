@@ -37,6 +37,14 @@ model.db.once('open', function() {
 					console.log(err);
 				}
 
+				model.addMovie("Jola", {title:"Movie 1", director:"Director 1", actors:["Actor 1", "Actor 1", "Actor 2"], writers:["Writer 1", "Writer 3"], genres:["Action","Action", "Adventure"], year:"2001", runtime:"80 min", plot:"Boring", rated:"G"});
+
+				model.addMovie("Jola", {title:"Movie 2", director:"Director 2", actors:["Actor 2", "Actor 2", "Actor 3"], writers:["Writer 3","Writer 2"], genres:["Action","Drama", "Adventure"], year: "2001", runtime:"80 min", plot:"Boring", rated:"G"});
+
+				model.addMovie("Jola", {title:"Movie 3", director:"Director 2", actors:["Actor 1", "Actor 2", "Actor 3"], writers:["Writer 1","Writer 3","Writer 2"], genres:["Fantasy","Drama", "Adventure"], year:"2002", runtime:"80 min", plot:"Boring", rated:"R"});
+
+				model.addMovie("Jola", {title:"Movie 4", director:"Director 2", actors:["Actor 1", "Actor 3"], writers:["Writer 1","Writer 3"], genre:["Fantasy","Drama", "Adventure"], year:"2002", runtime:"80 min", plot:"Boring", rated:"R"});
+
 				movieCount = 0;
 				for(movie of movies){
 					let writers = movie.Writer.split(", ");    
@@ -65,16 +73,16 @@ model.db.once('open', function() {
 					let processedRuntime = movie.Runtime.slice(0,-4);
 
 					
-					model.addMovie("Jola", {title:movie.Title,
-						director:directors[0],
-						actors:actors,
-							writers:writers, 
-							genres:movie.Genre.split(","),
-							year: Number(movie.Year), 
-							runtime:Number(processedRuntime),
-							plot:String(movie.Plot),
-							rated:String(movie.Rated), 
-							poster:movie.Poster})
+					// model.addMovie("Jola", {title:movie.Title,
+					// 	director:directors[0],
+					// 	actors:actors,
+					// 		writers:writers, 
+					// 		genres:movie.Genre.split(","),
+					// 		year: Number(movie.Year), 
+					// 		runtime:Number(processedRuntime),
+					// 		plot:String(movie.Plot),
+					// 		rated:String(movie.Rated), 
+					// 		poster:movie.Poster})
 								
 							
 				}

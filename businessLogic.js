@@ -30,8 +30,8 @@ The username of the user is not taken
 The user object is valid (has a username and password attribute)
 */
 function addUser(userObj, callback){
-    newUser = new User(userObj);
-    newUser.save((err, result) => {
+    // newUser = new User(userObj);
+    User.create(userObj, function(err, result){
         if(err){
 			console.log(err);
 			callback("Could not create user", false);
@@ -64,7 +64,7 @@ function addPerson(username, personObj, callback){
         if(user){
             if (user.contributor){
                 person = new Person(personObj);
-                person.save(function(err){
+                Person.create(personObj,function(err){
                     if(err){
                         // callback("Could not insert person");
                         console.log(err);
@@ -90,16 +90,17 @@ function addPerson(username, personObj, callback){
 
 
 
-function addMovie(username, movieObj){
+function addMovie(username, movieObj, callback){
     userQuery = User.findOne().where("username").equals(username);
     movieQuery = Movie.findOne().where("title").equals(movieObj.title);
     newMovie = new Movie(movieObj);
+    console.log(newMovie);
     newMovie.actors = [];
     newMovie.writers = [];
 
     userQuery.exec(function(err, result){
         if(err){
-            // callback("Could not add movie 1");
+            callback("Could not add movie 1");
             console.log(err);
             return;
         }
@@ -107,230 +108,203 @@ function addMovie(username, movieObj){
         user = result;
 
         if(!user){ 
-            // callback("This user does not exist");
+            callback("This user does not exist");
             console.log(err);
             return;
         }
 
         if(!user.contributor){
-            // callback("Only contributors can add movies")
+            callback("Only contributors can add movies")
             return;
         }
 
         Movie.findOne({title: movieObj.title}, function(err, result){
             if(err){
                 console.log(err);
-                // callback("Could not add movie 3");
+                callback("Could not add movie 3");
                 console.log(err);
                 return;
             }
 
             if(result){
-                // callback("A movie with this title already exists");
+                callback("A movie with this title already exists");
+                return;
             }
 
-            else{
-                actorsAdded = 0;
-                writersAdded = 0;
-                
-                actorAdditionCallback = function(){
-                    movieObj.actors.forEach(actorName => {
-                        Person.findOne({name:actorName}, function(err, result){
-                            if(err){
-                                // callback("Could not add movie 4");
-                                console.log(err);
-                                return;
-                            }
-                            actor = result;
-                            if(actor){
-                                newMovie.actors.push(actor["_id"]);
-                                // console.log("Added an actor");
-                                ++actorsAdded;
+            let directorAddition = function(callback){
+                Person.findOne({name:movieObj.director}, function(err, result){
+                    if(err){
+                        console.log(err);
+                    }
 
-                                if(actorsAdded == movieObj.actors.length){
-                                            
-                                    // console.log("Added all actors!")
-                                    writerAdditionCallback();
+                    else{
+                        director = result;
+                        //If the director already exists in the database, make them the movie director
+                        if(director){
+                            newMovie.director = director.name;
+                            callback();
+                        }
+
+                        //Otherwise add them to the database then make them the movie director
+                        else{
+                            directorName = movieObj.director;
+                            Person.create({name:directorName, director:true}, function(err, newInstance){
+                                if(err){
+                                    console.log(err);
                                     return;
                                 }
-                            }
-                            else{
-                                addPerson(username, {name: actorName, actor:true}, function(){
-                                    if(err){
-                                        // callback("Could not add movie 5");
-                                        return;
-                                    }
-
-                                    Person.findOne({name: actorName},function(err, result){
-                                        if(err){
-                                            // callback("Could not add movie 6");
-                                            console.log(err);
-                                            return;
-                                        }
-                                        actor = result;
-                                        newMovie.actors.push(actor["_id"])
-                                        ++actorsAdded;
-                                        // console.log("Added an actor");
-
-                                        if(actorsAdded == movieObj.actors.length){
-                                            
-                                            console.log("Added all actors!")
-                                            writerAdditionCallback();
-                                            return;
-                                        }
-
-                                        
-                                        
-
-                                    })/*.clone()*/
-                                })
-                            }
-   
-
-                        
-                        })
-
-
-                    })
-                }
-
-                   
-            
-
-                writerAdditionCallback = function(){
-                    movieObj.writers.forEach(writerName => {
-                        Person.findOne({name:writerName}, function(err, result){
-                            if(err){
-                                // callback("Could not add movie 7");
-                                console.log(err);
-                                return;
-                            }
-                            writer = result;
-                            if(writer){
-                                newMovie.writers.push(writer["_id"]);
-                                ++writersAdded;
-
-                                if(writersAdded == movieObj.writers.length){
-                                    console.log("Added all writers!")
-                                    newMovie.writer = writer.name;
-                                    newMovie.save(function(err){
-                                        if(err){
-                                            // callback("Could not add movie 12");
-                                            console.log(err);
-                                            return;
-                                        }
-                                        console.log("Inserted movie!")
-                                        
-                                        
-                                        updateCollaborators(newMovie);
-                                        updateSimilarMovies();
-    
-                                    })
-                                }
-                            }
-                            else{
-                                addPerson(username, {name: writerName, writer: true}, function(){
-                                    if(err){
-                                        // callback("Could not add movie");
-                                        console.log(err);
-                                        return;
-                                    }
-                                    
-
-                                    Person.findOne({name:writerName}, function(err, result){
-                                        if(err){
-                                            // callback("Could not add movie 8");
-                                            console.log(err);
-                                            return;
-                                        }
-                                        writer = result;
-
-                                        if(writer){
-                                            newMovie.writers.push(writer["_id"])
-                                            // console.log("Added a writer");
-                                            
-                                            ++writersAdded
-
-                                            if(writersAdded == movieObj.writers.length){
-                                                console.log("Added all writers!")
-                                                newMovie.writer = writer.name;
-                                                newMovie.save(function(err){
-                                                    if(err){
-                                                        // callback("Could not add movie 12");
-                                                        console.log(err);
-                                                        return;
-                                                    }
-                                                    console.log("Inserted movie!")
-                                                    
-                                                    
-                                                    // updateCollaborators(newMovie);
-                                                    // updateSimilarMovies();
-                
-                                                })
-                                            }
-                                        }
-
-                                        })
-                                })
-                            }
-
-                        })
-                    })
-                }
-                
-
-                
-
-
-                directorAddition = function(){
-                    // console.log("inside director callback")
-                    directorQuery = Person.findOne({name:movieObj.director}, function(err, result){
-                        if(err){
-                            // callback("Could not add movie");
-                            console.log(err);
+                                newMovie.director = newInstance.name;
+                                callback();
+                            })
                         }
-                        director = result;
 
-                        if(director){
-                            actorAdditionCallback();
-                            return;
+
+                        }
+                })
+            }
+
+            let actorAddition = function(callback){
+                console.log("Actor addition called")
+                actorsAdded = 0;
+                movieObj.actors.forEach(actorName =>{
+                    Person.findOne({name:actorName}, function(err, result){
+                        if(err){
+                            console.log(err);
                         }
 
                         else{
-                            directorName = movieObj.director
-         
-                            addPerson(username, {name:directorName, director:true}, function(err){
-                                if(err){
-                                    console.log(err);
-                                    // callback("Could not add movie ")
-                                    // return;
-                                }
-
-                            
-                                Person.findOne({name:directorName}, function(err, result){
+                            actor = result;
+                            // If the actor exists in the database
+                            if(actor){
+                                newMovie.actors.push(actor["_id"])
+                                ++actorsAdded;
+                                callback();
+                            }
+    
+                            //If the actor is not in the database, add them
+                            else{
+                                Person.create({name:actorName, actor:true}, function(err, result){
                                     if(err){
-                                        // callback("Could not add movie 8");
                                         console.log(err);
                                         return;
                                     }
-                                    
-                                    director = result;
-                                    if(director){
-                                        actorAdditionCallback();
-                                        return;
+                                    actor = result;
+                                    newMovie.actors.push(actor["_id"])
+                                    ++actorsAdded;
+                                   
+                                    if(actorsAdded >= movieObj.actors.length){
+                                        callback();
                                     }
+                                })
+                            }
+
+                        }
 
 
-                            
 
-                            })
-                        })
-                    }
-                    
+
+
+                    })
                 })
+
             }
-            directorAddition();
-        }
+
+            let writerAddition = function(callback){
+                console.log("Writer addition called")
+                // writersAdded = 0;
+                // movieObj.writers.forEach(writerName =>{
+                //     Person.findOne({name:writerName}, function(err, result){
+                //         if(err){
+                //             console.log(err);
+                //         }
+
+                //         else{
+                //             writer = result;
+                //             // If the writer exists in the database
+                //             if(writer){
+                //                 newMovie.writers.push(writer["_id"])
+                //                 ++writersAdded;
+                //                 callback();
+                //             }
+    
+                //             //If the writer is not in the database, add them
+                //             else{
+                //                 Person.create({name:writerName, writer:true}, function(err, result){
+                //                     if(err){
+                //                         console.log(err);
+                //                         return;
+                //                     }
+
+                //                     else{
+                //                         writer = result;
+                //                         newMovie.writers.push(writer["_id"])
+                //                         ++writersAdded;
+                //                     }
+         
+                                   
+                //                     if(writersAdded >= movieObj.writers.length){
+                //                         callback();
+                //                     }
+                //                 })
+                //             }
+
+                //         }
+
+
+
+
+
+                //     })
+                // })
+
+            }
+
+            directorAddition(
+                function(){
+                    actorAddition(
+                        function(){
+                            writerAddition(
+                                function(){
+                                    // Movie.create(newMovie, function(err, result){
+                                    //     if(err){
+                                    //         console.log(err);
+                                    //         return;
+                                    //     }
+                                    //     console.log(result);
+                                    // });
+                                    console.log("DONE");
+                                }
+                            )
+                        }
+                    )
+                    }
+            )
+            
+
+            // directorAddition(actorAddition(writerAddition(function(){
+            //     // console.log(newMovie);
+                // Movie.create(newMovie, function(err, result){
+                //     if(err){
+                //         console.log(err);
+                //         return;
+                //     }
+                //     console.log(result);
+                // });
+                // newMovie.save(function(err){
+                //     if(err){
+                //         // callback("Could not add movie 12");
+                //         console.log(err);
+                //         return;
+                //     }
+                //     console.log("Inserted movie!")
+                //     updateCollaborators(newMovie);
+                //     updateSimilarMovies();
+
+                // // })
+            // })))
+
+
+
     })
 })
 }
