@@ -7,7 +7,7 @@ let personSchema = Schema({
 		required: true,
 		minlength: 3,
 		maxlength: 50,
-        // unique: true
+        unique: true
 	},
     actor: {
         type: Boolean, 

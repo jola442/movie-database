@@ -97,250 +97,237 @@ function addPerson(username, personObj){
 
 
 function addMovie(username, movieObj){
-    return new Promise((mainResolve, mainReject)=>{
         userQuery = User.findOne().where("username").equals(username);
         movieQuery = Movie.findOne().where("title").equals(movieObj.title);
+        removeDuplicates(movieObj.actors)
+        removeDuplicates(movieObj.writers);
+        removeDuplicates(movieObj.genres);
         newMovie = new Movie(movieObj);
         // console.log(movieObj);
         // console.log(newMovie);
         newMovie.actors = [];
         newMovie.writers = [];
+
+
+        console.log("User check called");
+        userQuery.exec(function(err, result){
+            if(err){
+                console.log(err)
+                // reject(err);
+                return;
+            }
+            
+            console.log(result);
+            user = result;
     
-        let userCheck = function(){
-            return new Promise((resolve, reject)=>{
-                console.log("User check called");
-                userQuery.exec(function(err, result){
+            if(!user){ 
+                // callback("This user does not exist");
+                // 
+                // reject("This user does not exist");
+                return;
+            }
+    
+            else{
+                if(!user.contributor){
+                    // console.log("Contributor?",user.contributor)
+                    // callback("Only contributors can add movies")
+                    return;
+                }
+
+                console.log("User check calling the next function")
+            }
+
+            Movie.findOne({title: movieObj.title}, function(err, result){
+                if(err){
+                    // reject(err);
+                    console.log(err);
+                    return;
+                }
+    
+                if(result){
+                    // reject("This movie already exists");
+                    return;
+                }
+
+                console.log("director addition called")
+                Person.findOne({name:movieObj.director}, function(err, result){
                     if(err){
-                        reject(err);
+                        console.log(err)
                         return;
                     }
-                    
-                    console.log(result);
-                    user = result;
-            
-                    if(!user){ 
-                        // callback("This user does not exist");
-                        // 
-                        reject("This user does not exist");
-                        return;
-                    }
-            
+
                     else{
-                        if(!user.contributor){
-                            console.log("Contributor?",user.contributor)
-                            // callback("Only contributors can add movies")
-                            reject("Only contributors can add movies");
-                            return;
+                        director = result;
+                        //If the director already exists in the database, make them the movie director
+                        if(director){
+                            newMovie.director = director.name;
+                            // console.log("director check calling the next function")
                         }
 
-                        console.log("User check calling the next function")
-                        resolve();
-                        return;
-                    }
-    
-                })
-            })
-        }
-    
-    
-            let movieCheck = function(){
-                return new Promise((resolve, reject)=>{
-                    console.log("Movie check called")
-                    Movie.findOne({title: movieObj.title}, function(err, result){
-                        if(err){
-                            reject(err);
-                            return;
-                        }
-            
-                        if(result){
-                            reject("This movie already exists");
-                            return;
-                        }
-    
+                        //Otherwise add them to the database then make them the movie director
                         else{
-                            // console.log("Movie check calling the next function")
-                            resolve();
-                            return;
-                            
-                        }
-                    })
-                })
-            }   
-    
-    
-                let directorAddition = function(){
-                    return new Promise((resolve, reject) =>{
-                        console.log("director addition called")
-                        Person.findOne({name:movieObj.director}, function(err, result){
-                            if(err){
-                                reject(err)
-                                return;
-                            }
-        
-                            else{
-                                director = result;
-                                //If the director already exists in the database, make them the movie director
-                                if(director){
-                                    newMovie.director = director.name;
-                                    // console.log("director check calling the next function")
-                                    resolve();
+                            directorName = movieObj.director;
+                            Person.create({name:directorName, director:true}, function(err, newInstance){
+                                if(err){
+                                    // reject(err);
+                                    console.log(err);
                                     return;
                                 }
-        
-                                //Otherwise add them to the database then make them the movie director
-                                else{
-                                    directorName = movieObj.director;
-                                    Person.create({name:directorName, director:true}, function(err, newInstance){
+                                newMovie.director = newInstance.name;
+                                    
+
+                                console.log("Actor addition called")
+                                actorsAdded = 0;
+                                movieObj.actors.forEach(actorName =>{
+                                    Person.findOne({name:actorName}, function(err, result){
                                         if(err){
-                                            reject(err);
+                                            // reject(err)
+                                            console.log(err);
                                             return;
                                         }
-                                        newMovie.director = newInstance.name;
-                                        // console.log("director check calling the next function")
-                                        resolve();
-                                        return;
+                
+                                        else{
+                                            actor = result;
+                                            // If the actor exists in the database
+                                            if(actor){
+                                                newMovie.actors.push(actor["_id"])
+                                                console.log("Actors:", newMovie.actors)
+                                                ++actorsAdded;
+                                            
+                                            }
+                    
+                                            //If the actor is not in the database, add them
+                                            else{
+                                                Person.create({name:actorName, actor:true}, function(err, result){
+                                                    if(err){
+                                                        // reject(err);
+                                                        console.log(err);
+                                                        return;
+                                                    }
+                                                    actor = result;
+                                                    newMovie.actors.push(actor["_id"])
+                                                    ++actorsAdded;
+                                                    
+                                                
+                                                    if(actorsAdded >= movieObj.actors.length){
+                                                        // console.log("Actor check calling the next function")
+                                                        // resolve();
+                                                        console.log(newMovie);
+                                                        Movie.create(newMovie, function(err, result){
+                                                            if(err){   
+                                                                console.log(err); 
+                                                            }
+                                                            console.log(result);
+                                                            
+                                                        });
+
+                                                        // return;
+                                                    }
+                                                })
+                                            }
+                
+                                        }
+                
+                
+                
+                
+                
+                                    })
+                                })
                                     })
                                 }
-        
-        
-                                }
-                        })
-                    })
-    
-                }
-    
-                let actorAddition = function(){
-                    return new Promise((resolve, reject)=>{
-                        console.log("Actor addition called")
-                        actorsAdded = 0;
-                        movieObj.actors.forEach(actorName =>{
-                            Person.findOne({name:actorName}, function(err, result){
-                                if(err){
-                                    reject(err)
-                                    return;
-                                }
-        
-                                else{
-                                    actor = result;
-                                    // If the actor exists in the database
-                                    if(actor){
-                                        newMovie.actors.push(actor["_id"])
-                                        console.log("Actors:", newMovie.actors)
-                                        ++actorsAdded;
-                                      
-                                    }
-            
-                                    //If the actor is not in the database, add them
-                                    else{
-                                        Person.create({name:actorName, actor:true}, function(err, result){
-                                            if(err){
-                                                reject(err);
-                                                return;
-                                            }
-                                            actor = result;
-                                            newMovie.actors.push(actor["_id"])
-                                            ++actorsAdded;
-                                            
-                                           
-                                            if(actorsAdded >= movieObj.actors.length){
-                                                // console.log("Actor check calling the next function")
-                                                resolve();
-                                                return;
-                                            }
-                                        })
-                                    }
-        
-                                }
-        
-        
-        
-        
-        
-                            })
-                        })
-                    })
-    
-    
-                }
-    
-                let writerAddition = function(){
-                    return new Promise((resolve, reject)=>{
-                        console.log("Writer addition called")
-                        writersAdded = 0;
-                        movieObj.writers.forEach(writerName =>{
-                            Person.findOne({name:writerName}, function(err, result){
-                                if(err){
-                                    reject(err)
-                                    return;
-                                }
-        
-                                else{
-                                    writer = result;
-                                    // If the writer exists in the database
-                                    if(writer){
-                                        newMovie.writers.push(writer["_id"])
-                                        console.log(newMovie.writers)
-                                        ++writersAdded;
-                                        // resolve();
-                                    }
-            
-                                    //If the writer is not in the database, add them
-                                    else{
-                                        Person.create({name:writerName, writer:true}, function(err, result){
-                                            if(err){
-                                                reject(err);
-                                                return;
-                                            }
-        
-                                            else{
-                                                writer = result;
-                                                newMovie.writers.push(writer["_id"])
-                                                ++writersAdded;
-                                                
-                                            }
-                 
-                                           console.log("Added writers:", writersAdded, "Writers:", movieObj.writers.length);
-                                            if(writersAdded >= movieObj.writers.length){
-                                                // console.log("Writer additon calling the next function")
-                                                resolve();
-                                                return;
-                                            }
-                                        })
-                                    }
-        
-                                }
-        
-        
-        
-        
-        
-                            })
-                        })
-                    })
-        
-    
-                }
-    
-                let saveMovie = function(){
-                    return new Promise((resolve, reject)=>{
-                        console.log(newMovie);
-                        Movie.create(newMovie, function(err, result){
-                            if(err){    
-                                reject(err);
-                            }
-                            console.log(result);
-                            mainResolve();
-                        });
-                    })
-                }
 
 
-                errorOccured = false;
-                userCheck().then(movieCheck()).then(directorAddition()).then(actorAddition()).then(writerAddition()).then(saveMovie()).catch((err)=>{
-                    console.log(err);
+                        }
+                        
+                    })
                 })
 
-    })
+        })
+
+
+  
+
+  
+    
+                // let writerAddition = function(){
+                //     return new Promise((resolve, reject)=>{
+                //         console.log("Writer addition called")
+                //         writersAdded = 0;
+                //         movieObj.writers.forEach(writerName =>{
+                //             Person.findOne({name:writerName}, function(err, result){
+                //                 if(err){
+                //                     reject(err)
+                //                     return;
+                //                 }
+        
+                //                 else{
+                //                     writer = result;
+                //                     // If the writer exists in the database
+                //                     if(writer){
+                //                         newMovie.writers.push(writer["_id"])
+                //                         console.log("Writers: ", newMovie.writers)
+                //                         ++writersAdded;
+                //                         // resolve();
+                //                     }
+            
+                //                     //If the writer is not in the database, add them
+                //                     else{
+                //                         Person.create({name:writerName, writer:true}, function(err, result){
+                //                             if(err){
+                //                                 reject(err);
+                //                                 return;
+                //                             }
+        
+                //                             else{
+                //                                 writer = result;
+                //                                                    newMovie.writers.push(writer["_id"])
+                //                         console.log("Writers: ", newMovie.writers)
+                //                                 ++writersAdded;
+                                                
+                //                             }
+                 
+                //                            console.log("Added writers:", writersAdded, "Writers:", movieObj.writers.length);
+                //                             if(writersAdded >= movieObj.writers.length){
+                //                                 // console.log("Writer additon calling the next function")
+                //                                 resolve();
+                //                                 return;
+                //                             }
+                //                         })
+                //                     }
+        
+                //                 }
+        
+        
+        
+        
+        
+                //             })
+                //         })
+                //     })
+        
+    
+                // }
+    
+                // let saveMovie = function(){
+                //     return new Promise((resolve, reject)=>{
+                        // console.log(newMovie);
+                        // Movie.create(newMovie, function(err, result){
+                        //     if(err){    
+                        //         reject(err);
+                        //     }
+                        //     console.log(result);
+                            
+                        // });
+                    // })
+                // }
+
+
+                // userCheck().then(movieCheck()).then(directorAddition()).then(actorAddition()).then(writerAddition()).then(saveMovie()).catch((err)=>{
+                //     console.log(err);
+                // })
+
+    
 }
             
                                                     
@@ -537,40 +524,55 @@ Assumption
 The user will not have the option of changing account types if it
 is not their page
 */
-function changeAccountType(username){
-    return new Promise((resolve, reject)=>{
-        userQuery = User.findOne().where("username").equals(username)
-        userQuery.exec(function(err, result){
+function changeAccountType(username, callback){
+   
+    userQuery = User.findOne().where("username").equals(username)
+    userQuery.exec(function(err, result){
+        if(err){
+            console.log(err);
+            callback("Could not change account type");
+            return;
+        }
+
+        user = result;
+        if(!user){
+            callback("This user does not exist");
+            return; 
+        }
+
+        user.contributor = !user.contributor;
+
+        User.updateOne({username:username}, {contributor:user.contributor}, function(err){
             if(err){
-                
-                reject(err);
-                return;
-            }
-    
-            user = result;
-            if(!user){
-                reject("This user does not exist");
-                return; 
+                console.log(err);
+                callback(err)
             }
 
-            else{
-                user.contributor = !user.contributor;
-                user.save(function(err){
-                    if(err){   
-                        reject(err);
-                        return;
-                    }
-        
-                    resolve();
-                    return;
-        
-                })
-            }
-               
+            callback()
 
         })
     })
- 
+    //     user.save(function(err){
+    //         if(err){
+    //             console.log(err);
+    //             callback("Could not change account type");
+    //         }
+
+    //         else{
+    //             user.contributor = !user.contributor;
+    //             user.save(function(err){
+    //                 if(err){   
+    //                     console.log(err);
+    //                     return;
+    //                 }
+
+    //                 callback();
+    //                 return;
+
+    //             })
+    //         }
+    //     })
+    // })
 }
 
 
@@ -754,6 +756,11 @@ function unfollowPerson(username, personName){
 
 }
 
+function removeDuplicates(lst){
+    lst = new Set(lst);
+    lst = Array.from(lst);
+    return lst;
+}
 
 module.exports = {
     db,

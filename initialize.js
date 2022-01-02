@@ -32,14 +32,34 @@ model.db.once('open', function() {
 				console.log(err)
 				return;
 			}
-			model.changeAccountType("Jola")
-			// .then(model.addMovie("Jola", {title:"Movie 1", director:"Director 1", actors:["Actor 1", "Actor 1", "Actor 2"], writers:["Writer 1", "Writer 3"], genres:["Action","Action", "Adventure"], year:"2001", runtime:"80 min", plot:"Boring", rated:"G"}))
+			model.changeAccountType("Jola", function(err){
+				if(err){
+					console.log(err);
+					return;
+				}
+
+				User.findOne({username:"Jola"}, function(err, result){
+					if(err){
+						console.log(err);
+						return;
+					}
+					console.log(result);
+					model.addMovie("Jola", {title:"Movie 1", director:"Director 1", actors:["Actor 1", "Actor 2", "Actor 3"], writers:["Writer 1", "Writer 3"], genres:["Action","Action", "Adventure"], year:"2001", runtime:"80 min", plot:"Boring", rated:"G"})
+
+				})
+
+			})
+
+			})
+
+			// model.addMovie("Jola", {title:"Movie 1", director:"Director 1", actors:["Actor 1", "Actor 1", "Actor 2"], writers:["Writer 1", "Writer 3"], genres:["Action","Action", "Adventure"], year:"2001", runtime:"80 min", plot:"Boring", rated:"G"})
 			// .then(model.addMovie("Jola", {title:"Movie 2", director:"Director 2", actors:["Actor 2", "Actor 2", "Actor 3"], writers:["Writer 3","Writer 2"], genres:["Action","Drama", "Adventure"], year: "2001", runtime:"80 min", plot:"Boring", rated:"G"}))
 			// .then(model.addMovie("Jola", {title:"Movie 3", director:"Director 2", actors:["Actor 1", "Actor 2", "Actor 3"], writers:["Writer 1","Writer 3","Writer 2"], genres:["Fantasy","Drama", "Adventure"], year:"2002", runtime:"80 min", plot:"Boring", rated:"R"})).
-			.then(model.addMovie("Jola", {title:"Movie 4", director:"Director 2", actors:["Actor 1", "Actor 3"], writers:["Writer 1","Writer 3"], genres:["Fantasy","Drama", "Adventure"], year:"2002", runtime:"80 min", plot:"Boring", rated:"R"})).catch((err)=>{console.log(err);})
-		}
+			// .then(model.addMovie("Jola", {title:"Movie 4", director:"Director 2", actors:["Actor 1", "Actor 3"], writers:["Writer 1","Writer 3"], genres:["Fantasy","Drama", "Adventure"], year:"2002", runtime:"80 min", plot:"Boring", rated:"R"})).catch((err)=>{console.log(err);})
+		})
 
-		)
-	})
+
 })
+
+
 
