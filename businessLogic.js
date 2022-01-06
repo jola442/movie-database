@@ -111,8 +111,8 @@ async function addMovie(username, movieObj){
             await movieCheck();
             await directorAddition();
             await writerAdditon();
-            // await actorAdditon();
-            // await movieAddition();
+            await actorAdditon();
+            await movieAddition();
         }
 
         catch(err){
@@ -171,152 +171,62 @@ async function addMovie(username, movieObj){
 
         async function directorAddition(){
             // console.log("calling director addition")
-            Person.findOne({name:movieObj.director}, function(err, result){
-                if(err){
-                    return(err);
-                }
-                console.log(arguments)
-                
-                    director = result;
-                    //If the person with the specified user name exists
-                    if(director){
-                        //make them a director
-                        Person.updateOne({name:director.name}, {director:true}, function(err){
-                            if(err){
-                                console.log(err);
-                                return err;
-                            }
+            director = await Person.findOne({name:movieObj.director})
+            if(director){
+                director.director = true;
+                await director.save();
+                newMovie.director = director.name;
+                return;
+            }
 
-                            newMovie.director = director.name;
-                            return;
-                        })
-          
-                    }
-    
-                    //Otherwise add them to the database then make them the movie director
-                    else{
-                        directorName = movieObj.director;
-                        Person.create({name:directorName, director:true}, function(err, newInstance){
-                            if(err){
-                                return(err);
-                            }
-                            newMovie.director = newInstance.name;
-                            return;
-                                })
-                            }
-    
-    
-                    
-                    
-                })
+            else{
+                directorName = movieObj.director;
+                const director = await Person.create({name:directorName, director:true});
+                newMovie.director = director.name;
+                return;
+            }       
+               
         }
 
         async function addWriter(writerName){
             // console.log("Calling add writer")
-            Person.findOne({name:writerName}, function(err, result){
-                if(err){
-                    console.log(err);
-                    return err;
-                }
+            writer = await Person.findOne({name:writerName});
+            if(writer){
+                writer.writer = true;
+                await writer.save();
+                newMovie.writers.push(writer["_id"]);
+            }
 
-                console.log(arguments)
-                writer = result;
-                // If the person with the name specified exists in the database
-
+            else{
+                writer = await Person.create({name:writerName, writer:true});
                 if(writer){
-                    // console.log(writer.name, "is already in the db!")
-                    //make them a writer
-                    Person.updateOne({name:writer.name}, {writer:true}, function(err){
-                        if(err){
-                            return (err);
-                        }
-
-                        newMovie.writers.push(writer["_id"]);
-                        // console.log("Writers: ", newMovie.writers)
-                        return;
-                    })
-        
+                    newMovie.writers.push(writer["_id"]);
                 }
+                return;
+            }
 
-                //If the writer is not in the database, add them
-                else{
-                    // console.log("now creating", writerName, "and making them a writer")
-                    Person.create({name:writerName, writer:true}, function(err, result){
-                        if(err){
-                            console.log(err);
-                            return err;
-                        }
-
-                        else{
-                            writer = result;
-                            newMovie.writers.push(writer["_id"])
-                            // console.log("Writers: ", newMovie.writers)
-                            return;
-                            
-                        }
-
-                    })
-                }
         
-            })
+   
+        
+      
         }
 
         async function addActor(actorName){
-            console.log("Trying to find a person whose name is")
-            Person.findOne({name:actorName}, function(err, result){
-                if(err){
-
-                    console.log(err);
-                    return err;
-                }
-
-                console.log(result);
-
-                
-                
-                    actor = result;
-                    // console.log(actor)
-                    // If a person with this name exists in the database
-                    if(actor){
-                        // console.log(actor.name, "is already in the db!")
-                        //make them an actor
-                        Person.updateOne({name:actor.name}, {actor:true}, function(err){
-                            if(err){
-                           
-                                console.log(err);
-                                return err;
-                            }
-
-                            newMovie.actors.push(actor["_id"]);
-                            // console.log("Actors: ", newMovie.actors)
-                            return;
-                        })
-          
-                    }
-
-                    //If the actor is not in the database, add them
-                    else{
-                        // console.log("now creating", actorName, "and making them an actor")
-                        Person.create({name:actorName, actor:true}, function(err, result){
-                            if(err){
-                                console.log("From actor addition")
-                                console.log(err);
-                                return err;
-                            }
-
-                            else{
-                                actor = result;
-                                newMovie.actors.push(actor["_id"])
-                                // console.log("Actors: ", newMovie.actors)
-                                return;
-                                
-                            }
-
-                })
+            actor = await Person.findOne({name:actorName});
+            if(actor){
+                actor.actor = true;
+                await actor.save();
+                newMovie.actors.push(actor["_id"]);
             }
-        
-    })
-        }
+
+            else{
+                actor = await Person.create({name:actorName, actor:true});
+                if(actor){
+                    newMovie.actors.push(actor["_id"]);
+                }
+                return;
+            }
+    }
 
         async function writerAdditon(){
             for(i = 0; i < movieObj.writers.length; ++i){
@@ -325,7 +235,7 @@ async function addMovie(username, movieObj){
                 }
 
                 catch(err){
-                    // console.log(err);
+                    console.log(err);
                 }
             }
 
@@ -339,7 +249,7 @@ async function addMovie(username, movieObj){
                 }
 
                 catch(err){
-                    // console.log(err);
+                    console.log(err);
                 }
             }
             return;
@@ -356,8 +266,9 @@ async function addMovie(username, movieObj){
 
             })
         }
+    }
        
-}
+
             
                                                     
 function updateCollaborators(movieModel){
