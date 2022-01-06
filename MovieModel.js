@@ -12,7 +12,7 @@ let movieSchema = Schema({
             type:Schema.Types.ObjectId,
             ref: 'Person', 
             }],
-        required:true,
+        required:true
         // validate: [function(){return this.writers.length >= 1}]
 
     },
@@ -22,7 +22,7 @@ let movieSchema = Schema({
             type:Schema.Types.ObjectId,
             ref: 'Person', 
             }],
-        required:true,
+        required:true
         // validate: [function(){return this.actors.length >= 1}]
 
     },
