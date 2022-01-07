@@ -23,11 +23,12 @@ let personSchema = Schema({
     },
 	followers: [{type: Schema.Types.ObjectId, ref: 'User'}],
 	movies: [{type: Schema.Types.ObjectId, ref: 'Movie'}],
-    collaborators: {
-        type: Map,
-        of: Number
-    },
+
 });
+
+personSchema.query.byName = function(name){
+    return this.where({name: new RegExp(name, 'i')});
+}
 
 // personObj.director = false;
 // personObj.actor = false;

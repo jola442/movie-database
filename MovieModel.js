@@ -1,9 +1,11 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
+const Review = require("./ReviewModel");
 
 let movieSchema = Schema({
     director: {
-        type:String,
+        type:Schema.Types.ObjectId,
+        ref: 'Person', 
         required: true,
     },
 
@@ -12,8 +14,8 @@ let movieSchema = Schema({
             type:Schema.Types.ObjectId,
             ref: 'Person', 
             }],
-        required:true
-        // validate: [function(){return this.writers.length >= 1}]
+        required:true,
+        validate: [function(){return this.writers.length >= 1}]
 
     },
 
@@ -22,8 +24,8 @@ let movieSchema = Schema({
             type:Schema.Types.ObjectId,
             ref: 'Person', 
             }],
-        required:true
-        // validate: [function(){return this.actors.length >= 1}]
+        required:true,
+        validate: [function(){return this.actors.length >= 1}]
 
     },
 
@@ -58,8 +60,29 @@ let movieSchema = Schema({
     poster: {
         type:String,
         // required: true
-    }
+    },
 });
+
+movieSchema.query.byTitle = function(title){
+    return this.where({title: new RegExp(title, 'i')});
+}
+
+movieSchema.query.byYear = function(year){
+    return this.where({year: new RegExp(year, 'i')});
+}
+movieSchema.query.byGenre = function(genre){
+    return this.where({genre: new RegExp(genre, 'i')});
+}
+
+// movieSchema.virtual('averageRating').get(async function(){
+
+// })
+
+
+// movieSchema.virtual('similarMovies').get(async function(){
+
+// })
+
 
 
 // let validRatings = ["PG-13", "PG", "R", "G", "Not Rated", "Unrated", "N/A", "TV-14", "TV-Y", "TV", "13+","14A",

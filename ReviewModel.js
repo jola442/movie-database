@@ -15,7 +15,28 @@ let reviewSchema = Schema({
     rating:{
         type: Number,
         required: true
-    }
+    },
+
+    basic:{
+        type: String,
+        required: true
+    },
+
+    reviewText:{
+        type: String,
+        required: function(){
+            return !this.basic
+        }
+    },
+
+    summary: {
+        type: String,
+        required: function(){
+            return !this.basic
+        }
+    },
+
+
 });
 
 // personObj.director = false;

@@ -24,6 +24,9 @@ let userSchema = Schema({
 	recommmendedMovies: [{type:Schema.Types.ObjectId, ref: 'Movie'}],
 });
 
+userSchema.query.byUsername = function(username){
+    return this.where({username: new RegExp(username, 'i')});
+}
 
 module.exports = mongoose.model("User", userSchema);
 // userObj.contributor = false;
