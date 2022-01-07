@@ -1,35 +1,47 @@
 const express = require('express');
 let router = express.Router();
 const model =  require("./businessLogic.js");
+const Movie = require("./MovieModel");
 
 
 router.get("/", [queryParser,respondWithMovies]);
-router.get("/:movieTitle", respondWithMovie);
+router.get("/:title", respondWithMovie);
 
 router.use(express.json());
 
-router.post("/:movieTitle/actors", addNewActor);
-router.post("/:movieTitle/writers", addNewWriter);
-router.post("/:movieTitle/directors", addNewDirector)
+router.post("/:title/actors", addNewActor);
+router.post("/:title/writers", addNewWriter);
+router.post("/:title/directors", addNewDirector)
 router.post("/", addNewMovie)
-router.post("/:movieTitle/reviews", updateReviews);
+router.post("/:title/reviews", updateReviews);
 
 
 
 
 function addNewMovie(req, res){
-    // console.log(req.body);
-    if(!req.session.username || !model.users[req.session.username].contributor){
-        res.status(401).send();
+    try{
+                // console.log(req.body);
+        if(!req.session.username || !(req.session.user.contributor)){
+            res.status(401).send();
+        }
+
+        else if(model.addMovie(req.session.username, req.body)){
+            res.status(201).send();
+        }
+
+        else{
+            res.status(400).send();
+        }
     }
 
-    else if(model.addMovie(req.session.username, req.body)){
-        res.status(201).send();
+    catch{
+	    console.log(err)
     }
 
-    else{
-        res.status(400).send();
+    finally{
+        return;
     }
+
 }
 
 
@@ -38,82 +50,120 @@ function addNewActor(req, res){
     // console.log(req.body.title);
     // console.log(model.movies[req.body.title]);
 
-    if(!req.session.username || !model.users[req.session.username].contributor){
-        res.status(401).send();
-    }
+    // if(!req.session.username || !model.users[req.session.username].contributor){
+    //     res.status(401).send();
+    // }
 
-    else if(model.addActor(model.users[req.session.username], model.people[req.body.name], req.body.title)){
-        res.status(200).send();
-    }
+    // else if(model.addActor(model.users[req.session.username], model.people[req.body.name], req.body.title)){
+    //     res.status(200).send();
+    // }
 
-    else{
-        res.status(400).send();
-    }
+    // else{
+    //     res.status(400).send();
+    // }
 }
 
 function addNewDirector(req, res){
     // console.log(req.body);
     // console.log(req.body.title);
     // console.log(model.movies[req.body.title]);
-    if(!req.session.username || !model.users[req.session.username].contributor){
-        res.status(401).send();
-    }
 
-    else if(model.addDirector(model.users[req.session.username], model.people[req.body.name], req.body.title)){
-        res.status(200).send();
-    }
+    // if(!req.session.username || !model.users[req.session.username].contributor){
+    //     res.status(401).send();
+    // }
 
-    else{
-        res.status(400).send();
-    }
+    // else if(model.addDirector(model.users[req.session.username], model.people[req.body.name], req.body.title)){
+    //     res.status(200).send();
+    // }
+
+    // else{
+    //     res.status(400).send();
+    // }
 }
 
 function addNewWriter(req, res){
     // console.log(req.body);
     // console.log(req.body.title);
     // console.log(model.movies[req.body.title]);
-    if(!req.session.username || !model.users[req.session.username].contributor){
-        res.status(401).send();
-    }
 
-    else if(model.addWriter(model.users[req.session.username], model.people[req.body.name], req.body.title)){
-        res.status(200).send();
-    }
+    // if(!req.session.username || !model.users[req.session.username].contributor){
+    //     res.status(401).send();
+    // }
 
-    else{
-        res.status(400).send();
-    }
+    // else if(model.addWriter(model.users[req.session.username], model.people[req.body.name], req.body.title)){
+    //     res.status(200).send();
+    // }
+
+    // else{
+    //     res.status(400).send();
+    // }
 }
 
 
-function updateReviews(req, res){
-    if(req.session.username){
-        req.body.reviewer = req.session.username;
-        if(model.writeReview(req.body)){
-            // res.redirect("/movies/"+req.body.movieTitle);
-            res.status(200).send();
-            // res.status(200).render("movie", {username:req.session.username, movie:model.movies[req.params.movieTitle], reviews:model.reviews});
+async function updateReviews(req, res){
+    try{
+        if(req.session.username){
+            // req.body.reviewer = req.session.username;
+            if(await model.addReview(req.session.username, req.body)){
+                // res.redirect("/movies/"+req.body.movieTitle);
+                res.status(200).send();
+                // res.status(200).render("movie", {username:req.session.username, movie:model.movies[req.params.movieTitle], reviews:model.reviews});
+            }
+            else{
+                res.status(400).send();
+            }
         }
+    
         else{
-            res.status(400).send();
+            res.status(401).send();
         }
     }
 
-    else{
-        res.status(401).send();
+    catch{
+	    console.log(err)
     }
+
+    finally{
+        return;
+    }
+
     // next();
 }
 
-function respondWithMovie(req, res){
-    if(model.isValidMovie(model.movies[req.params.movieTitle])){
-        res.format({"text/html":renderMoviePage,
-        "application/json":sendMovie});
+async function respondWithMovie(req, res){
+    try{
+        const movie = await Movie.findOne({title:req.params.title}).lean()
+        .populate({path:'actors', select:{"_id":0, "name":1}})
+        .populate({path:'writers', select:{"_id":0, "name":1}})
+        .populate({path:'director', select:{"_id":0, "name":1}});
+
+        if(movie){
+            movie.reviews = await model.getReviews(movie.title);
+            movie.averageRating = await model.getAverageRating(movie.title);
+            res.format({"text/html":
+                function(){
+                    res.status(200).render("pages/movie", {username:req.session.username, movie: movie});
+                },
+            "application/json":
+                function(){
+                    res.status(200).json(movie);
+                }});
+        }
+    
+        else{
+            console.log("Cant find this movie");
+            res.status(404).send();
+        }
     }
 
-    else{
-        res.status(404).send();
+    catch{
+	    console.log(err)
     }
+
+    finally{
+        return;
+    }
+
    
 }
 
@@ -177,12 +227,14 @@ function movieMatches(movie, query){
 
 function respondWithMovies(req, res){
     res.results = [];
-    for(movieName in model.movies){
-        let movie = model.movies[movieName]
-        if(movieMatches(movie, req.query)){
-            res.results.push(movieName);
-        }
-    }
+
+    // res.results = await Movie.find({});
+    // for(movieName in model.movies){
+    //     let movie = model.movies[movieName]
+    //     if(movieMatches(movie, req.query)){
+    //         res.results.push(movieName);
+    //     }
+    // }
 
     if(res.results.length == 0){
         res.status(404).send();
@@ -200,11 +252,6 @@ function respondWithMovies(req, res){
     }
 }
 
-function renderMoviePage(req, res, next){
-    res.status(200).render("pages/movie", {users:model.users, username:req.session.username, movie:model.movies[req.params.movieTitle], reviews:model.reviews});
-}
 
-function sendMovie(req, res){
-    res.json(model.movies[req.params.movieTitle]);
-}
+
 module.exports = router;

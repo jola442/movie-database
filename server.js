@@ -6,6 +6,59 @@ const model =  require("./businessLogic.js");
 let usersRouter = require("./usersRouter");
 let moviesRouter = require("./moviesRouter");
 let peopleRouter = require("./peopleRouter");
+const mc = require("mongodb").MongoClient;
+const mongoose = require("mongoose");
+const Movie = require("./MovieModel");
+const Person = require("./PersonModel");
+const User = require("./UserModel");
+const Review = require("./ReviewModel");
+const Notificaiton = require("./NotificationModel");
+
+featuredMovies = [];
+
+async function main(){
+    try{
+        mongoose.connect('mongodb://localhost:27017/movieDB', {useNewUrlParser: true});
+        db = mongoose.connection;
+
+        db.on('connected', function() {
+            console.log('database is connected successfully');
+        });
+        db.on('disconnected',function(){
+            console.log('database is disconnected successfully');
+        })
+        db.on('error', console.error.bind(console, 'connection error:'));
+
+        db.once('open', async function() {
+            try{
+                featuredMovies = await Movie.find({}).limit(30);
+
+                app.listen(process.env.PORT || 3000);
+                console.log("Server listening at http://localhost:3000");
+            }
+
+            catch{
+                console.log(err.message);
+            }
+
+            finally{
+                return;
+            }
+ 
+        });
+    }
+
+    catch{
+        console.log(err);
+    }
+
+    finally{
+        return;
+    }
+}
+
+
+main();
 
 app.use(session({secret:"pain"}));
 app.set("view engine", "pug");
@@ -18,16 +71,28 @@ app.use(express.json());
 // })
 
 
-app.post("/login", function(req, res, next){
-    if(model.verifyUser(req.body.username, req.body.password)){
-        req.session.user = model.users[req.body.username];
-        req.session.username = req.session.user.username
-        res.status(200).send();
+app.post("/login", async function(req, res){
+    try{
+        user = await User.findOne({username: req.body.username, password: req.body.password});
+        if(user){
+            req.session.user = user;
+            req.session.username = req.session.user.username
+            res.status(200).send();
+        }
+    
+        else{
+            res.status(401).send();
+        }
     }
 
-    else{
-        res.status(401).send();
+    catch{
+        console.log(err);
     }
+
+    finally{
+        return;
+    }
+
 })
 
 
@@ -46,12 +111,12 @@ app.use("/users", usersRouter);
 app.use("/movies", moviesRouter);
 app.use("/people", peopleRouter);
 
-function renderHome(req, res, next){
-    res.status(200).render("pages/home", {username:req.session.username, movies:model.movies});
+function renderHome(req, res){
+    res.status(200).render("pages/home", {username:req.session.username, movies:featuredMovies});
 }
 
-function renderContributorPage(req, res, next){
-    res.status(200).render("pages/contributor", {username:req.session.username, movies:model.movies});
+function renderContributorPage(req, res){
+    res.status(200).render("pages/contributor", {username:req.session.username, movies:featuredMovies});
 }
 
 function renderFilterPage(req, res){
@@ -59,5 +124,3 @@ function renderFilterPage(req, res){
 }
 
 
-app.listen(process.env.PORT || 3000);
-console.log("Server listening at http://localhost:3000");

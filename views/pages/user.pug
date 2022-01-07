@@ -35,13 +35,13 @@ header
 
     if username  
         if username === user.username
-            if users[username].contributor == true
+            if user.contributor == true
                 #contributor-options
                     a(href="/contributor-options") Contributor Options
             #changeAccountType.button
                 input(type='button' value='Change Account Type', onclick = "changeAccountType()")
         else
-            -var following = users[username].usersFollowing.indexOf(user.username) > -1
+            -var following = user.usersFollowing.indexOf(user.username) > -1
             if following === true
                 #unfollow.button
                     input(type='button' value='Unfollow', onclick = "unfollow()")
@@ -54,13 +54,14 @@ header
 .mainPane
     h2 Recommended Movies
     -count = 0;
-    each movie in user.recommendedMovies
-      
-        if count == 10
-            -break
-        li
-          a(href="/movies/"+movie) #{movie}
-        -count++;
+    if user.recommendedMovies
+        each movie in user.recommendedMovies
+        
+            if count == 10
+                -break
+            li
+            a(href="/movies/"+movie) #{movie}
+            -count++;
     h2 Followers
     each follower in user.followers
       li
@@ -78,15 +79,15 @@ header
         .reviewItem
             li
                 .label= "Movie"
-                a(href="/movies/"+reviews[review].movieTitle)=  reviews[review].movieTitle
+                a(href="/movies/"+review.movie.title)=  review.movie.title
 
                 .label= "Score"
-                p= reviews[review].rating
-                if(reviews[review].basic == false)
+                p= review.rating
+                if(review.basic == false)
                     .label= "Review"
-                    p= reviews[review].reviewText
+                    p= review.reviewText
                     .label= "Summary"
-                    p= reviews[review].summary
+                    p= review.summary
 
                 
         

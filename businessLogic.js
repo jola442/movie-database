@@ -588,6 +588,7 @@ async function getAverageRating(title){
             {$match:  {movie: movie["_id"]}},
             {$group: {_id: "$movie", average: {$avg : "$rating"}}}
         ]);
+
         return rating[0].average;
     }
     else{
@@ -598,7 +599,7 @@ async function getAverageRating(title){
 async function getReviews(title){
     movie = await Movie.findOne({  title });
     if(movie){
-        const reviews = await Review.find({movie: movie["_id"]}).populate('reviewer', 'username').select('rating basic reviewText summary').exec();
+        const reviews = await Review.find({movie: movie["_id"]}).populate({path:'reviewer', select:{'username':1, "_id":0}}).select('rating basic reviewText summary').exec();
         return reviews;
     }
     else{

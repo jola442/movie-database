@@ -41,14 +41,10 @@ body(onload = "init()")
         #director
           -var count = 0;
           span.label Director: 
-          each director in movie.directors
-            -count++;
-            if count === movie.directors.length
-              a(href="/people/"+director)= director 
-            else
-              a(href="/people/"+director)= director + ", "
+              a(href="/people/"+movie.director.name)= movie.director.name
+
           if username
-            if(users[username].contributor == true)
+            if(user.contributor == true)
               button(id="add-director" type='button')
                 i.fa.fa-plus
 
@@ -58,11 +54,11 @@ body(onload = "init()")
           each writer in movie.writers
             -count++;
             if count === movie.writers.length
-              a(href="/people/"+writer)= writer 
+              a(href="/people/"+writer)= writer.name 
             else
-              a(href="/people/"+writer)= writer + ", "
+              a(href="/people/"+writer)= writer.name + ", "
           if username
-            if(users[username].contributor == true)
+            if(user.contributor == true)
                 button(id="add-writer" type='button')
                   i.fa.fa-plus
         #actors
@@ -71,11 +67,11 @@ body(onload = "init()")
           each actor in movie.actors
             -count++;
             if count === movie.actors.length
-              a(href="/people/"+actor)= actor
+              a(href="/people/"+actor.name)= actor.name
             else
-              a(href="/people/"+actor)= actor + ", "
+              a(href="/people/"+actor.name)= actor.name + ", "
           if username
-            if(users[username].contributor == true)
+            if(user.contributor == true)
                 button(id="add-actor" type='button')
                   i.fa.fa-plus
         #plot
@@ -84,22 +80,21 @@ body(onload = "init()")
 
         #averageRating
           span.label Average Rating:
-          - var roundedRating = movie.averageRating.toFixed(1); 
-          span= roundedRating
+          span= movie.averageRating
         #similar-movies
           -var count = 0;
           span.label Similar Movies: 
-          if movie.similarMovies.length == 0
-            span
-              |None
-          else
-            each similarMovie in movie.similarMovies
-              -count++;
-              if count === movie.similarMovies.length || count == 10
-                a(href="/movies/"+similarMovie)= similarMovie
-                -break
-              else
-                a(href="/movies/"+similarMovie)= similarMovie + ", "
+          //- if movie.similarMovies.length == 0
+          //-   span
+          //-     |None
+          //- else
+          //-   each similarMovie in movie.similarMovies
+          //-     -count++;
+          //-     if count === movie.similarMovies.length || count == 10
+          //-       a(href="/movies/"+similarMovie)= similarMovie
+          //-       -break
+          //-     else
+          //-       a(href="/movies/"+similarMovie)= similarMovie + ", "
         br
 
         #reviews
@@ -112,17 +107,17 @@ body(onload = "init()")
                 .reviewer
                   span.label Reviewer: 
                   span.value
-                    a(href="/users/"+reviews[review].reviewer)=reviews[review].reviewer
+                    a(href="/users/"+review.reviewer.username)=review.reviewer.username
                 .score
                   span.label Score:
-                  span.value= reviews[review].rating
-                if(reviews[review].basic === false)
+                  span.value= review.rating
+                if(review.basic === false)
                   .summary
                     span.label Summary:
-                    span.value= reviews[review].summary
+                    span.value= review.summary
                   .reviewText
                     span.label Review Text:
-                    span.value= reviews[review].reviewText
+                    span.value= review.reviewText
                     br
                     br
                 else

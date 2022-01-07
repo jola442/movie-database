@@ -1,6 +1,7 @@
 const express = require('express');
 let router = express.Router();
 const model =  require("./businessLogic.js");
+const User = require("./UserModel");
 
 router.post("/", createUser);
 router.get("/", respondWithUsers);
@@ -9,107 +10,233 @@ router.put("/:username/followers", updateUsersFollowing);
 router.put("/:username/accountType", updateAccountType);
 router.put("/:username/notifications", updateNotifications)
 
-function createUser(req, res){
+async function createUser(req, res){
     // console.log(req.body);
-    if(model.createUser(req.body)){
-        // console.log("works");
-        req.session.user = model.users[req.body.username];
-        req.session.username = req.session.user.username;
-        res.status(200).send();
+    try{
+        newUser = await User.findOne({username:req.body.username});
+        if(newUser){
+            console.log("Could not add user");
+            res.status(400).send();
+        }
+
+        else{
+            await newUser.save();
+            req.session.user = newUser;
+            req.session.username = newUser.username;
+            res.status(200).send();
+        }
+
+    }   
+
+    catch{
+        console.log(err);
     }
 
-    else{
-        res.status(400).send();
+    finally{
+        return;
     }
+
 }
 
 function updateNotifications(req, res){
-    let results = [];
-    if(!req.session.username){
-        res.status(200).send();
-       return; 
-    }
-    while(model.users[req.session.username].notifications.length != 0){
-        results.push(model.users[req.params.username].notifications.pop());
-    }
-    res.status(200).send(JSON.stringify(results));
+    // let results = [];
+    // if(!req.session.username){
+    //     res.status(200).send();
+    //    return; 
+    // }
+    // while(model.users[req.session.username].notifications.length != 0){
+    //     results.push(model.users[req.params.username].notifications.pop());
+    // }
+    // res.status(200).send(JSON.stringify(results));
        
 }
 
-function updateAccountType(req, res){
-    model.users[req.params.username].contributor = !model.users[req.params.username].contributor;
-    res.status(200).send();
-}
-
-function updateUsersFollowing(req, res){
-    if(req.body.follow == false){
-        if(model.unfollowUser(req.session.username, req.params.username)){
-            // console.log(model.users[req.session.username].usersFollowing);
+async function updateAccountType(req, res){
+    try{
+        if(await model.changeAccountType(req.params.username)){
             res.status(200).send();
         }
+    
+        else{
+            res.status(304).send();
+        }
+    }
 
+    catch{
+        console.log(err);
+    }
+
+    finally{
+        return;
+    }
+
+}
+
+async function updateUsersFollowing(req, res){
+
+    try{
+        if(req.body.follow == false){
+            if(await model.unfollowUser(req.session.username, req.params.username)){
+                res.status(200).send();
+            }
+    
+            else{
+                res.status(304).send();
+            }
+        }
+    
+        else if(req.body.follow == true){
+            if(await model.followUser(req.session.username, req.params.username)){
+                res.status(200).send();
+            }
+    
+            else{
+                res.status(304).send();
+            }
+        }
+    }
+
+    catch{
+	    console.log(err)
+    }
+
+    finally{
+        return;
+    }
+
+
+}
+
+async function respondWithUser(req, res){
+
+    try{
+        user = await User.findOne({username:req.params.username}).lean()
+        .populate('usersFollowing', 'username').populate('followers', 'username')
+        .populate('peopleFollowing', 'name').populate({path: 'reviews', select:{"_id":0, "reviewer":0}, populate:{path:'movie', select:{"title":1, "_id":0}}})
+
+        newUsersFollowing = user.usersFollowing.map((usr)=> {return usr.username});
+        newFollowers = user.followers.map((usr)=> {return usr.username});
+        newPeopleFollowing = user.peopleFollowing.map((p)=> {return p.name});
+        user.usersFollowing = newUsersFollowing;
+        user.peopleFollowing = newPeopleFollowing;
+        user.followers = newFollowers;
+
+        
+
+        if(user){
+            res.format({"text/html": function(){
+                res.status(200).render("pages/user", {username:req.session.username, user:user, reviews:user.reviews})
+            },
+            "application/json": function(){
+                res.status(200).json(user);
+            }});
+        }
+    
+        else{
+            res.status(404).send();
+        }
+    }
+
+    catch{
+	    console.log(err)
+    }
+
+    finally{
+        return;
+    }
+
+
+
+}
+
+async function renderUserPage(req, res){
+
+    try{
+        const user = await User.findOne({username:req.params.username}).populate('review');
+        if(user){
+            res.status(200).render("pages/user", {username:req.session.username, user:user})
+        }
+    
         else{
             res.status(400).send();
         }
     }
 
-    else if(req.body.follow == true){
-        if(model.followUser(req.session.username, req.params.username)){
-            // console.log("After following");
-            // console.log(model.users[req.session.username].usersFollowing);
-            res.status(200).send();
-        }
+    catch{
+	    console.log(err)
+    }
 
+    finally{
+        return;
+    }
+
+
+
+}
+
+
+async function sendUser(req, res){
+    try{
+        const user = await User.findOne({username:req.params.username});
+        if(user){
+            res.status(200).json(user);
+        }
+    
         else{
             res.status(400).send();
         }
+    
     }
-}
 
-function respondWithUser(req, res){
-    if(model.isValidUser(model.users[req.params.username])){
-        res.format({"text/html": renderUserPage,
-                    "application/json": sendUser});
+    catch{
+	    console.log(err)
     }
-    else{
-        res.status(404).send();
-    }
-}
 
-function renderUserPage(req, res){
-    res.status(200).render("pages/user", {username:req.session.username, users:model.users, user:model.users[req.params.username], reviews:model.reviews})
+    finally{
+        return;
+    }
+
 }
 
 
-function sendUser(req, res){
-    res.status(200).json(model.users[req.params.username]);
-}
-
-
-function respondWithUsers(req, res){
-    let results = [];
-    if(!req.query.name){
-        req.query.name = "";
-        results = Object.keys(model.users);
+async function respondWithUsers(req, res){
+    try{
+        let results = [];
+        if(!req.query.name){
+            req.query.name = "";
+            results = await User.find({}).limit(50);
+        }
+    
+        else{
+            results = await User.find().byUsername(req.query.name).lean().select({"username":1, "_id":0});
+            newResults = results.map((obj)=>{return obj.username});
+            results = newResults;
+            
+        }
+    
+        if(results.length == 0){
+            res.status(404).send();
+        }
+    
+        else{
+            res.format({
+            "text/html": function(req,res){
+                res.status(200).render("pages/users", {username: req.session.username, users:results});
+            }, 
+            "application/json":function(req, res, next){
+                res.status(200).json(results);
+            }})
+        }
     }
 
-    else{
-        results = model.searchUsers(req.query.name);
+    catch{
+	    console.log(err)
     }
 
-    if(results.length == 0){
-        res.status(404).send();
+    finally{
+        return;
     }
-
-    else{
-        res.format({
-        "text/html": function(req,res){
-            res.status(200).render("pages/users", {username: req.session.username, users:results});
-        }, 
-        "application/json":function(req, res, next){
-            res.status(200).json(results);
-        }})
-    }
+   
 }
 
 module.exports = router;

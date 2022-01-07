@@ -33,13 +33,13 @@ header
         i.fa.fa-film
       .label
         | Movies
-      #movies.value #{person.works.length}
+      #movies.value #{person.movies.length}
     .profileItem
       .icon
         i.fa.fa-user-circle
       .label
         | Worked with
-      #workedwith.value #{Object.keys(person.collaborators).length}
+      //- #workedwith.value #{Object.keys(person.collaborators).length}
 
   if username  
     -var following = users[username].peopleFollowing.indexOf(person.name) > -1
@@ -52,16 +52,16 @@ header
 
 .mainPane
     h2 Movies
-    each movie in person.works
-        a(href="/movies/"+movie)=movie 
+    each movie in person.movies
+        a(href="/movies/"+movie.title)=movie.title 
         br
     h2 Most Frequent Collaborators
-    each coworker in person.mostFrequentCollaborators
-        a(href="/people/"+coworker)=coworker
-        if(person.collaborators[coworker] > 1)  
-          span=" ("+ person.collaborators[coworker] + " times)"
-        else
-          span= " ("+ person.collaborators[coworker] + " time)"
-        br
+    //- each coworker in person.mostFrequentCollaborators
+    //-     a(href="/people/"+coworker)=coworker
+    //-     if(person.collaborators[coworker] > 1)  
+    //-       span=" ("+ person.collaborators[coworker] + " times)"
+    //-     else
+    //-       span= " ("+ person.collaborators[coworker] + " time)"
+    //-     br
 script(src="/clientjs/person.js")
 

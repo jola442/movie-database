@@ -122,9 +122,9 @@ async function addMovies(){
 	try{
 		for(movie of movies){
 			
-			if(movieCount >= 10){
-				break;
-			}
+			// if(movieCount >= 10){
+			// 	break;
+			// }
 			let writers = movie.Writer.split(", ");    
 			let actors = movie.Actors.split(", ");
 			let directors = movie.Director.split(",");
