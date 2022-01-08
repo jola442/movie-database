@@ -589,10 +589,19 @@ async function getAverageRating(title){
             {$group: {_id: "$movie", average: {$avg : "$rating"}}}
         ]).exec();
 
-        return rating[0].average;
+        if(rating.length > 0){
+            return rating[0].average;
+        }
+
+
+        else{
+            return 0;
+        }
+
+        
     }
     else{
-        return;
+        return null;
     }
 }
 

@@ -135,19 +135,20 @@ async function respondWithMovie(req, res){
     try{
         reviews = await model.getReviews(req.params.title);
         averageRating = await model.getAverageRating(req.params.title);
-  
-
+        
 
         movie = await Movie.findOne({title:req.params.title}).lean()
         .populate({path:'actors', select:{"_id":0, "name":1}})
         .populate({path:'writers', select:{"_id":0, "name":1}})
-        .populate({path:'director', select:{"_id":0, "name":1}});
+        .populate({path:'director', select:{"_id":0, "name":1}}).exec();
+        console.log("Movie:",movie);
 
 
         if(movie){
-            console.log(averageRating);
+            console.log("Reached here")
             res.format({"text/html":
             function(){
+
                 res.status(200).render("pages/movie", {reviews, averageRating, username:req.session.username, movie: movie});
             },
         "application/json":
