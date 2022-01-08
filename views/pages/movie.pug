@@ -54,9 +54,9 @@ body(onload = "init()")
           each writer in movie.writers
             -count++;
             if count === movie.writers.length
-              a(href="/people/"+writer)= writer.name 
+              a(href="/people/"+writer.name)= writer.name 
             else
-              a(href="/people/"+writer)= writer.name + ", "
+              a(href="/people/"+writer.name)= writer.name + ", "
           if username
             if(user.contributor == true)
                 button(id="add-writer" type='button')
@@ -80,7 +80,7 @@ body(onload = "init()")
 
         #averageRating
           span.label Average Rating:
-          span= movie.averageRating
+          span= averageRating
         #similar-movies
           -var count = 0;
           span.label Similar Movies: 
@@ -105,11 +105,11 @@ body(onload = "init()")
 
         #reviews
           h3 Reviews
-          if(movie.reviews)
-            if(movie.reviews.length === 0)
+          if(reviews)
+            if(reviews.length === 0)
                 p No Reviews Yet
             else
-              each review in movie.reviews
+              each review in reviews
                 .review
                   .reviewer
                     span.label Reviewer: 

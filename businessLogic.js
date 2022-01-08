@@ -587,7 +587,7 @@ async function getAverageRating(title){
         const rating = await Review.aggregate([
             {$match:  {movie: movie["_id"]}},
             {$group: {_id: "$movie", average: {$avg : "$rating"}}}
-        ]);
+        ]).exec();
 
         return rating[0].average;
     }

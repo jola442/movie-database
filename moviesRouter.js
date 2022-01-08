@@ -133,50 +133,28 @@ async function updateReviews(req, res){
 async function respondWithMovie(req, res){
     // console.log(req.params.title);
     try{
+        reviews = await model.getReviews(req.params.title);
+        averageRating = await model.getAverageRating(req.params.title);
+  
+
+
         movie = await Movie.findOne({title:req.params.title}).lean()
         .populate({path:'actors', select:{"_id":0, "name":1}})
         .populate({path:'writers', select:{"_id":0, "name":1}})
         .populate({path:'director', select:{"_id":0, "name":1}});
 
-        
-        newActors = movie.actors.map((p)=> {return p.name});
-        newWriters = movie.writers.map((p)=> {return p.name});
-        newDirector = movie.director.name;
-
-      
-        
-
-        // movie.actors = newActors;
-        // movie.writers = newWriters;
-        // console.log(movie);
 
         if(movie){
-            // movieReviews = model.getReviews(movie.title, function(err, rev){
-            //     if(err){
-            //         console.log(err);
-            //     }
-            //     movie.review = rev;
-            //     console.log(movie.review);
+            console.log(averageRating);
+            res.format({"text/html":
+            function(){
+                res.status(200).render("pages/movie", {reviews, averageRating, username:req.session.username, movie: movie});
+            },
+        "application/json":
+            function(){
+                res.status(200).json(movie);
+            }});
 
-            //     movieAverageRating = model.getAverageRating(movie.title, function(err, rating){
-            //         if(err){
-            //             console.log(err);
-            //         } 
-            //         movie.averageRating = rating[0].average;
-            //         console.log(movie.averageRating);
-
-            //         newMovie = movie;
-                    res.format({"text/html":
-                    function(){
-                        res.status(200).render("pages/movie", {actors: newActors, writers: newWriters, director:newDirector, username:req.session.username, movie: movie});
-                    },
-                "application/json":
-                    function(){
-                        res.status(200).json(newMovie);
-                    }});
-            //     });
-
-            // })
         }
     }
 
