@@ -14,9 +14,12 @@ main
     else
       each movie in movies
           span.movie
-            if modelMovies[movie].poster
-              img(src=modelMovies[movie].poster width=50 height = 50)
+            if movie.poster
+              img(src=movie.poster width=50 height = 50)
             else
               img(src="/images/blankmovie.jpg" width=50 height=50)
-            a(href="/movies/"+movie)=movie
+            a(href="/movies/"+movie.title)=movie.title
           br
+    
+
+    
