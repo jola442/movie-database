@@ -68,7 +68,7 @@ movieSchema.query.byTitle = function(title){
 }
 
 movieSchema.query.byYear = function(year){
-    return this.where({year: new RegExp(year, 'i')});
+    return this.where({year});
 }
 movieSchema.query.byGenre = function(genre){
     return this.where({genre: new RegExp(genre, 'i')});
