@@ -149,15 +149,62 @@ async function respondWithUser(req, res){
 
 }
 
+async function renderUserPage(req, res){
+
+    try{
+        const user = await User.findOne({username:req.params.username}).populate('review');
+        if(user){
+            res.status(200).render("pages/user", {username:req.session.username, user:user})
+        }
+    
+        else{
+            res.status(400).send();
+        }
+    }
+
+    catch{
+	    console.log(err)
+    }
+
+    finally{
+        return;
+    }
+
+
+
+}
+
+
+async function sendUser(req, res){
+    try{
+        const user = await User.findOne({username:req.params.username});
+        if(user){
+            res.status(200).json(user);
+        }
+    
+        else{
+            res.status(400).send();
+        }
+    
+    }
+
+    catch{
+	    console.log(err)
+    }
+
+    finally{
+        return;
+    }
+
+}
+
+
 async function respondWithUsers(req, res){
-    console.log("Searching for users", req.url);
     try{
         let results = [];
         if(!req.query.name){
             req.query.name = "";
-            results = await User.find({}).limit(50).lean().select({"username":1, "_id":0});
-            newResults = results.map((obj)=>{return obj.username});
-            results = newResults;
+            results = await User.find({}).limit(50);
         }
     
         else{

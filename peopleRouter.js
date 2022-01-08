@@ -112,16 +112,12 @@ async function respondWithPeople(req, res){
         let results = [];
         if(!req.query.name){
             req.query.name = "";
-            results = await Person.find({}).lean().select({"name":1, "_id":0});
-            newResults = results.map((obj)=>{return obj.name});
-            results = newResults;
+            results = await Person.find({}).limit(50);
         }
     
     
         else{
-            results = await Person.find().byUsername(req.query.name).lean().select({"name":1, "_id":0});
-            newResults = results.map((obj)=>{return obj.name});
-            results = newResults;
+            results = await Person.find().ByName(req.query.name);
         }
     
         if(results.length == 0){

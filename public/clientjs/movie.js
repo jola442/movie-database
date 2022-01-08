@@ -12,7 +12,7 @@ function init(){
 //This function sends a POST request to /movies/movieName/reviews
 function makeReview(){
     var xhttp = new XMLHttpRequest();
-    let title = document.getElementById("title").lastChild.innerHTML;
+    let movieTitle = document.getElementById("title").lastChild.innerHTML;
     let rating = document.getElementById("rating").value;
     let reviewText = document.getElementById("review-text").value;
     let summary = document.getElementById("review-summary").value;
@@ -30,21 +30,15 @@ function makeReview(){
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             alert("Successfully added review");
-            window.location.href = "/movies/"+title;
+            window.location.href = "/movies/"+movieTitle;
        }
 
        else if(this.readyState ==4 && this.status == 400){
            alert("Unable to add review");
        }
-
-
-       else if(this.readyState ==4 && this.status == 401){
-            alert("You must be logged in to make a review")
-       }
-
     };
-    let url = "/movies/" + title +"/reviews";
-    let reviewObj = {rating:rating, title, basic};
+    let url = "/movies/" + movieTitle +"/reviews";
+    let reviewObj = {rating:rating, movieTitle, basic};
     
     if(!basic){
         reviewObj.summary = summary;
@@ -60,10 +54,10 @@ function makeReview(){
 //provided through user input
 function addDirector(){
     let input = prompt("Enter a director name");
-    let title = document.getElementById("title").lastChild.innerHTML;
+    let movieTitle = document.getElementById("title").lastChild.innerHTML;
 
     if(input != null){
-        let data = {name:input, title};
+        let data = {name:input, title:movieTitle};
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
@@ -75,7 +69,7 @@ function addDirector(){
             alert("Unable to add director");
         }
         };
-        xhttp.open("POST", "/movies/"+title+"/directors", true);
+        xhttp.open("POST", "/movies/"+movieTitle+"/directors", true);
         xhttp.setRequestHeader("Content-type","application/json");
         xhttp.send(JSON.stringify(data));
     }
@@ -85,10 +79,10 @@ function addDirector(){
 //provided through user input
 function addWriter(){
     let input = prompt("Enter a writer name");
-    let title = document.getElementById("title").lastChild.innerHTML;
+    let movieTitle = document.getElementById("title").lastChild.innerHTML;
 
     if(input != null){
-        let data = {name:input, title};
+        let data = {name:input, title:movieTitle};
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
@@ -99,7 +93,7 @@ function addWriter(){
             alert("Unable to add writer");
         }
         };
-        xhttp.open("POST", "/movies/"+title+"/writers", true);
+        xhttp.open("POST", "/movies/"+movieTitle+"/writers", true);
         xhttp.setRequestHeader("Content-type","application/json");
         xhttp.send(JSON.stringify(data));
     }
@@ -109,11 +103,11 @@ function addWriter(){
 //provided through user input
 function addActor(){
     let input = prompt("Enter an actor name");
-    let title = document.getElementById("title").lastChild.innerHTML;
+    let movieTitle = document.getElementById("title").lastChild.innerHTML;
     
 
     if(input != null){
-        let data = {name:input, title};
+        let data = {name:input, title:movieTitle};
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
@@ -125,7 +119,7 @@ function addActor(){
             alert("Unable to add actor");
         }
         };
-        xhttp.open("POST", "/movies/"+title+"/actors", true);
+        xhttp.open("POST", "/movies/"+movieTitle+"/actors", true);
         xhttp.setRequestHeader("Content-type","application/json");
         xhttp.send(JSON.stringify(data));
     }
