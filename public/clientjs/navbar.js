@@ -44,6 +44,7 @@ function search(){
     let value = document.getElementById("searchbar").value;
 
     let body = "";
+
     if(option === "title"|| option === "genre" || option === "minrating" || option === "year"){
         body = "/movies?";
     }
@@ -58,7 +59,7 @@ function search(){
         option = "name";
     }
 
-    let url = body + option + "=" + value;
+    let url = body + option + "=" + value + "&page=1";
     // console.log(url);
     let xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
@@ -72,5 +73,6 @@ function search(){
     }
     };
     xhttp.open("GET", url, true);
-    xhttp.send();
+    xhttp.setRequestHeader("Content-type","application/json");
+    xhttp.send(JSON.stringify(url));
 }

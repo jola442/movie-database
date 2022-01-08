@@ -581,29 +581,31 @@ async function unfollowPerson(username, personName){
     }
 }
 
-async function getAverageRating(title){
+async function getAverageRating(title, callback){
+    console.log(title);
     movie = await Movie.findOne({  title });
     if(movie){
         const rating = await Review.aggregate([
             {$match:  {movie: movie["_id"]}},
             {$group: {_id: "$movie", average: {$avg : "$rating"}}}
-        ]);
+        ])
+        console.log(rating);
 
-        return rating[0].average;
+        callback(null,rating)
     }
     else{
-        return;
+        callback("Error occured", null);
     }
 }
 
-async function getReviews(title){
-    movie = await Movie.findOne({  title });
+async function getReviews(title, callback){
+    movie = await Movie.findOne({  title }).lean();
     if(movie){
         const reviews = await Review.find({movie: movie["_id"]}).populate({path:'reviewer', select:{'username':1, "_id":0}}).select('rating basic reviewText summary').exec();
-        return reviews;
+        callback(null,reviews);
     }
     else{
-        return [];
+        callback("An error occured", null);
     }
 }
 

@@ -1,6 +1,9 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const Review = require("./ReviewModel");
+// const mongoosePaginate = require('mongoose-paginate-v2');
+
+
 
 let movieSchema = Schema({
     director: {
@@ -63,6 +66,7 @@ let movieSchema = Schema({
     },
 });
 
+
 movieSchema.query.byTitle = function(title){
     return this.where({title: new RegExp(title, 'i')});
 }
@@ -73,6 +77,8 @@ movieSchema.query.byYear = function(year){
 movieSchema.query.byGenre = function(genre){
     return this.where({genre: new RegExp(genre, 'i')});
 }
+
+// movieSchema.plugin(mongoosePaginate);
 
 // movieSchema.virtual('averageRating').get(async function(){
 
@@ -88,4 +94,4 @@ movieSchema.query.byGenre = function(genre){
 // let validRatings = ["PG-13", "PG", "R", "G", "Not Rated", "Unrated", "N/A", "TV-14", "TV-Y", "TV", "13+","14A",
 //  "16+", "18A", "18+", "R", "A", "TV-Y", "TV-G", "TV-Y7", "TV-Y7-FV", "TV-PG", "NC-17", "TV-MA"];
 
-module.exports = mongoose.model("Movie", movieSchema);
+// module.exports = mongoose.model("Movie", movieSchema);

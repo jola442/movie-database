@@ -27,6 +27,14 @@ span{
     display:inline-block;
 }
 
+span.previous{
+    text-align: left;
+}
+
+span a.next{
+    text-align: right;
+}
+
 .movie{
     width:100%;
     /* border-bottom:2px solid black; */

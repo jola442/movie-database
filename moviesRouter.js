@@ -131,30 +131,83 @@ async function updateReviews(req, res){
 }
 
 async function respondWithMovie(req, res){
+    // console.log(req.params.title);
     try{
-        const movie = await Movie.findOne({title:req.params.title}).lean()
+        movie = await Movie.findOne({title:req.params.title}).lean()
         .populate({path:'actors', select:{"_id":0, "name":1}})
         .populate({path:'writers', select:{"_id":0, "name":1}})
         .populate({path:'director', select:{"_id":0, "name":1}});
 
+        
+        newActors = movie.actors.map((p)=> {return p.name});
+        newWriters = movie.writers.map((p)=> {return p.name});
+        newDirector = movie.director.name;
+
+      
+        
+
+        // movie.actors = newActors;
+        // movie.writers = newWriters;
+        // console.log(movie);
+
         if(movie){
-            movie.reviews = await model.getReviews(movie.title);
-            movie.averageRating = await model.getAverageRating(movie.title);
-            res.format({"text/html":
-                function(){
-                    res.status(200).render("pages/movie", {username:req.session.username, movie: movie});
-                },
-            "application/json":
-                function(){
-                    res.status(200).json(movie);
-                }});
-        }
-    
-        else{
-            console.log("Cant find this movie");
-            res.status(404).send();
+            movieReviews = model.getReviews(movie.title, function(err, rev){
+                if(err){
+                    console.log(err);
+                }
+                movie.review = rev;
+                console.log(movie.review);
+
+                movieAverageRating = model.getAverageRating(movie.title, function(err, rating){
+                    if(err){
+                        console.log(err);
+                    } 
+                    movie.averageRating = rating[0].average;
+                    console.log(movie.averageRating);
+
+                    newMovie = movie;
+                    res.format({"text/html":
+                    function(){
+                        res.status(200).render("pages/movie", {actors: newActors, writers: newWriters, director:newDirector, username:req.session.username, movie: movie});
+                    },
+                "application/json":
+                    function(){
+                        res.status(200).json(newMovie);
+                    }});
+                });
+
+            })
         }
     }
+
+
+            
+           
+            
+            // if(movieReviews){
+            //     movie.reviews = movieReviews;
+            // }
+
+            // if(movieAverageRating){
+            //     movie.averageRating = movieAverageRating;
+            // }
+        
+        
+        //     res.format({"text/html":
+        //         function(){
+        //             res.status(200).render("pages/movie", {username:req.session.username, movie: movie});
+        //         },
+        //     "application/json":
+        //         function(){
+        //             res.status(200).json(movie);
+        //         }});
+        // }
+    
+        // else{
+        //     console.log("Cant find this movie");
+        //     res.status(404).send();
+        // }
+    // }
 
     catch{
 	    console.log(err)
@@ -193,6 +246,16 @@ function queryParser(req, res, next){
         }
     }
 
+    try{
+		req.query.page = req.query.page || 1;
+		req.query.page = Number(req.query.page);
+		if(req.query.page < 1){
+			req.query.page = 1;
+		}
+	}catch{
+		req.query.page = 1;
+	}
+
 
     if(req.query.minrating){
         try{
@@ -216,34 +279,47 @@ function queryParser(req, res, next){
 
 }
 
-//This function checks whether a movie matches the provided query parameters
-function movieMatches(movie, query){
-    let titleCheck = query.title === "*"||movie.title.toLowerCase().includes(query.title.toLowerCase());
-    let genreCheck = query.genre  === "*"||movie.genres.join().toLowerCase().includes(query.genre.toLowerCase());
-    let yearCheck = query.year === "*"||movie.year === query.year;
-    let minratingCheck = query.minrating == undefined||movie.averageRating >= query.minrating;
-    return titleCheck && genreCheck && yearCheck && minratingCheck;
-}
+async function respondWithMovies(req, res){
+    movieQuery = Movie.find().lean().limit(50).skip((req.query.page-1)*50);
+    movieQueryString = "Movie.find()"
+    for(parameter in req.query){
+        if(req.query[parameter] === "*"){
+            movieQuery = movieQuery.where(parameter).ne(null)
+            movieQueryString += ".where(" + parameter + ").ne(null)"
+        }
 
-function respondWithMovies(req, res){
-    res.results = [];
+        else{
+            if(parameter === "title"){
+                movieQuery = movieQuery.byTitle(req.query[parameter]);
+                movieQueryString += ".where(" + parameter + ").includes(" + req.query[parameter] + ")"
+            }
 
-    // res.results = await Movie.find({});
-    // for(movieName in model.movies){
-    //     let movie = model.movies[movieName]
-    //     if(movieMatches(movie, req.query)){
-    //         res.results.push(movieName);
-    //     }
-    // }
+            else if(parameter === "genre"){
+                movieQuery = movieQuery.byGenre(req.query[parameter]);
+                movieQueryString += ".where(" + parameter + ").includes(" + req.query[parameter] + ")"
+            }
+
+            else if(parameter === "year"){
+                movieQuery = movieQuery.byYear(req.query[parameter]);
+                movieQueryString += ".where(" + parameter + ").includes(" + req.query[parameter] + ")"
+            }
+            
+        }
+    }
+ 
+
+    res.results = await movieQuery.select({"title":1, "poster":1, "_id":0}).exec();
+  
 
     if(res.results.length == 0){
         res.status(404).send();
     }
 
     else{
+        // currentPage = Number(req.query.page);
         res.format(
             {"text/html": function(req, res){
-                res.status(200).render("pages/movies", {modelMovies:model.movies, username:req.session.username, movies:res.results})
+                res.status(200).render("pages/movies", {username:req.session.username, movies:res.results})
                 },
             "application/json": function(req, res){
                 res.status(200).json(res.results);
