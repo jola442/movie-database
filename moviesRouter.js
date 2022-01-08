@@ -2,7 +2,7 @@ const express = require('express');
 let router = express.Router();
 const model =  require("./businessLogic.js");
 const Movie = require("./MovieModel");
-
+ENTRIES_PER_PAGE = 50;
 
 router.get("/", [queryParser,respondWithMovies]);
 router.get("/:title", respondWithMovie);
@@ -202,15 +202,15 @@ function queryParser(req, res, next){
     const MAX_RATING = 10;
     const MIN_RATING = 0;
     if(!req.query.title){
-        req.query.title = "*";
+        req.query.title = "";
     }
 
     if(!req.query.genre){
-        req.query.genre = "*";
+        req.query.genre = "";
     }
 
     if(!req.query.year){
-        req.query.year = "*";
+        req.query.year = "";
     }
 
     else{
@@ -219,7 +219,7 @@ function queryParser(req, res, next){
         }
 
         catch{
-            req.query.year = "*";
+            req.query.year = "";
         }
     }
 
@@ -257,10 +257,10 @@ function queryParser(req, res, next){
 }
 
 async function respondWithMovies(req, res){
-    movieQuery = Movie.find().lean().limit(50).skip((req.query.page-1)*50);
+    movieQuery = Movie.find().lean().limit(ENTRIES_PER_PAGE).skip((req.query.page-1)*ENTRIES_PER_PAGE);
     movieQueryString = "Movie.find()"
     for(parameter in req.query){
-        if(req.query[parameter] === "*"){
+        if(req.query[parameter] === ""){
             movieQuery = movieQuery.where(parameter).ne(null)
             movieQueryString += ".where(" + parameter + ").ne(null)"
         }
@@ -285,21 +285,33 @@ async function respondWithMovies(req, res){
     }
  
 
-    res.results = await movieQuery.select({"title":1, "poster":1, "_id":0}).exec();
-  
+    results = await movieQuery.select({"title":1, "poster":1, "_id":0}).exec();
+    queryObject = req.query;
 
-    if(res.results.length == 0){
+    if(results.length >= ENTRIES_PER_PAGE){
+        queryObject["hasNext"] = true;
+    }
+
+    else{
+        queryObject["hasNext"] = false;
+    }
+  
+    // console.log(queryObject)
+
+    if(results.length == 0){
         res.status(404).send();
     }
 
     else{
         // currentPage = Number(req.query.page);
+        
+ 
         res.format(
             {"text/html": function(req, res){
-                res.status(200).render("pages/movies", {username:req.session.username, movies:res.results})
+                res.status(200).render("pages/movies", {qObj: queryObject, username:req.session.username, movies:results})
                 },
             "application/json": function(req, res){
-                res.status(200).json(res.results);
+                res.status(200).json(results);
             }
         })
     }

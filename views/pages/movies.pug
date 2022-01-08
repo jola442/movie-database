@@ -20,6 +20,21 @@ main
               img(src="/images/blankmovie.jpg" width=50 height=50)
             a(href="/movies/"+movie.title)=movie.title
           br
+
+
+    
+    if qObj.page > 1
+      -let url = "/movies?title=" + qObj.title + "&genre=" + qObj.genre + "&year=" + qObj.year + "&page="+(qObj.page-1)
+
+      span.previous
+        a(href=url) Previous 
+      
+    
+    if (qObj.hasNext)
+      -let url = "/movies?title=" + qObj.title + "&genre=" + qObj.genre + "&year=" + qObj.year + "&page="+(qObj.page+1)
+      span.next
+        a(href=url) Next 
+        
     
 
     

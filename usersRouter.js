@@ -2,6 +2,7 @@ const express = require('express');
 let router = express.Router();
 const model =  require("./businessLogic.js");
 const User = require("./UserModel");
+ENTRIES_PER_PAGE = 50;
 
 router.post("/", createUser);
 router.get("/", respondWithUsers);
@@ -149,69 +150,28 @@ async function respondWithUser(req, res){
 
 }
 
-async function renderUserPage(req, res){
-
-    try{
-        const user = await User.findOne({username:req.params.username}).populate('review');
-        if(user){
-            res.status(200).render("pages/user", {username:req.session.username, user:user})
-        }
-    
-        else{
-            res.status(400).send();
-        }
-    }
-
-    catch{
-	    console.log(err)
-    }
-
-    finally{
-        return;
-    }
-
-
-
-}
-
-
-async function sendUser(req, res){
-    try{
-        const user = await User.findOne({username:req.params.username});
-        if(user){
-            res.status(200).json(user);
-        }
-    
-        else{
-            res.status(400).send();
-        }
-    
-    }
-
-    catch{
-	    console.log(err)
-    }
-
-    finally{
-        return;
-    }
-
-}
-
-
 async function respondWithUsers(req, res){
     try{
+        queryObject = req.query;
         let results = [];
-        if(!req.query.name){
-            req.query.name = "";
-            results = await User.find({}).limit(50);
+        if(!req.query.username){
+            req.query.username = "";
+            results = await User.find({}).limit(ENTRIES_PER_PAGE).skip((req.query.page-1)*ENTRIES_PER_PAGE);
         }
     
         else{
-            results = await User.find().byUsername(req.query.name).lean().select({"username":1, "_id":0});
+            results = await User.find().byUsername(req.query.username).lean().select({"username":1, "_id":0});
             newResults = results.map((obj)=>{return obj.username});
             results = newResults;
             
+        }
+
+        if(results.length > ENTRIES_PER_PAGE){
+            queryObject["hasNext"] = true;
+        }
+    
+        else{
+            queryObject["hasNext"] = false;
         }
     
         if(results.length == 0){
@@ -219,9 +179,10 @@ async function respondWithUsers(req, res){
         }
     
         else{
+
             res.format({
             "text/html": function(req,res){
-                res.status(200).render("pages/users", {username: req.session.username, users:results});
+                res.status(200).render("pages/users", {qObj:queryObject, username: req.session.username, users:results});
             }, 
             "application/json":function(req, res, next){
                 res.status(200).json(results);

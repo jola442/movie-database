@@ -16,3 +16,13 @@ main
               img(src="/images/blankpfp.png" width = 50 height = 50)
               a(href="/users/"+user)=user 
               br
+    br
+    if qObj.page > 1
+      -let url = "/users?username=" + qObj.username + "&page="+(qObj.page-1)
+      span.previous
+        a(href=url) Previous 
+    
+    if qObj.hasNext
+      -let url = "/users?username=" + qObj.username + "&page="+(qObj.page-1)
+      span.next
+        a(href=url) Next 

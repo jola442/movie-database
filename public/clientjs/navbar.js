@@ -55,7 +55,7 @@ function search(){
 
     else if(option === "users"){
         body = "/users?";
-        option = "name";
+        option = "username";
     }
 
     let url = body + option + "=" + value;
