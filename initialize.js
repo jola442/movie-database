@@ -125,6 +125,7 @@ async function addMovies(){
 			// if(movieCount >= 10){
 			// 	break;
 			// }
+
 			let writers = movie.Writer.split(", ");    
 			let actors = movie.Actors.split(", ");
 			let directors = movie.Director.split(",");

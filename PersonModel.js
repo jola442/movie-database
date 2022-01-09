@@ -5,7 +5,7 @@ let personSchema = Schema({
 	name: {
 		type: String, 
 		required: true,
-		minlength: 3,
+		minlength: 2,
 		maxlength: 50,
         unique: true
 	},

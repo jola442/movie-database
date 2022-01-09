@@ -41,8 +41,8 @@ header
             #changeAccountType.button
                 input(type='button' value='Change Account Type', onclick = "changeAccountType()")
         else
-            -var following = user.usersFollowing.indexOf(user.username) > -1
-            if following === true
+            -var following = user.usersFollowing.indexOf(username) > -1
+            if following
                 #unfollow.button
                     input(type='button' value='Unfollow', onclick = "unfollow()")
             else

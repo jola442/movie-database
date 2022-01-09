@@ -260,23 +260,30 @@ async function addActor(username, name, title){
 
 
 async function addMovie(username, movieObj){
-        // console.log(movieObj);
-        userQuery = User.findOne().where("username").equals(username);
-        movieQuery = Movie.findOne().where("title").equals(movieObj.title);
         movieObj.actors = removeDuplicates(movieObj.actors)
-        movieObj.writers =removeDuplicates(movieObj.writers);
+        movieObj.writers = removeDuplicates(movieObj.writers);
         movieObj.genres = removeDuplicates(movieObj.genres);
         newMovie = new Movie(movieObj);
         newMovie.actors = [];
         newMovie.writers = [];
-
+        
         try{
-            await userCheck();
-            await movieCheck();
-            await directorAddition();
-            await writerAdditon();
-            await actorAdditon();
-            await movieAddition();
+            returnVal = true;
+            userIsContributor = await isContributor(username);
+            if(userIsContributor){
+                movie = await getMovie(movieObj.title); 
+                if(!movie){
+                    await directorAddition();
+                    await writerAdditon();
+                    await actorAdditon();
+                    insertedMovie = await movieAddition();
+                    if(!insertedMovie){
+                        returnVal = false;
+                    }
+                }
+
+            }
+            return false;
         }
 
         catch(err){
@@ -284,39 +291,39 @@ async function addMovie(username, movieObj){
         }
 
         finally{
-            return;
+            return returnVal;
         }
 
-        async function userCheck(){
-            // console.log("calling userCheck")
+        // async function userCheck(){
+        //     // console.log("calling userCheck")
 
-            user = await User.findOne({ username })
-            if(user){
-                if(!user.contributor){
-                    console.log(username, "is not a contributor. Only contributors can add movies");
-                }
-                return;
+        //     user = await User.findOne({ username })
+        //     if(user){
+        //         if(!user.contributor){
+        //             console.log(username, "is not a contributor. Only contributors can add movies");
+        //         }
+        //         return;
 
-            }
+        //     }
 
-            else{
-                console.log("The user", username, "does not exist");
-            }
-        }
+        //     else{
+        //         console.log("The user", username, "does not exist");
+        //     }
+        // }
 
-        async function movieCheck(){
-            // console.log("Calling movie check")
-            movie = await Movie.findOne({title: movieObj.title})
-            if(movie){
-                console.log("The movie", movieObj.title, "already exists");
-            }
+        // async function movieCheck(){
+        //     // console.log("Calling movie check")
+        //     movie = await Movie.findOne({title: movieObj.title})
+        //     if(movie){
+        //         console.log("The movie", movieObj.title, "already exists");
+        //     }
 
-            return;
-        }
+        //     return;
+        // }
 
         async function directorAddition(){
             // console.log("calling director addition")
-            director = await Person.findOne({name:movieObj.director})
+            director = await getPerson(movieObj.director);
             if(director){
                 director.director = true;
                 await director.save();
@@ -335,17 +342,22 @@ async function addMovie(username, movieObj){
 
         async function addWriter(writerName){
             // console.log("Calling add writer")
-            writer = await Person.findOne({name:writerName});
+            writer = await getPerson(writerName);
             if(writer){
                 writer.writer = true;
                 await writer.save();
-                newMovie.writers.push(writer["_id"]);
+                if(!newMovie.writers.includes(writer["_id"])){
+                    newMovie.writers.push(writer["_id"]);
+                }   
+                
             }
 
             else{
                 writer = await Person.create({name:writerName, writer:true});
                 if(writer){
-                    newMovie.writers.push(writer["_id"]);
+                    if(!newMovie.writers.includes(writer["_id"])){
+                        newMovie.writers.push(writer["_id"]);
+                    }   
                 }
                 return;
             }
@@ -357,17 +369,21 @@ async function addMovie(username, movieObj){
         }
 
         async function addActor(actorName){
-            actor = await Person.findOne({name:actorName});
+            actor = await getPerson(actorName);
             if(actor){
                 actor.actor = true;
                 await actor.save();
-                newMovie.actors.push(actor["_id"]);
+                if(!newMovie.actors.includes(actor["_id"])){
+                    newMovie.actors.push(actor["_id"]);
+                }              
             }
 
             else{
                 actor = await Person.create({name:actorName, actor:true});
                 if(actor){
-                    newMovie.actors.push(actor["_id"]);
+                    if(!newMovie.actors.includes(actor["_id"])){
+                        newMovie.actors.push(actor["_id"]);
+                    }     
                 }
                 return;
             }
@@ -418,12 +434,11 @@ async function addMovie(username, movieObj){
                         await personOne.save();
                     }
                 }
-                return;
+                return true;
             }
 
-            else{
-                return;
-            }
+            return false;
+        
         }
                         
                         // for(let j = 0; j < personnel.length; ++j){

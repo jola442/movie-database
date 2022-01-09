@@ -7,23 +7,23 @@ document.getElementById("searchbar").addEventListener("keydown", function(event)
 
 let username = document.getElementById("hiddenusername").innerHTML;
 
-if(username){
-    setInterval(function(){
-        let xhttp = new XMLHttpRequest();
+// if(username){
+//     setInterval(function(){
+//         let xhttp = new XMLHttpRequest();
        
-        xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            let notifications = JSON.parse(this.responseText);
-            // console.log(notifications)
-            for(let i = 0; i < notifications.length; i++){
-                alert(notifications[i]);
-            }
-        }
-        };
-        xhttp.open("PUT", "/users/"+username+"/notifications", true);
-        xhttp.send();
-    }, 5000);
-}
+//         xhttp.onreadystatechange = function() {
+//         if (this.readyState == 4 && this.status == 200) {
+//             let notifications = JSON.parse(this.responseText);
+//             // console.log(notifications)
+//             for(let i = 0; i < notifications.length; i++){
+//                 alert(notifications[i]);
+//             }
+//         }
+//         };
+//         xhttp.open("PUT", "/users/"+username+"/notifications", true);
+//         xhttp.send();
+//     }, 5000);
+// }
 
 
 //This function sends a DELETE request to the server to 'destroy' the current session
