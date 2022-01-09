@@ -11,7 +11,7 @@ router.use(express.json());
 
 router.post("/:title/actors", addNewActor);
 router.post("/:title/writers", addNewWriter);
-router.post("/:title/directors", addNewDirector)
+router.post("/:title/directors", changeDirector)
 router.post("/", addNewMovie)
 router.post("/:title/reviews", updateReviews);
 
@@ -45,59 +45,51 @@ function addNewMovie(req, res){
 }
 
 
-function addNewActor(req, res){
-    // console.log(req.body);
-    // console.log(req.body.title);
-    // console.log(model.movies[req.body.title]);
+async function addNewActor(req, res){
+ 
+    if(!req.session.username || !req.session.user.contributor){
+        res.status(401).send();
+    }
 
-    // if(!req.session.username || !model.users[req.session.username].contributor){
-    //     res.status(401).send();
-    // }
-
-    // else if(model.addActor(model.users[req.session.username], model.people[req.body.name], req.body.title)){
-    //     res.status(200).send();
-    // }
-
-    // else{
-    //     res.status(400).send();
-    // }
-}
-
-function addNewDirector(req, res){
-    // console.log(req.body);
-    // console.log(req.body.title);
-    // console.log(model.movies[req.body.title]);
-
-    // if(!req.session.username || !model.users[req.session.username].contributor){
-    //     res.status(401).send();
-    // }
-
-    // else if(model.addDirector(model.users[req.session.username], model.people[req.body.name], req.body.title)){
-    //     res.status(200).send();
-    // }
-
-    // else{
-    //     res.status(400).send();
-    // }
-}
-
-function addNewWriter(req, res){
     
-    // console.log(req.body);
-    // console.log(req.body.title);
-    // console.log(model.movies[req.body.title]);
+    else if(await model.addActor(req.session.username, req.body.name, req.body.title)){
+        res.status(200).send();
+    }
 
-    // if(!req.session.username || !model.users[req.session.username].contributor){
-    //     res.status(401).send();
-    // }
+    else{
+        res.status(400).send();
+    }
+}
 
-    // else if(model.addWriter(model.users[req.session.username], model.people[req.body.name], req.body.title)){
-    //     res.status(200).send();
-    // }
+async function changeDirector(req, res){
 
-    // else{
-    //     res.status(400).send();
-    // }
+
+    if(!req.session.username || !req.session.user.contributor){
+        res.status(401).send();
+    }
+
+    else if(await model.changeDirector(req.session.username, req.body.name, req.body.title)){
+        res.status(200).send();
+    }
+
+    else{
+        res.status(400).send();
+    }
+}
+
+async function addNewWriter(req, res){
+    
+    if(!req.session.username || !req.session.user.contributor){
+        res.status(401).send();
+    }
+
+    else if(await model.addWriter(req.session.username, req.body.name, req.body.title)){
+        res.status(200).send();
+    }
+
+    else{
+        res.status(400).send();
+    }
 }
 
 
@@ -136,13 +128,13 @@ async function respondWithMovie(req, res){
     try{
         reviews = await model.getReviews(req.params.title);
         averageRating = await model.getAverageRating(req.params.title);
-        console.log(averageRating);
+        // console.log(averageRating);
         
         movie = await Movie.findOne({title:req.params.title}).lean()
         .populate({path:'actors', select:{"_id":0, "name":1}})
         .populate({path:'writers', select:{"_id":0, "name":1}})
         .populate({path:'director', select:{"_id":0, "name":1}}).exec();
-        console.log(movie);
+        // console.log(movie);
 
         if(movie){
             res.format({"text/html":

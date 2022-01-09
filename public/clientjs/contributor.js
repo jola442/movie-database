@@ -88,9 +88,8 @@ function add(){
         data.genres = data.genres.map(ele => ele.trim());
         // console.log(data.genres);
 
-        data.directors = document.getElementById("director-text").value;
-        data.directors = data.directors.split(",");
-        data.directors = data.directors.map(ele => ele.trim());
+        data.director = document.getElementById("director-text").value.trim();
+
         // console.log(data.directors);
 
         data.actors = document.getElementById("actor-text").value;

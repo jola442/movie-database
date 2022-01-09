@@ -42,7 +42,7 @@ header
       //- #workedwith.value #{Object.keys(person.collaborators).length}
 
   if username  
-    -var following = users[username].peopleFollowing.indexOf(person.name) > -1
+    -var following = user.peopleFollowing.indexOf(person.name) > -1
     if following == true
         #unfollow.button
             input(type='button' value='Unfollow', onclick = "unfollow()")

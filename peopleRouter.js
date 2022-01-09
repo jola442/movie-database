@@ -84,7 +84,7 @@ async function respondWithPerson(req, res){
         if(person){
             res.format({"text/html": 
                 function(){
-                    res.render("pages/person", {username: req.session.username, users:model.users, person: person});
+                    res.render("pages/person", {username: req.session.username, user:req.session.user, person: person});
                 },
     
                 "application/json": 

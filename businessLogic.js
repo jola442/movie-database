@@ -260,6 +260,7 @@ async function addActor(username, name, title){
 
 
 async function addMovie(username, movieObj){
+        console.log(movieObj);
         movieObj.actors = removeDuplicates(movieObj.actors)
         movieObj.writers = removeDuplicates(movieObj.writers);
         movieObj.genres = removeDuplicates(movieObj.genres);
@@ -322,7 +323,7 @@ async function addMovie(username, movieObj){
         // }
 
         async function directorAddition(){
-            // console.log("calling director addition")
+     
             director = await getPerson(movieObj.director);
             if(director){
                 director.director = true;
@@ -390,6 +391,7 @@ async function addMovie(username, movieObj){
     }
 
         async function writerAdditon(){
+   
             for(i = 0; i < movieObj.writers.length; ++i){
                 try{
                     await addWriter(movieObj.writers[i]);
@@ -404,6 +406,7 @@ async function addMovie(username, movieObj){
         }
 
         async function actorAdditon(){
+
             for(i = 0; i < movieObj.actors.length; ++i){
                 try{
                     await addActor(movieObj.actors[i]);
