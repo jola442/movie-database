@@ -104,15 +104,168 @@ async function addReview(username, reviewObj){
     }
 }
 
+async function getMovie(title){
+    movie = await Movie.findOne({title});
+    return movie;
+}
+
+async function getUser(username){
+    user = await User.findOne({username});
+    return user;
+}
+
+async function getPerson(name){
+    person = await Person.findOne({name});
+    return person;
+}
+
+async function isContributor(username){
+    user = await getUser(username);
+ 
+    if(user){
+        return user.contributor;
+    }
+
+    else{
+        return false;
+    }
+}
+
+
+async function addWriter(username, name, title){
+    userIsContributor = await isContributor(username);
+    if(userIsContributor){
+        movie = await getMovie(title);
+        if(movie){
+            person = await getPerson(name);
+            if(person){
+                person.writer = true;
+                if(!movie.writers.includes(person["_id"])){
+                    movie.writers.push(person["_id"]);
+                }
+                
+
+                if(!person.movies.includes(movie["_id"])){
+                    person.movies.push(movie["_id"]);
+                }
+                await person.save();
+                await movie.save();
+                return true;
+            }
+
+            else{
+                person = await Person.create({name, writer:true});
+                if(person){
+                    if(!movie.writers.includes(person["_id"])){
+                        movie.writers.push(person["_id"]);
+                    }
+                    
+
+                    if(!person.movies.includes(movie["_id"])){
+                        person.movies.push(movie["_id"]);
+                    }
+                    await movie.save();
+                    await person.save();
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+
+}
+
+async function changeDirector(username, name, title){
+    userIsContributor = await isContributor(username);
+    if(userIsContributor){
+        movie = await getMovie(title);
+        if(movie){
+            person = await getPerson(name);
+            if(person){
+                person.director = true;
+                movie.director = person["_id"];
+
+                if(!person.movies.includes(movie["_id"])){
+                    person.movies.push(movie["_id"]);
+                }
+
+                await person.save();
+                await movie.save();
+                return true;
+            }
+
+            else{
+                person = await Person.create({name, director:true});
+                if(person){
+                    movie.director = person["_id"];
+   
+                    if(!person.movies.includes(movie["_id"])){
+                        person.movies.push(movie["_id"]);
+                    }
+
+                    await movie.save();
+                    await person.save();
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+
+}
+
+async function addActor(username, name, title){
+    userIsContributor = await isContributor(username);
+    if(userIsContributor){
+        movie = await getMovie(title);
+        if(movie){
+            person = await getPerson(name);
+            if(person){
+                person.actor = true;
+
+                if(!movie.actors.includes(person["_id"])){
+                    movie.actors.push(person["_id"]);
+                }
+                
+                if(!person.movies.includes(movie["_id"])){
+                    person.movies.push(movie["_id"]);
+                }
+                
+                await person.save();
+                await movie.save();
+                return true;
+            }
+
+            else{
+                person = await Person.create({name, actor:true});
+                if(person){
+                    if(!movie.actors.includes(person["_id"])){
+                        movie.actors.push(person["_id"]);
+                    }
+                    
+
+                    if(!person.movies.includes(movie["_id"])){
+                        person.movies.push(movie["_id"]);
+                    }
+                    await person.save();
+                    await movie.save();
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+
+}
 
 
 async function addMovie(username, movieObj){
         // console.log(movieObj);
         userQuery = User.findOne().where("username").equals(username);
         movieQuery = Movie.findOne().where("title").equals(movieObj.title);
-        removeDuplicates(movieObj.actors)
-        removeDuplicates(movieObj.writers);
-        removeDuplicates(movieObj.genres);
+        movieObj.actors = removeDuplicates(movieObj.actors)
+        movieObj.writers =removeDuplicates(movieObj.writers);
+        movieObj.genres = removeDuplicates(movieObj.genres);
         newMovie = new Movie(movieObj);
         newMovie.actors = [];
         newMovie.writers = [];
@@ -622,11 +775,19 @@ function removeDuplicates(lst){
     return lst;
 }
 
+// async function test(){
+//     console.log(await isContributor("Light"));
+// }
+
+// test();
+
+
 module.exports = {
     addUser,
     addPerson,
     addMovie,
     addReview,
+    getMovie, getPerson, getUser, isContributor, addActor, changeDirector, addWriter,
     changeAccountType,
     followUser,
     unfollowUser,

@@ -82,6 +82,7 @@ function addNewDirector(req, res){
 }
 
 function addNewWriter(req, res){
+    
     // console.log(req.body);
     // console.log(req.body.title);
     // console.log(model.movies[req.body.title]);

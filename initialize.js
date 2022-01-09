@@ -97,8 +97,8 @@ async function initialize(){
 		await model.addReview("Jola", {rating:4, title:"Jumanji",  basic:false, summary:"So bad", reviewText: "Almost broke my TV watching this"});
 		await model.addReview("Dave", {rating:10, title:"Grumpier Old Men",  basic:false, summary:"Loved it", reviewText: "Good plot, good fight scenes"});
 		await model.addReview("Dave", {rating:"2", title:"Waiting to Exhale", basic:false, summary:"Didn't like it", reviewText: "The truth is, I didn't like this movie"});
-		console.log(await model.getAverageRating("Toy Story"));
-		console.log(await model.getReviews("Toy Story"));
+		// console.log(await model.getAverageRating("Toy Story"));
+		// console.log(await model.getReviews("Toy Story"));
 	
 		// await model.addMovie("Jola", {collaborators: {"":0}, title:"Movie 1", director:"Director 1", actors:["Actor 1", "Actor 2", "Actor 3"], writers:["Writer 1", "Writer 3", "Actor 1"], genres:["Action","Action", "Adventure"], year:"2001", runtime:"80 min", plot:"Boring", rated:"G"})
 		// await model.addMovie("Jola", {title:"Movie 2", director:"Director 2", actors:["Actor 2", "Actor 2", "Actor 3"], writers:["Writer 3","Writer 2"], genres:["Action","Drama", "Adventure"], year: "2001", runtime:"80 min", plot:"Boring", rated:"G"})
