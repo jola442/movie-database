@@ -139,7 +139,7 @@ async function respondWithUser(req, res){
     }
 
     catch{
-	    console.log(err)
+	    console.log(err);
     }
 
     finally{
@@ -151,6 +151,7 @@ async function respondWithUser(req, res){
 }
 
 async function respondWithUsers(req, res){
+    console.log(req.query);
     try{
         queryObject = req.query;
         let results = [];
@@ -169,6 +170,8 @@ async function respondWithUsers(req, res){
         if(!req.query.username){
             req.query.username = "";
             results = await User.find({}).limit(ENTRIES_PER_PAGE).skip((req.query.page-1)*ENTRIES_PER_PAGE);
+            newResults = results.map((obj)=>{return obj.username});
+            results = newResults;
         }
     
         else{

@@ -73,7 +73,8 @@ movieSchema.query.byYear = function(year){
     return this.where({year});
 }
 movieSchema.query.byGenre = function(genre){
-    return this.where({genre: new RegExp(genre, 'i')});
+    genre = genre[0].toUpperCase() + genre.substring(1);
+    return this.where({genres:genre});
 }
 
 module.exports = mongoose.model("Movie", movieSchema);

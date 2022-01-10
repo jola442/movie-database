@@ -229,27 +229,27 @@ function queryParser(req, res, next){
 
 async function respondWithMovies(req, res){
     movieQuery = Movie.find().lean().limit(ENTRIES_PER_PAGE).skip((req.query.page-1)*ENTRIES_PER_PAGE);
-    movieQueryString = "Movie.find()"
+    // movieQueryString = "Movie.find()"
     for(parameter in req.query){
         if(req.query[parameter] === ""){
             movieQuery = movieQuery.where(parameter).ne(null)
-            movieQueryString += ".where(" + parameter + ").ne(null)"
+            // movieQueryString += ".where(" + parameter + ").ne(null)"
         }
 
         else{
             if(parameter === "title"){
                 movieQuery = movieQuery.byTitle(req.query[parameter]);
-                movieQueryString += ".where(" + parameter + ").includes(" + req.query[parameter] + ")"
+                // movieQueryString += ".where(" + parameter + ").includes(" + req.query[parameter] + ")"
             }
 
             else if(parameter === "genre"){
                 movieQuery = movieQuery.byGenre(req.query[parameter]);
-                movieQueryString += ".where(" + parameter + ").includes(" + req.query[parameter] + ")"
+                // movieQueryString += ".where(" + parameter + ").includes(" + req.query[parameter] + ")"
             }
 
             else if(parameter === "year"){
                 movieQuery = movieQuery.byYear(req.query[parameter]);
-                movieQueryString += ".where(" + parameter + ").includes(" + req.query[parameter] + ")"
+                // movieQueryString += ".where(" + parameter + ").includes(" + req.query[parameter] + ")"
             }
             
         }
