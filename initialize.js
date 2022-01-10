@@ -6,6 +6,8 @@ const Person = require("./PersonModel");
 const User = require("./UserModel");
 const Review = require("./ReviewModel");
 const Notificaiton = require("./NotificationModel");
+const prompt = require("prompt-sync")();
+
 MAX_MOVIES = 2;
 
 let movies = require("./movie-data.json");
@@ -50,8 +52,12 @@ async function main(){
 
 
 	try{
-		await initialize();
-		await db.close();
+		start = prompt("WARNING. THIS WILL DROP THE DATABASE AND REINITIALIZE IT. Would you like to continue? y/n: ");
+		if(start === 'y'){
+			await initialize();
+			await db.close();
+		}
+
 	}
 	
 	catch(err){
@@ -120,6 +126,7 @@ async function initialize(){
 
 async function addMovies(){
 	try{
+		failedMovieCount = 0;
 		for(movie of movies){
 			
 			// if(movieCount >= 10){
@@ -148,7 +155,7 @@ async function addMovies(){
 				}
 			}
 		
-			await model.addMovie("Jola", {title:movie.Title,
+			addedMovie = await model.addMovie("Jola", {title:movie.Title,
 				 director: directors[0],
 				  actors: actors,
 				   writers: writers,
@@ -157,7 +164,17 @@ async function addMovies(){
 					  runtime: movie.Runtime, plot: String(movie.Plot),
 					rated: String(movie.Rated),
 				poster: movie.Poster})
+				
+
+			if(addedMovie){
 				++movieCount;
+			}
+
+			else{
+				++failedMovieCount;
+				console.log("Failed Movie Count:", failedMovieCount);
+			}
+			
 		}
 		console.log("There are", movieCount, "movies"); 
 		// await model.addMovie("Jola", {collaborators: {"":0}, title:"Movie 1", director:"Director 1", actors:["Actor 1", "Actor 2", "Actor 3"], writers:["Writer 1", "Writer 3", "Actor 1"], genres:["Action","Action", "Adventure"], year:"2001", runtime:"80 min", plot:"Boring", rated:"G"})

@@ -81,7 +81,7 @@ function add(){
         // console.log(data.year);
         data.rated = document.getElementById("rated-text").value;
 
-        data.runtime = document.getElementById("runtime-text").value;
+        data.runtime = document.getElementById("runtime-text").value + " mins";
 
         data.genres = document.getElementById("genre-text").value;
         data.genres = data.genres.split(",");

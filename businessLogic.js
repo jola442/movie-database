@@ -260,7 +260,6 @@ async function addActor(username, name, title){
 
 
 async function addMovie(username, movieObj){
-        console.log(movieObj);
         movieObj.actors = removeDuplicates(movieObj.actors)
         movieObj.writers = removeDuplicates(movieObj.writers);
         movieObj.genres = removeDuplicates(movieObj.genres);
@@ -283,8 +282,16 @@ async function addMovie(username, movieObj){
                     }
                 }
 
+                else{
+                    returnVal = false;
+                }
+
             }
-            return false;
+
+            else{
+                returnVal = false;
+            }   
+            
         }
 
         catch(err){

@@ -11,5 +11,15 @@ main
     each person in people
         span.person
           img(src="/images/blankpfp.png" width=50 height=50)
-          a(href="/people/"+person)=person 
+          a(href="/people/"+person.name)=person.name 
         br
+  
+    if qObj.page > 1
+      -let url = "/people?name=" + qObj.name + "&page="+(qObj.page-1)
+      span.previous
+        a(href=url) Previous 
+    
+    if qObj.hasNext
+      -let url = "/people?name=" + qObj.name + "&page="+(qObj.page+1)
+      span.next
+        a(href=url) Next 

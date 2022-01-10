@@ -126,6 +126,7 @@ async function updateReviews(req, res){
 async function respondWithMovie(req, res){
     // console.log(req.params.title);
     try{
+
         reviews = await model.getReviews(req.params.title);
         averageRating = await model.getAverageRating(req.params.title);
         // console.log(averageRating);
@@ -134,6 +135,8 @@ async function respondWithMovie(req, res){
         .populate({path:'actors', select:{"_id":0, "name":1}})
         .populate({path:'writers', select:{"_id":0, "name":1}})
         .populate({path:'director', select:{"_id":0, "name":1}}).exec();
+
+
         // console.log(movie);
 
         if(movie){
@@ -148,36 +151,11 @@ async function respondWithMovie(req, res){
             }});
 
         }
+
+        else{
+            res.status(404).send();
+        }
     }
-
-
-            
-           
-            
-            // if(movieReviews){
-            //     movie.reviews = movieReviews;
-            // }
-
-            // if(movieAverageRating){
-            //     movie.averageRating = movieAverageRating;
-            // }
-        
-        
-        //     res.format({"text/html":
-        //         function(){
-        //             res.status(200).render("pages/movie", {username:req.session.username, movie: movie});
-        //         },
-        //     "application/json":
-        //         function(){
-        //             res.status(200).json(movie);
-        //         }});
-        // }
-    
-        // else{
-        //     console.log("Cant find this movie");
-        //     res.status(404).send();
-        // }
-    // }
 
     catch{
 	    console.log(err)

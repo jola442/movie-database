@@ -30,12 +30,4 @@ personSchema.query.byName = function(name){
     return this.where({name: new RegExp(name, 'i')});
 }
 
-// personObj.director = false;
-// personObj.actor = false;
-// personObj.writer = false;
-// personObj.works = [];
-// personObj.collaborators = {};
-// personObj.mostFrequentCollaborators = [];
-// personObj.followers = [];
-
 module.exports = mongoose.model("Person", personSchema);

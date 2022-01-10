@@ -23,6 +23,6 @@ main
         a(href=url) Previous 
     
     if qObj.hasNext
-      -let url = "/users?username=" + qObj.username + "&page="+(qObj.page-1)
+      -let url = "/users?username=" + qObj.username + "&page="+(qObj.page+1)
       span.next
         a(href=url) Next 

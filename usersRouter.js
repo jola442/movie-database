@@ -12,7 +12,7 @@ router.put("/:username/accountType", updateAccountType);
 router.put("/:username/notifications", updateNotifications)
 
 async function createUser(req, res){
-    // console.log(req.body);
+    console.log(req.body);
     try{
         newUser = await User.findOne({username:req.body.username});
         if(newUser){
@@ -21,7 +21,7 @@ async function createUser(req, res){
         }
 
         else{
-            await newUser.save();
+            newUser = await User.create(req.body);
             req.session.user = newUser;
             req.session.username = newUser.username;
             res.status(200).send();
@@ -154,6 +154,18 @@ async function respondWithUsers(req, res){
     try{
         queryObject = req.query;
         let results = [];
+
+        try{
+            req.query.page = req.query.page || 1;
+            req.query.page = Number(req.query.page);
+            if(req.query.page < 1){
+                req.query.page = 1;
+            }
+        }catch{
+            req.query.page = 1;
+        }
+
+        
         if(!req.query.username){
             req.query.username = "";
             results = await User.find({}).limit(ENTRIES_PER_PAGE).skip((req.query.page-1)*ENTRIES_PER_PAGE);

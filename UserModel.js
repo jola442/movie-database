@@ -11,7 +11,7 @@ let userSchema = Schema({
 	},
 	password: {
 		type: String,
-		required: [true, "You need a price…"],
+		required: true
 	},
 	contributor: {
 		type: Boolean,
@@ -29,10 +29,3 @@ userSchema.query.byUsername = function(username){
 }
 
 module.exports = mongoose.model("User", userSchema);
-// userObj.contributor = false;
-//     userObj.followers = [];
-//     userObj.usersFollowing = [];
-//     userObj.peopleFollowing = [];
-//     userObj.reviews = [];
-//     userObj.recommendedMovies = [];
-//     userObj.notifications = [];
