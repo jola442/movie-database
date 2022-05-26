@@ -13,12 +13,13 @@ const Person = require("./PersonModel");
 const User = require("./UserModel");
 const Review = require("./ReviewModel");
 const Notificaiton = require("./NotificationModel");
+const uri = "mongodb+srv://jola:naBEBmgvuZKQBXp0@moviedb.gcazrrx.mongodb.net/?retryWrites=true&w=majority";
 
 featuredMovies = [];
 
 async function main(){
     try{
-        mongoose.connect('mongodb://localhost:27017/movieDB', {useNewUrlParser: true});
+        mongoose.connect(uri, {useNewUrlParser: true});
         db = mongoose.connection;
 
         db.on('connected', function() {
