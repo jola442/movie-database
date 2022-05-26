@@ -1,15 +1,15 @@
 const mc = require("mongodb").MongoClient;
 const mongoose = require("mongoose");
 const model = require("./businessLogic");
-const Movie = require("./MovieModel");
-const Person = require("./PersonModel");
 const User = require("./UserModel");
-const Review = require("./ReviewModel");
-const Notificaiton = require("./NotificationModel");
-const prompt = require("prompt-sync")();
 const uri = "mongodb+srv://jola:naBEBmgvuZKQBXp0@moviedb.gcazrrx.mongodb.net/?retryWrites=true&w=majority";
+// const Movie = require("./MovieModel");
+// const Person = require("./PersonModel");
+// const Review = require("./ReviewModel");
+// const Notificaiton = require("./NotificationModel");
 
-MAX_MOVIES = 2;
+
+// MAX_MOVIES = 2;
 
 let movies = require("./movie-data.json");
 movieCount = 0;
@@ -53,11 +53,8 @@ async function main(){
 
 
 	try{
-		start = prompt("WARNING. THIS WILL DROP THE DATABASE AND REINITIALIZE IT. Would you like to continue? y/n: ");
-		if(start === 'y'){
 			await initialize();
 			await db.close();
-		}
 
 	}
 	
