@@ -110,6 +110,7 @@ async function respondWithPerson(req, res){
 
 async function respondWithPeople(req, res){
     try{
+        queryObject = req.query;
         let results = [];
         try{
             req.query.page = req.query.page || 1;
@@ -125,19 +126,18 @@ async function respondWithPeople(req, res){
         if(!req.query.name){
             req.query.name = "";
             results = await Person.find({}).
-                            populate({path:'movies', select:{"title":1, "_id":0}}).
                             limit(ENTRIES_PER_PAGE).skip((req.query.page-1)*ENTRIES_PER_PAGE);
         }
     
     
         else{
-            results = await Person.find().ByName(req.query.name).
-                            populate({path:'movies', select:{"title":1, "_id":0}}).
-                            limit(ENTRIES_PER_PAGE).
-                            skip((req.query.page-1)*ENTRIES_PER_PAGE);
+            console.log(req.query.name);
+            results = await Person.find().byName(req.query.name).lean().select({"name":1, "_id":0});
+            console.log(results);
         }
+  
        
-        queryObject = req.query;
+
  
         
         if(results.length >= ENTRIES_PER_PAGE){

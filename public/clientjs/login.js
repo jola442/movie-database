@@ -14,6 +14,7 @@ function verifyAccount(){
         if (this.readyState == 4 && this.status == 200){
             window.location.href = "./home"
         }
+
         else if(this.readyState == 4 && this.status == 401){
             alert("Invalid login credentials");
         }
