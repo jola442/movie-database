@@ -1,40 +1,38 @@
 h1{
-    font-family: 'Bangers', cursive;
-    color: #301c1c;
+    font-family:var(--main-font);
+    color: var(--complementary-colour-lavender);
+
 }
 article{
+    display: none;
     font-size:2vw;
-    font-family: 'Lato', sans-serif;
+    font-family:var(--main-font);
     position:absolute;
-    background: whitesmoke;
+    background:var(--dominant-colour);
     top:15vh;
     left:10vw;
     width:80vw;
-    height:100vh;
-    overflow: scroll;
-    opacity: 0.8;
-}
-
-article a{
-    font-family: 'Sansita Swashed', cursive;
+    overflow: hidden;
     text-decoration: none;
 }
 
+article a{
+    color:var(--complementary-colour-lavender);
+    font-size: 1.5em;
+}
+
+
+
+article a:visited{
+    color:var(--complementary-colour-lavender);
+}
+
+
 article a:hover{
-    font-size:3vw;
+    color:var(--complementary-colour-white);
 }
 
 
-/* img{
-    width:30%;
-    height:20%;
-} */
-
-.label{
-    color: #0f0f5e;
-    font-weight: bold;
-    font-size: 2.5vw;
-}
 
 #review{
     width:50%;

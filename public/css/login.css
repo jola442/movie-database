@@ -1,66 +1,58 @@
-@import url('https://fonts.googleapis.com/css2?family=Sansita+Swashed:wght@500&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Bangers&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Lato:wght@700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Nerko+One&display=swap');
-
 html{
-    background:url(".././images/moviebg.jpg") no-repeat center center fixed;
-    -webkit-background-size:cover;
-    -moz-background-size:cover;
-    -o-background-size:cover;
-    background-size: cover;
+    height: 100%;
+    background: linear-gradient(var(--complementary-colour-white), var(--complementary-colour-lavender));
+    background-attachment: fixed;
+    
+}
+:root{
+    --dominant-colour:rgb(26,26,26);
+    --complementary-colour-lavender:#8685EF;
+    --complementary-colour-white:#FAF8FF;
+    --complementary-colour-green:#D3FBD8;
+    --main-font:Garamond, serif;
+    --main-font-weight:800;
+    
 }
 
 *{
     box-sizing:border-box;
     margin:0;
     padding:0;
-}
-
-.navbar li a{
-    font-family: 'Sansita Swashed', cursive;
-    font-weight:500;
-    color:#edf0f1;
-    text-decoration: none;
-    font-size:20px;
-}
-
-#logo a{
-    font-weight:500;
-    text-decoration:none;
-    font-size:30px;
-    font-family: 'Bangers', cursive;
-    color:#edf0f1;
-    text-decoration: none;
-}
-
-header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:30px 10%;
-    background-color:#270903;
-    height:60px;
-    opacity:0.8; 
-}
-
-.navbar ul{
     list-style:none;
-    
+    text-decoration: none;
 }
 
-.navbar li{
-    display: inline-block;
-    padding:0px 20px;
-
+.navbar{
+    display:flex;
+    justify-content:space-evenly;
+    align-items:center;
+    background-color:var(--dominant-colour);
+    height:60px;
+    /* opacity:0.8; */
+    font-family:var(--main-font);
+    font-weight:var(--main-font-weight);
+    font-size:1.5em;
+    flex-wrap: wrap;
 }
 
-.navbar li a{
+a{
     transition:all 0.3s ease 0s;
 }
 
-.navbar li a:hover{
-    color:#2696aa;
+a:visited{
+    color:var(--complementary-colour-lavender);
+}
+
+
+a:hover{
+    color:var(--complementary-colour-white);
+}
+
+.searchbar{
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    height: 40px;
 }
 
 
@@ -68,35 +60,52 @@ header{
     border:0;
     border-top-left-radius:0;
     border-bottom-left-radius:0;
-    background-color: whitesmoke;
-    height:40px;
+    background-color: var(--complementary-colour-white);
     width:250px;
+    height: 100%;
     outline:none;
+    color:var(--dominant-colour);
     box-sizing:border-box;
     text-align: center;
-    font-family: 'Lato', sans-serif;
+
     border-left:none;
 }
 
 .navbar button{
-    float:right;
     width:40px;
     height:40px;
+    height: 100%;
     border-top-right-radius:20px;
     border-bottom-right-radius:20px;
     border-left: none;   
-    background: whitesmoke;
+    background-color: var(--complementary-colour-white);
     border: 0;
 }
+
 
 #search-options{
     position:relative;
     left:5px;
-    bottom:0.5px;
     width:120px;
-    height:40px;
+    height: 100%;
+    color: var(--complementary-colour-white);
     border:0;
     outline:0;
+    background-color: var(--complementary-colour-lavender);
+}
+
+#hiddenusername{
+    display: none;
+}
+
+@media screen and (max-width:600px){
+    .navbar{
+        display: block;;
+    }
+
+    .navbar a{
+        display: none;
+    }
 }
 
 .loginPanel{
@@ -104,22 +113,24 @@ header{
     top:50%;
     left:50%;
     transform:translate(-50%,-50%);
-    font-family: 'Lato', sans-serif;
-    background: white;
+    font-family: var(--main-font);
+    background: var(--dominant-colour);
+    color:var(--complementary-colour-white);
     border-radius: 20px;
     height:70vh;
     padding:30px;
     width:25vw;
-    font-size:1.25vw;
-    opacity: 0.8;
+    font-size:1em;
+    font-weight: var(--main-font-weight);
+
 }
 
 .loginPanel h1{
     text-align: center;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: var(--main-font);
+    color:var(--complementary-colour-white);
     border-bottom:1px solid silver;
-    padding:0 0 20px 0;
-    font-family: 'Sansita Swashed', cursive;    
+    padding:0 0 20px 0; 
 }
 
 .loginPanel a{
@@ -128,11 +139,12 @@ header{
 
 .loginPanel input{
     position: relative;
-    /* border-bottom:2px solid #adadad; */
     margin:10px;
     margin-left:1px;
     border:none;
-    font-family: 'Lato', sans-serif;
+    font-family: var(--main-font);
+    font-weight: var(--main-font-weight);
+    font-size: 1em;
     height:30px;
     width:100%;
     border-bottom:1px solid silver;
@@ -143,8 +155,8 @@ header{
 
 
 #sign-in{
-    background-color:#0e0909;
-    color: white;
+    background-color:var(--complementary-colour-green);
+    color:var(--dominant-colour);
     height:40px;
     box-shadow:0 2px #000000;
 }
@@ -159,9 +171,9 @@ header{
 
 #register{
     height:40px;
-    color:white;
+    color:var(--complementary-colour-white);
     box-shadow:0 2px #08083f;
-    background-color: #ad2b14;
+    background-color: var(--complementary-colour-lavender);
 }
 
 #register:hover{

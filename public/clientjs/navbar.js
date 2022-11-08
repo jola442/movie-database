@@ -74,3 +74,9 @@ function search(){
     xhttp.open("GET", url, true);
     xhttp.send();
 }
+
+function toggleNavBar(){
+    navlinks = document.getElementsByClassName("navlinks")[0];
+    console.log(navlinks);
+    navlinks.classList.toggle("active");
+}

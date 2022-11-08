@@ -1,14 +1,13 @@
 article{
     font-size:2vw;
-    font-family: 'Lato', sans-serif;
+    font-family:var(--main-font);
     position:absolute;
-    background: whitesmoke;
+    background:var(--dominant-colour);
     top:15vh;
     left:10vw;
     width:80vw;
-    height:100vh;
-    overflow: scroll;
-    opacity: 0.8;
+    overflow: hidden;
+    text-decoration: none;
 }
 
 article a{
