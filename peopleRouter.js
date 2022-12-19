@@ -39,6 +39,7 @@ async function addNewPerson(req, res){
 
 async function updatePeopleFollowing(req, res){
     try{
+        console.log(req.body.follow);
         if(req.body.follow == false){
             // console.log("Prior to unfollowing");
             // console.log(model.users[req.session.username].peopleFollowing);
@@ -83,9 +84,13 @@ async function respondWithPerson(req, res){
     try{
         person = await Person.findOne({name:req.params.name}).lean().populate({path:'movies', select:{"title":1, "_id":0}});
         if(person){
+            let user = req.session.user;
+            if(req.session.username){
+                user = await model.getUser(req.session.username);
+            }
             res.format({"text/html": 
                 function(){
-                    res.render("pages/person", {username: req.session.username, user:req.session.user, person: person});
+                    res.render("pages/person", {username: req.session.username, user, person});
                 },
     
                 "application/json": 
@@ -132,7 +137,7 @@ async function respondWithPeople(req, res){
     
         else{
             console.log(req.query.name);
-            results = await Person.find().byName(req.query.name).lean().select({"name":1, "_id":0});
+            results = await Person.find().byName(req.query.name).limit(ENTRIES_PER_PAGE).skip((req.query.page-1)*ENTRIES_PER_PAGE).lean().select({"name":1, "_id":0});
             console.log(results);
         }
   

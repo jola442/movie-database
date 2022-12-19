@@ -74,11 +74,39 @@ app.use(express.json());
 
 app.post("/login", async function(req, res){
     try{
-        user = await User.findOne({username: req.body.username, password: req.body.password});
+        // user = await User.findOne({username: req.body.username, password: req.body.password}).populate("usersFollowing").populate("peopleFollowing");
+        // user = await User.findOne({username:req.body.username, password: req.body.password}).lean()
+        // .populate('usersFollowing', 'username').populate('followers', 'username')
+        // .populate('peopleFollowing', 'name').populate({path: 'reviews', select:{"_id":0, "reviewer":0}, populate:{path:'movie', select:{"title":1, "_id":0}}})
+
+        user = await model.getUser(req.body.username);
+        //Changing array of objects with usernames to array of usernames
+        // newUsersFollowing = user.usersFollowing.map(function(userFollowing){
+        //     return userFollowing.username;
+        // })
+
+        // //Changing array of objects with names to array of names
+        // newPeopleFollowing = user.peopleFollowing.map(function(personFollowing){
+        //     return personFollowing.name;
+        // })
+
+        // user.usersFollowing = newUsersFollowing;
+        // user.peopleFollowing = newPeopleFollowing;
+        // console.log(user);
         if(user){
-            req.session.user = user;
-            req.session.username = req.session.user.username
-            res.status(200).send();
+            //accessing the password attribute because the findOne method returns {id:, password:}
+            passwordObj = await User.findOne({username: req.body.username, password: req.body.password}).select("password");
+            password = passwordObj.password;
+
+            if(password === req.body.password){
+                req.session.user = user;
+                req.session.username = req.session.user.username
+                res.status(200).send();
+            }
+            else{
+                res.status(401).send();
+            }
+          
         }
     
         else{

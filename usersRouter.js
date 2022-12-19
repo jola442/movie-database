@@ -74,10 +74,13 @@ async function updateAccountType(req, res){
 }
 
 async function updateUsersFollowing(req, res){
-
+    console.log("SERVER: updateUsersFollowing called");
+    console.log("request body:",req.body);
+    console.log("request parameters:", req.params);
     try{
         if(req.body.follow == false){
-            if(await model.unfollowUser(req.session.username, req.params.username)){
+            success = await model.unfollowUser(req.session.username, req.params.username)
+            if(success){
                 res.status(200).send();
             }
     
@@ -87,7 +90,8 @@ async function updateUsersFollowing(req, res){
         }
     
         else if(req.body.follow == true){
-            if(await model.followUser(req.session.username, req.params.username)){
+            success = model.followUser(req.session.username, req.params.username);
+            if(success){
                 res.status(200).send();
             }
     
@@ -126,6 +130,7 @@ async function respondWithUser(req, res){
 
         if(user){
             res.format({"text/html": function(){
+                console.log(user);
                 res.status(200).render("pages/user", {username:req.session.username, user:user, reviews:user.reviews})
             },
             "application/json": function(){
@@ -175,7 +180,7 @@ async function respondWithUsers(req, res){
         }
     
         else{
-            results = await User.find().byUsername(req.query.username).lean().select({"username":1, "_id":0});
+            results = await User.find().byUsername(req.query.username).limit(ENTRIES_PER_PAGE).skip((req.query.page-1)*ENTRIES_PER_PAGE).lean().select({"username":1, "_id":0});
             newResults = results.map((obj)=>{return obj.username});
             results = newResults;
             

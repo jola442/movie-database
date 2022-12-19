@@ -44,7 +44,8 @@ header
 
   if username  
     -var following = user.peopleFollowing.indexOf(person.name) > -1
-    if following == true
+    -console.log("PERSON PUG:", user)
+    if following
         #unfollow.button
             input(type='button' value='Unfollow', onclick = "unfollow()")
     else

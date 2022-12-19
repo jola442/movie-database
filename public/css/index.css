@@ -1,19 +1,34 @@
 h1{
     font-family:var(--main-font);
-    color: var(--complementary-colour-lavender);
-
+    color: var(--complementary-colour-white);
+    text-align: center;
 }
+
+
+
+main{
+    display:flex;
+    margin:2em 0;
+    justify-content: center;
+    align-items: center;
+}
+
 article{
-    display: none;
-    font-size:2vw;
-    font-family:var(--main-font);
-    position:absolute;
+    /* position:relative;
+    top: 5em;
+    left:5em; */
+    width:90%;
     background:var(--dominant-colour);
-    top:15vh;
-    left:10vw;
-    width:80vw;
-    overflow: hidden;
-    text-decoration: none;
+}
+
+.featured-movies{
+    display: grid;
+    justify-content: space-evenly;
+    grid-template-columns: repeat(auto-fill, 300px);
+}
+
+.label{
+    text-align: center;
 }
 
 article a{

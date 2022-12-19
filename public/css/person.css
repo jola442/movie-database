@@ -8,7 +8,7 @@ h2{
 }
 
 .infoPanel{
-    position:absolute;
+    position:relative;
     top:15vh;
     left:2vw;
     display:inline-block;

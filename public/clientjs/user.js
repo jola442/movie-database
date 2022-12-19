@@ -46,6 +46,7 @@ function changeAccountType(){
 //This function sends a PUT request to /people/personName/followers with a body 
 //that indicates whether a person should be added or removed from a list of followers
 function follow(){
+    console.log("follow user called")
     let xhttp = new XMLHttpRequest();
     let username = document.getElementById("username").innerHTML;
     let action = {follow:true};
@@ -65,6 +66,7 @@ function follow(){
 //This function sends a PUT request to /people/personName/followers with a body 
 //that indicates whether a person should be added or removed from a list of followers
 function unfollow(){
+    console.log("unfollow user called");
     let xhttp = new XMLHttpRequest();
     // let loggedInUsername = document.getElementById("loggedInUser").innerHTML;
     let username = document.getElementById("username").innerHTML;

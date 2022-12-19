@@ -38,7 +38,7 @@ article button{
     border:none;
     font-family:var(--main-font);
     font-weight: var(--main-font-weight);
-    font-size: 1em;
+    font-size: 0.7em;
     border-bottom:1px solid silver;
     border-radius:20px;
     text-align: center;

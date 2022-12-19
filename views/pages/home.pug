@@ -19,7 +19,9 @@ main
             .label
                 a(href="/movies/"+movie.title) #{movie.title}
             if movie.poster
-              img(src=movie.poster alt='')
+              a(href="/movies/"+movie.title)
+                img(src=movie.poster alt='')
             else
-              img(src="images/blankmovie.jpg" width=300 height=398)
+              a(href="/movies/"+movie.title)
+                img(src="images/blankmovie.jpg" width=300 height=398)
 

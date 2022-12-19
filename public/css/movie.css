@@ -2,7 +2,7 @@ article{
     font-size:1.5em;
     font-family:var(--main-font);
     color:var(--complementary-colour-lavender);
-    position:absolute;
+    position:relative;
     background:var(--dominant-colour);
     top:15vh;
     left:10vw;
@@ -72,13 +72,18 @@ article input[type="button"]:active{
     transform: translateY(2px);
 }
 
-article input[type="textbox"]{
+#rating{
+    height: 4em;
+    background-color: var(--complementary-colour-white)
+}
+/* article input[type="textbox"]{
     height:5vh;
     font-size:1.5vw;
-}
+} */
 
 textarea{
-    font-size:1.5vw;
+    font-size:1em;
+    background:var(--complementary-colour-white);
 }
 
 article i{

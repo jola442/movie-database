@@ -110,7 +110,18 @@ async function getMovie(title){
 }
 
 async function getUser(username){
-    user = await User.findOne({username});
+    user = await User.findOne({username}).lean()
+    .populate('usersFollowing', 'username').populate('followers', 'username')
+    .populate('peopleFollowing', 'name').populate({path: 'reviews', select:{"_id":0, "reviewer":0}, populate:{path:'movie', select:{"title":1, "_id":0}}})
+    
+
+    newUsersFollowing = user.usersFollowing.map((usr)=> {return usr.username});
+    newFollowers = user.followers.map((usr)=> {return usr.username});
+    newPeopleFollowing = user.peopleFollowing.map((p)=> {return p.name});
+    user.usersFollowing = newUsersFollowing;
+    user.peopleFollowing = newPeopleFollowing;
+    user.followers = newFollowers;
+    
     return user;
 }
 

@@ -1,7 +1,7 @@
 article{
     font-size:2vw;
     font-family:var(--main-font);
-    position:absolute;
+    position:relative;
     background:var(--dominant-colour);
     top:15vh;
     left:10vw;

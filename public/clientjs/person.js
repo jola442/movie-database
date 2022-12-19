@@ -1,6 +1,7 @@
 //This function sends a PUT request to /people/personName/followers with a body 
 //that indicates whether a person should be added or removed from a list of followers
 function follow(){
+    console.log("follow function called")
     let xhttp = new XMLHttpRequest();
     let personName = document.getElementById("name").innerHTML;
     let action = {follow:true};
@@ -20,6 +21,7 @@ function follow(){
 //This function sends a PUT request to /people/personName/followers with a body 
 //that indicates whether a person should be added or removed from a list of followers
 function unfollow(){
+    console.log("unfollow function called");
     let xhttp = new XMLHttpRequest();
     let personName = document.getElementById("name").innerHTML;
     let action = {follow:false};
