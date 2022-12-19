@@ -18,10 +18,10 @@ router.post("/:title/reviews", updateReviews);
 
 
 
-function addNewMovie(req, res){
+async function addNewMovie(req, res){
+    const user = await model.getUser(req.session.username);
     try{
-                // console.log(req.body);
-        if(!req.session.username || !(req.session.user.contributor)){
+        if(!req.session.username || !(user.contributor)){
             res.status(401).send();
         }
 
@@ -46,8 +46,8 @@ function addNewMovie(req, res){
 
 
 async function addNewActor(req, res){
- 
-    if(!req.session.username || !req.session.user.contributor){
+    const user = await model.getUser(req.session.username);
+    if(!req.session.username || !user.contributor){
         res.status(401).send();
     }
 
@@ -62,9 +62,8 @@ async function addNewActor(req, res){
 }
 
 async function changeDirector(req, res){
-
-
-    if(!req.session.username || !req.session.user.contributor){
+    const user = await model.getUser(req.session.username);
+    if(!req.session.username || !user.contributor){
         res.status(401).send();
     }
 
@@ -78,8 +77,8 @@ async function changeDirector(req, res){
 }
 
 async function addNewWriter(req, res){
-    
-    if(!req.session.username || !req.session.user.contributor){
+    const user = await model.getUser(req.session.username);
+    if(!req.session.username || !user.contributor){
         res.status(401).send();
     }
 

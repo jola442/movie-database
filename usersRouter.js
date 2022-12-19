@@ -115,17 +115,18 @@ async function updateUsersFollowing(req, res){
 async function respondWithUser(req, res){
 
     try{
-        user = await User.findOne({username:req.params.username}).lean()
-        .populate('usersFollowing', 'username').populate('followers', 'username')
-        .populate('peopleFollowing', 'name').populate({path: 'reviews', select:{"_id":0, "reviewer":0}, populate:{path:'movie', select:{"title":1, "_id":0}}})
+        // user = await User.findOne({username:req.params.username}).lean()
+        // .populate('usersFollowing', 'username').populate('followers', 'username')
+        // .populate('peopleFollowing', 'name').populate({path: 'reviews', select:{"_id":0, "reviewer":0}, populate:{path:'movie', select:{"title":1, "_id":0}}})
 
-        newUsersFollowing = user.usersFollowing.map((usr)=> {return usr.username});
-        newFollowers = user.followers.map((usr)=> {return usr.username});
-        newPeopleFollowing = user.peopleFollowing.map((p)=> {return p.name});
-        user.usersFollowing = newUsersFollowing;
-        user.peopleFollowing = newPeopleFollowing;
-        user.followers = newFollowers;
+        // newUsersFollowing = user.usersFollowing.map((usr)=> {return usr.username});
+        // newFollowers = user.followers.map((usr)=> {return usr.username});
+        // newPeopleFollowing = user.peopleFollowing.map((p)=> {return p.name});
+        // user.usersFollowing = newUsersFollowing;
+        // user.peopleFollowing = newPeopleFollowing;
+        // user.followers = newFollowers;
 
+        const user = await model.getUser(req.params.username);
         
 
         if(user){

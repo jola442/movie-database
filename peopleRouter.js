@@ -13,8 +13,10 @@ router.post("/", addNewPerson)
 
 async function addNewPerson(req, res){
     // console.log(req.body);
+    const user = await model.getUser(req.session.username);
+
     try{
-        if(!req.session.username || !(req.session.user.contributor)){
+        if(!req.session.username || !user.contributor){
             res.status(401).send();
         }
     
@@ -84,7 +86,7 @@ async function respondWithPerson(req, res){
     try{
         person = await Person.findOne({name:req.params.name}).lean().populate({path:'movies', select:{"title":1, "_id":0}});
         if(person){
-            let user = req.session.user;
+            let user;
             if(req.session.username){
                 user = await model.getUser(req.session.username);
             }
