@@ -142,7 +142,7 @@ async function respondWithMovie(req, res){
             res.format({"text/html":
             function(){
 
-                res.status(200).render("pages/movie", {reviews, averageRating, username:req.session.username, movie: movie});
+                res.status(200).render("pages/movie", {reviews, username:req.session.username, movie: movie});
             },
         "application/json":
             function(){

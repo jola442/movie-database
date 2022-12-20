@@ -61,6 +61,21 @@ let movieSchema = Schema({
         type:String,
         // required: true
     },
+
+    totalRating:{
+        type:Number,
+        default:0
+    },
+
+    numRatings:{
+        type:Number,
+        default:0
+    },
+
+    averageRating:{
+        type:Number,
+        default:0
+    }
 });
 
 

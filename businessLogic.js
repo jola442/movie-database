@@ -70,18 +70,45 @@ async function addPerson(username, personObj){
 }
 
 async function addReview(username, reviewObj){
-    const user = await User.findOne({ username });
-    // console.log(reviewObj);
-    if(user){
-        const movie = await Movie.findOne({title: reviewObj.title});
-        if(movie){
-            reviewObj.reviewer = user["_id"];
-            reviewObj.movie = movie["_id"];
-            const newReview = await Review.create(reviewObj);
+    const userObj = await User.findOne({ username });
+
+    if(userObj){
+        const movieObj = await Movie.findOne({title: reviewObj.movieTitle});
+
+        if(movieObj){
+            reviewObj.reviewer = userObj["_id"];
+            reviewObj.movie = movieObj["_id"];
+            reviewObj.rating = Number(reviewObj.rating);
+            delete reviewObj.movieTitle;
+            console.log("SERVER: Review Object: ",reviewObj)
+            const newReview = await Review.create(reviewObj/*, function(err){
+                if(err){
+                    console.log(err);
+                }
+            }*/);
+
+            
+            console.log("SERVER: New Review:", newReview)
 
             if(newReview){
-                user.reviews.push(newReview["_id"])
-                await user.save();
+                movieObj.numRatings += 1;
+                movieObj.totalRating += reviewObj.rating;
+                //Rounding to one decimal place
+                movieObj.averageRating = Math.round( (movieObj.totalRating/movieObj.numRatings) * 10)/10;
+                userObj.reviews.push(newReview["_id"])
+                console.log("SERVER: Movie Object:", movieObj)
+                console.log("SERVER: User Object:", userObj)
+                await userObj.save(function(err){
+                    if(err){
+                        console.log(err);
+                    }
+                });
+  
+                await movieObj.save(function(err){
+                    if(err){
+                        console.log(err);
+                    }
+                });
                 return true;
             }
            
@@ -105,12 +132,12 @@ async function addReview(username, reviewObj){
 }
 
 async function getMovie(title){
-    movie = await Movie.findOne({title});
+    const movie = await Movie.findOne({title});
     return movie;
 }
 
 async function getUser(username){
-    user = await User.findOne({username}).lean()
+    const user = await User.findOne({username}).lean()
     .populate('usersFollowing', 'username').populate('followers', 'username')
     .populate('peopleFollowing', 'name').populate({path: 'reviews', select:{"_id":0, "reviewer":0}, populate:{path:'movie', select:{"title":1, "_id":0}}})
     
@@ -126,12 +153,12 @@ async function getUser(username){
 }
 
 async function getPerson(name){
-    person = await Person.findOne({name});
+    const person = await Person.findOne({name});
     return person;
 }
 
 async function isContributor(username){
-    user = await getUser(username);
+    const user = await getUser(username);
  
     if(user){
         return user.contributor;
@@ -144,7 +171,7 @@ async function isContributor(username){
 
 
 async function addWriter(username, name, title){
-    userIsContributor = await isContributor(username);
+    const userIsContributor = await isContributor(username);
     if(userIsContributor){
         movie = await getMovie(title);
         if(movie){
@@ -187,7 +214,7 @@ async function addWriter(username, name, title){
 }
 
 async function changeDirector(username, name, title){
-    userIsContributor = await isContributor(username);
+    const userIsContributor = await isContributor(username);
     if(userIsContributor){
         movie = await getMovie(title);
         if(movie){
@@ -226,7 +253,7 @@ async function changeDirector(username, name, title){
 }
 
 async function addActor(username, name, title){
-    userIsContributor = await isContributor(username);
+    const userIsContributor = await isContributor(username);
     if(userIsContributor){
         movie = await getMovie(title);
         if(movie){
@@ -651,7 +678,7 @@ The user will not have the option of changing account types if it
 is not their page
 */
 async function changeAccountType(username){
-    user = await User.findOne({ username });
+    const user = await User.findOne({ username });
     if(user){
         user.contributor = !user.contributor;
         await user.save();
@@ -771,7 +798,7 @@ async function unfollowPerson(username, personName){
 }
 
 async function getAverageRating(title){
-    movie = await Movie.findOne({  title });
+    const movie = await Movie.findOne({  title });
     if(movie){
         const rating = await Review.aggregate([
             {$match:  {movie: movie["_id"]}},
@@ -795,7 +822,7 @@ async function getAverageRating(title){
 }
 
 async function getReviews(title){
-    movie = await Movie.findOne({  title });
+    const movie = await Movie.findOne({  title });
     if(movie){
         const reviews = await Review.find({movie: movie["_id"]}).populate({path:'reviewer', select:{'username':1, "_id":0}}).select('rating basic reviewText summary').exec();
         return reviews;

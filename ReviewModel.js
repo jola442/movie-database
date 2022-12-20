@@ -14,7 +14,9 @@ let reviewSchema = Schema({
 
     rating:{
         type: Number,
-        required: true
+        required: true,
+        min: [0, "The movie rating must be at least 1"],
+        max: [10, "The movie rating must be at most 10"]
     },
 
     basic:{
@@ -25,26 +27,21 @@ let reviewSchema = Schema({
     reviewText:{
         type: String,
         required: function(){
-            return !this.basic
+            return !this.basic;
+            // return [!this.basic, "Basic reviews can't have review text"]
         }
     },
 
     summary: {
         type: String,
         required: function(){
-            return !this.basic
+            return !this.basic;
+            // return [!this.basic, "Basic reviews can't have a summary"]
         }
     },
 
 
 });
 
-// personObj.director = false;
-// personObj.actor = false;
-// personObj.writer = false;
-// personObj.works = [];
-// personObj.collaborators = {};
-// personObj.mostFrequentCollaborators = [];
-// personObj.followers = [];
 
 module.exports = mongoose.model("Review", reviewSchema);
