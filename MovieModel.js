@@ -36,6 +36,14 @@ let movieSchema = Schema({
         validate: [function(){return this.genres.length >= 1}]
     },
 
+    similarMovies:{
+        type:[{
+            type:Schema.Types.ObjectId,
+            ref: 'Movie', 
+            }],
+        default: []
+    },
+
 
     title: {
         type:String, 

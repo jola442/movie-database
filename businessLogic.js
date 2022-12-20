@@ -469,6 +469,7 @@ async function addMovie(username, movieObj){
             personnel = movie.actors.concat(movie.writers, [movie.director]);
             // console.log(personnel);
             if(movie){
+                updateSimilarMovies(movie);
                 // console.log(movie['averageRating']);
                 
                 // console.log(movie);
@@ -543,8 +544,65 @@ async function addMovie(username, movieObj){
                                                     
 
 
-function updateSimilarMovies(movieModel){
-    return;
+async function updateSimilarMovies(movieObj){
+    try{
+        const genres = [...movieObj.genres];
+        let results = []
+        let resultsMap = new Map();
+        for(let i = 0; i < movieObj.genres.length; ++i){
+            //finding 5 movies that contain all the genres in the genres array that are not the movie to update
+            const newResults = await Movie.find({genres: {$all:genres}, title: {$ne:movieObj.title}}).select(["_id", "title"]);
+        
+            // console.log("New Results: ", newResults);
+
+    
+            newResults.forEach( (result) =>{
+                resultsMap.set(result.title, result["_id"]);
+            })
+
+            if(resultsMap.size >= 5){
+                break;
+            }
+
+            else{
+                genres.pop();
+            }
+        }
+
+        resultsMap.forEach((value) => {
+            results.push(value);
+        })
+        
+        if(results.length > 5){
+            results.splice(5,results.length-5)
+        }
+
+        // console.log("Results array before mapping:", results);
+
+        //changing the array of objects with IDs to an array of IDs
+        results = results.map( (result) => (result["_id"]));
+
+        // console.log("Mapped results array:", results);
+
+        //updating similar movies of the movieObj
+        let movieToUpdate = await Movie.findOne({title: movieObj.title});
+        // console.log("Movie to Update:", movieToUpdate)
+        movieToUpdate.similarMovies = removeDuplicates(results);
+        await movieToUpdate.save((err)=>{if(err)console.log(err)});
+
+        //Updating all movies in the movieToUpdate's similar movies array
+        for(let i = 0; i < results.length; ++i){
+            let movie = await Movie.findOne({_id:results[i]});
+            movie.similarMovies = [...movie.similarMovies, movieToUpdate]
+            movie.similarMovies = removeDuplicates(movie.similarMovies);
+            await movie.save((err)=>{if(err)console.log(err)});
+        }
+    }
+
+    catch(err){
+        console.log(err);
+    }
+
 }
 
 
@@ -857,5 +915,6 @@ module.exports = {
     followPerson,
     unfollowPerson,
     getAverageRating,
-    getReviews
+    getReviews,
+    updateSimilarMovies
 }

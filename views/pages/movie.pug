@@ -94,10 +94,10 @@ body(onload = "init()")
               each similarMovie in movie.similarMovies
                 -count++;
                 if count === movie.similarMovies.length || count == 10
-                  a(href="/movies/"+similarMovie)= similarMovie
+                  a(href="/movies/"+similarMovie.title)= similarMovie.title
                   -break
                 else
-                  a(href="/movies/"+similarMovie)= similarMovie + ", "
+                  a(href="/movies/"+similarMovie.title)= similarMovie.title + ", "
             br
           else 
             span

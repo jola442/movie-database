@@ -129,13 +129,19 @@ async function respondWithMovie(req, res){
         reviews = await model.getReviews(req.params.title);
         averageRating = await model.getAverageRating(req.params.title);
         // console.log(averageRating);
-        
+        movie =  await Movie.findOne({title:req.params.title});
+        await model.updateSimilarMovies(movie);
+
         movie = await Movie.findOne({title:req.params.title}).lean()
         .populate({path:'actors', select:{"_id":0, "name":1}})
         .populate({path:'writers', select:{"_id":0, "name":1}})
-        .populate({path:'director', select:{"_id":0, "name":1}}).exec();
+        .populate({path:'director', select:{"_id":0, "name":1}})
+        .populate({path:"similarMovies", select:{"_id":0, "title":1}}).exec();
+
+        
 
 
+       
         // console.log(movie);
 
         if(movie){
