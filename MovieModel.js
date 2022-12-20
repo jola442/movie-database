@@ -87,9 +87,16 @@ movieSchema.query.byTitle = function(title){
 movieSchema.query.byYear = function(year){
     return this.where({year});
 }
+
 movieSchema.query.byGenre = function(genre){
     genre = genre[0].toUpperCase() + genre.substring(1);
     return this.where({genres:genre});
 }
+
+movieSchema.query.byMinRating = function(rating){
+    return this.where("averageRating").gte(rating);
+}
+
+
 
 module.exports = mongoose.model("Movie", movieSchema);

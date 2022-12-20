@@ -231,8 +231,7 @@ async function respondWithMovies(req, res){
     // movieQueryString = "Movie.find()"
     for(parameter in req.query){
         if(req.query[parameter] === ""){
-            movieQuery = movieQuery.where(parameter).ne(null)
-            // movieQueryString += ".where(" + parameter + ").ne(null)"
+            movieQuery = movieQuery.where(parameter).ne(null);
         }
 
         else{
@@ -249,6 +248,10 @@ async function respondWithMovies(req, res){
             else if(parameter === "year"){
                 movieQuery = movieQuery.byYear(req.query[parameter]);
                 // movieQueryString += ".where(" + parameter + ").includes(" + req.query[parameter] + ")"
+            }
+
+            else if(parameter === "minrating"){
+                movieQuery = movieQuery.byMinRating(req.query[parameter]);
             }
             
         }
