@@ -1,5 +1,6 @@
 const express = require('express');
 const session = require("express-session");
+const path = require('path');
 const app = express();
 const model =  require("./businessLogic.js");
 
@@ -14,6 +15,7 @@ const User = require("./UserModel");
 const Review = require("./ReviewModel");
 const Notificaiton = require("./NotificationModel");
 const uri = "mongodb+srv://jola:naBEBmgvuZKQBXp0@moviedb.gcazrrx.mongodb.net/?retryWrites=true&w=majority";
+const cors = require('cors');
 
 featuredMovies = [];
 
@@ -34,8 +36,8 @@ async function main(){
             try{
                 featuredMovies = await Movie.find({}).limit(30);
 
-                app.listen(process.env.PORT || 3000);
-                console.log("Server listening at http://localhost:3000");
+                app.listen(process.env.PORT || 5000);
+                console.log("Server listening at http://localhost:5000");
             }
 
             catch{
@@ -64,6 +66,12 @@ main();
 app.use(session({secret:"pain"}));
 app.set("view engine", "pug");
 app.use(express.json());
+app.use(cors());
+// app.use(function(req, res, next) {
+//   res.header("Access-Control-Allow-Origin", "http://localhost:3000"); // update to match the domain you will make the request from
+//   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+//   next();
+// });
 
 // app.use("/", function(req, res, next){
     // console.log(req.session);
@@ -134,7 +142,6 @@ app.delete("/signOut", function(req,res,next){
     req.session.destroy();
     res.status(200).send();
 });
-app.use(express.static("public"));
 
 app.use("/users", usersRouter);
 app.use("/movies", moviesRouter);

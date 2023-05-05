@@ -1,0 +1,32 @@
+h1{
+  text-align: center;
+  color:black;
+  margin-top: 64px;
+}
+
+.featured-movies .swiper{
+  width: 80%
+}
+
+.featured-movies .swiper-slide img{
+  width: 100%;
+  height: 40vh;
+}
+
+.featured-movies .swiper-slide{
+  cursor: pointer;
+}
+
+.featured-movies .swiper-slide p{
+  text-align: center;
+  font-family: var(--main-font);
+  font-size: 1.75em;
+  color: var(--complementary-colour-white);
+}
+
+.featured-movies{
+  /* margin-top:64px; */
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}

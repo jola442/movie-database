@@ -84,7 +84,17 @@ async function updatePeopleFollowing(req, res){
 
 async function respondWithPerson(req, res){
     try{
-        person = await Person.findOne({name:req.params.name}).lean().populate({path:'movies', select:{"title":1, "_id":0}});
+        const person = await Person.findOne({name:req.params.name}).lean()
+        .populate({path:'movies', select:{"title":1, "_id":0}})
+
+        // console.log("Person found:",person);
+  
+        let mostFrequentCollaborators = await model.getMostFrequentCollaborators(person)/*.entries();*/
+
+        if(mostFrequentCollaborators.length > 5){
+            mostFrequentCollaborators = mostFrequentCollaborators.slice(0,5)
+        }
+        // console.log("Most Frequent Collaborators", mostFrequentCollaborators);
         if(person){
             let user;
             if(req.session.username){
@@ -92,7 +102,7 @@ async function respondWithPerson(req, res){
             }
             res.format({"text/html": 
                 function(){
-                    res.render("pages/person", {username: req.session.username, user, person});
+                    res.render("pages/person", {username: req.session.username, user, person, mostFrequentCollaborators});
                 },
     
                 "application/json": 

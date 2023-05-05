@@ -1,24 +1,7 @@
-const mongo = require
-const mongoose = require("mongoose");
-const model = require("./businessLogic");
 const Movie = require("./MovieModel");
 const Person = require("./PersonModel");
 const User = require("./UserModel");
 const Review = require("./ReviewModel");
-const Notification = require("./NotificationModel");
-var ObjectId = require('mongodb').ObjectId;
-
-
-// mongoose.connect('mongodb://localhost:27017/movieDB', {useNewUrlParser: true});
-// const db = mongoose.connection;
-// db.on('connected', function() {
-//     console.log('database is connected successfully');
-// });
-// db.on('disconnected',function(){
-//     console.log('database is disconnected successfully');
-// })
-// db.on('error', console.error.bind(console, 'connection error:'));
-
 
 /*
 This function initializes user attributes of a new user object and 
@@ -170,133 +153,6 @@ async function isContributor(username){
 }
 
 
-async function addWriter(username, name, title){
-    const userIsContributor = await isContributor(username);
-    if(userIsContributor){
-        movie = await getMovie(title);
-        if(movie){
-            person = await getPerson(name);
-            if(person){
-                person.writer = true;
-                if(!movie.writers.includes(person["_id"])){
-                    movie.writers.push(person["_id"]);
-                }
-                
-
-                if(!person.movies.includes(movie["_id"])){
-                    person.movies.push(movie["_id"]);
-                }
-                await person.save();
-                await movie.save();
-                return true;
-            }
-
-            else{
-                person = await Person.create({name, writer:true});
-                if(person){
-                    if(!movie.writers.includes(person["_id"])){
-                        movie.writers.push(person["_id"]);
-                    }
-                    
-
-                    if(!person.movies.includes(movie["_id"])){
-                        person.movies.push(movie["_id"]);
-                    }
-                    await movie.save();
-                    await person.save();
-                    return true;
-                }
-            }
-        }
-    }
-    return false;
-
-}
-
-async function changeDirector(username, name, title){
-    const userIsContributor = await isContributor(username);
-    if(userIsContributor){
-        movie = await getMovie(title);
-        if(movie){
-            person = await getPerson(name);
-            if(person){
-                person.director = true;
-                movie.director = person["_id"];
-
-                if(!person.movies.includes(movie["_id"])){
-                    person.movies.push(movie["_id"]);
-                }
-
-                await person.save();
-                await movie.save();
-                return true;
-            }
-
-            else{
-                person = await Person.create({name, director:true});
-                if(person){
-                    movie.director = person["_id"];
-   
-                    if(!person.movies.includes(movie["_id"])){
-                        person.movies.push(movie["_id"]);
-                    }
-
-                    await movie.save();
-                    await person.save();
-                    return true;
-                }
-            }
-        }
-    }
-    return false;
-
-}
-
-async function addActor(username, name, title){
-    const userIsContributor = await isContributor(username);
-    if(userIsContributor){
-        movie = await getMovie(title);
-        if(movie){
-            person = await getPerson(name);
-            if(person){
-                person.actor = true;
-
-                if(!movie.actors.includes(person["_id"])){
-                    movie.actors.push(person["_id"]);
-                }
-                
-                if(!person.movies.includes(movie["_id"])){
-                    person.movies.push(movie["_id"]);
-                }
-                
-                await person.save();
-                await movie.save();
-                return true;
-            }
-
-            else{
-                person = await Person.create({name, actor:true});
-                if(person){
-                    if(!movie.actors.includes(person["_id"])){
-                        movie.actors.push(person["_id"]);
-                    }
-                    
-
-                    if(!person.movies.includes(movie["_id"])){
-                        person.movies.push(movie["_id"]);
-                    }
-                    await person.save();
-                    await movie.save();
-                    return true;
-                }
-            }
-        }
-    }
-    return false;
-
-}
-
-
 async function addMovie(username, movieObj){
         movieObj.actors = removeDuplicates(movieObj.actors)
         movieObj.writers = removeDuplicates(movieObj.writers);
@@ -340,33 +196,6 @@ async function addMovie(username, movieObj){
             return returnVal;
         }
 
-        // async function userCheck(){
-        //     // console.log("calling userCheck")
-
-        //     user = await User.findOne({ username })
-        //     if(user){
-        //         if(!user.contributor){
-        //             console.log(username, "is not a contributor. Only contributors can add movies");
-        //         }
-        //         return;
-
-        //     }
-
-        //     else{
-        //         console.log("The user", username, "does not exist");
-        //     }
-        // }
-
-        // async function movieCheck(){
-        //     // console.log("Calling movie check")
-        //     movie = await Movie.findOne({title: movieObj.title})
-        //     if(movie){
-        //         console.log("The movie", movieObj.title, "already exists");
-        //     }
-
-        //     return;
-        // }
-
         async function directorAddition(){
      
             director = await getPerson(movieObj.director);
@@ -391,6 +220,8 @@ async function addMovie(username, movieObj){
             writer = await getPerson(writerName);
             if(writer){
                 writer.writer = true;
+  
+
                 await writer.save();
                 if(!newMovie.writers.includes(writer["_id"])){
                     newMovie.writers.push(writer["_id"]);
@@ -418,6 +249,7 @@ async function addMovie(username, movieObj){
             actor = await getPerson(actorName);
             if(actor){
                 actor.actor = true;
+  
                 await actor.save();
                 if(!newMovie.actors.includes(actor["_id"])){
                     newMovie.actors.push(actor["_id"]);
@@ -467,9 +299,10 @@ async function addMovie(username, movieObj){
         async function movieAddition(){
             const movie = await Movie.create(newMovie);
             personnel = movie.actors.concat(movie.writers, [movie.director]);
-            // console.log(personnel);
+            // console.log("Personnel array from movieAddition:",personnel);
             if(movie){
-                updateSimilarMovies(movie);
+                await updateSimilarMovies(movie);
+                await updateCollaborators(personnel);
                 // console.log(movie['averageRating']);
                 
                 // console.log(movie);
@@ -533,10 +366,61 @@ async function addMovie(username, movieObj){
                 //     }
                 // }
 
-        async function updateCollaborators(movieModel){
-            return;
+        async function updateCollaborators(personnelArr){
+            // let populatedPersonnelArr = await personnelArr.map( async (personID) => {
+            //     let person = await Person.findOne({"_id": personID});
+                // console.log("Finding the person with ID =" + personID + ": " + person);
+            //     return person;
+            // });
+
+            populatedPersonnelArr = []
+
+            for(let i = 0; i < personnelArr.length; i++){
+                let personID = personnelArr[i];
+                let person = await Person.findOne({"_id": personID});
+                // console.log("Finding the person with ID =" + personID + ": " + person);
+                populatedPersonnelArr.push(person);
+            }
+
+
+            //populating the personnel array
+            // personnelArr.forEach( async (personID) => {
+            //     let person = await Person.findOne({"_id": personID});
+            //     console.log("Finding the person with ID =" + personID + ": " + person);
+            //     populatedPersonnelArr.push(person);
+            // })
+
+            // console.log("Populated personnel array:",populatedPersonnelArr);
+
+            //Updating the collaborators of every person involved in the movie
+            for(let i = 0; i < populatedPersonnelArr.length; i++){
+                // let personOneID = populatedPersonnelArr[i]["_id"];
+                let personOneName = populatedPersonnelArr[i].name;
+                for(let j = 0; j < populatedPersonnelArr.length; j++){
+                    let personTwoID = populatedPersonnelArr[j]["_id"];
+                    let personTwoName = populatedPersonnelArr[j].name;
+                    if(personOneName === personTwoName){
+                        continue;
+                    }
+
+                    if(populatedPersonnelArr[i].collaborators){
+                        if(populatedPersonnelArr[i].collaborators.has(personTwoName)){
+                            let oldCollabaratorCount = populatedPersonnelArr[i].collaborators.get(personTwoID);
+                            populatedPersonnelArr[i].collaborators.set(personTwoID, oldCollabaratorCount+1);
+                        }
+
+                        else{
+                            populatedPersonnelArr[i].collaborators.set(personTwoID, 1);
+                        }
+                    }
+       
+                        
+                }
+                await populatedPersonnelArr[i].save((err) => {if(err) console.log(err)});
+
         }
 
+        }
     }
        
 
@@ -544,14 +428,15 @@ async function addMovie(username, movieObj){
                                                     
 
 
-async function updateSimilarMovies(movieObj){
+async function updateSimilarMovies(movieModel){
     try{
-        const genres = [...movieObj.genres];
+        const genres = [...movieModel.genres];
         let results = []
+        //storing results in a map to remove duplicates
         let resultsMap = new Map();
-        for(let i = 0; i < movieObj.genres.length; ++i){
+        for(let i = 0; i < movieModel.genres.length; ++i){
             //finding 5 movies that contain all the genres in the genres array that are not the movie to update
-            const newResults = await Movie.find({genres: {$all:genres}, title: {$ne:movieObj.title}}).select(["_id", "title"]);
+            const newResults = await Movie.find({genres: {$all:genres}, title: {$ne:movieModel.title}}).select(["_id", "title"]);
         
             // console.log("New Results: ", newResults);
 
@@ -584,16 +469,16 @@ async function updateSimilarMovies(movieObj){
 
         // console.log("Mapped results array:", results);
 
-        //updating similar movies of the movieObj
-        let movieToUpdate = await Movie.findOne({title: movieObj.title});
+        //updating similar movies of the movieModel
+  
         // console.log("Movie to Update:", movieToUpdate)
-        movieToUpdate.similarMovies = removeDuplicates(results);
-        await movieToUpdate.save((err)=>{if(err)console.log(err)});
+        movieModel.similarMovies = removeDuplicates(results);
+        await movieModel.save((err)=>{if(err)console.log(err)});
 
-        //Updating all movies in the movieToUpdate's similar movies array
+        //Updating all movies in the movieModel's similar movies array
         for(let i = 0; i < results.length; ++i){
             let movie = await Movie.findOne({_id:results[i]});
-            movie.similarMovies = [...movie.similarMovies, movieToUpdate]
+            movie.similarMovies = [...movie.similarMovies, movieModel]
             movie.similarMovies = removeDuplicates(movie.similarMovies);
             await movie.save((err)=>{if(err)console.log(err)});
         }
@@ -602,6 +487,36 @@ async function updateSimilarMovies(movieObj){
     catch(err){
         console.log(err);
     }
+
+}
+
+async function getMostFrequentCollaborators(personModel){
+    try{
+        // console.log("Entries:", personModel.collaborators instanceof Map);  
+        personModel.collaborators = new Map(Object.entries(personModel.collaborators));
+        let sortedMap = new Map([...personModel.collaborators.entries()].sort((a, b) => b[1] - a[1]));
+        // console.log("Sorted Frequency map:", sortedMap);
+        let mostFrequentCollaborators = []
+
+        for(let person of personModel.collaborators.entries()){
+            collabCount = person[1]
+            objectID = person[0]
+            personNameObj = await Person.findById(objectID).select("name")
+            personName = personNameObj.name;
+            // console.log("Person name: ", personName);
+            // console.log("Count:", collabCount);
+            mostFrequentCollaborators.push({name: personName, count: collabCount});
+        }
+
+        // console.log("Most Frequent Collaborators: ", mostFrequentCollaborators);
+        return mostFrequentCollaborators;
+    }
+
+    catch(err){
+        console.log(err);
+    }
+
+    return null;
 
 }
 
@@ -908,7 +823,7 @@ module.exports = {
     addPerson,
     addMovie,
     addReview,
-    getMovie, getPerson, getUser, isContributor, addActor, changeDirector, addWriter,
+    getMovie, getPerson, getUser, isContributor,
     changeAccountType,
     followUser,
     unfollowUser,
@@ -916,5 +831,5 @@ module.exports = {
     unfollowPerson,
     getAverageRating,
     getReviews,
-    updateSimilarMovies
+    getMostFrequentCollaborators
 }

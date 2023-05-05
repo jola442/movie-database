@@ -23,7 +23,7 @@ let personSchema = Schema({
     },
 	followers: [{type: Schema.Types.ObjectId, ref: 'User'}],
 	movies: [{type: Schema.Types.ObjectId, ref: 'Movie'}],
-
+    collaborators:{type:Map, of:Number, default:new Map()}
 });
 
 personSchema.query.byName = function(name){

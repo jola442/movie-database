@@ -40,7 +40,7 @@ header
         i.fa.fa-user-circle
       .label
         | Worked with
-      //- #workedwith.value #{Object.keys(person.collaborators).length}
+      #workedwith.value #{person.collaborators.size}
 
   if username  
     -var following = user.peopleFollowing.indexOf(person.name) > -1
@@ -58,12 +58,12 @@ header
         a(href="/movies/"+movie.title)=movie.title 
         br
     h2 Most Frequent Collaborators
-    //- each coworker in person.mostFrequentCollaborators
-    //-     a(href="/people/"+coworker)=coworker
-    //-     if(person.collaborators[coworker] > 1)  
-    //-       span=" ("+ person.collaborators[coworker] + " times)"
-    //-     else
-    //-       span= " ("+ person.collaborators[coworker] + " time)"
-    //-     br
+    each coworker in mostFrequentCollaborators
+        a(href="/people/"+coworker.name)=coworker.name
+        if(coworker.count > 1)  
+          span=" ("+ coworker.count + " times)"
+        else
+          span= " ("+ coworker.count + " time)"
+        br
 script(src="/clientjs/person.js")
 

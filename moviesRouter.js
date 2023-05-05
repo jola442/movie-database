@@ -130,13 +130,13 @@ async function respondWithMovie(req, res){
         averageRating = await model.getAverageRating(req.params.title);
         // console.log(averageRating);
         movie =  await Movie.findOne({title:req.params.title});
-        await model.updateSimilarMovies(movie);
+        // await model.updateSimilarMovies(movie);
 
         movie = await Movie.findOne({title:req.params.title}).lean()
         .populate({path:'actors', select:{"_id":0, "name":1}})
         .populate({path:'writers', select:{"_id":0, "name":1}})
         .populate({path:'director', select:{"_id":0, "name":1}})
-        .populate({path:"similarMovies", select:{"_id":0, "title":1}}).exec();
+        .populate({path:"similarMovies", select:{"_id":0, "title":1, "poster":1}}).exec();
 
         
 
@@ -145,6 +145,7 @@ async function respondWithMovie(req, res){
         // console.log(movie);
 
         if(movie){
+            movie.similarMovies = movie.similarMovies.splice(1,10)
             res.format({"text/html":
             function(){
 
