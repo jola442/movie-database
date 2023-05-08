@@ -3,10 +3,9 @@ import React, { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import DOMPurify from 'dompurify'
 import "./index.css"
-import { Navigation, Pagination, Scrollbar, A11y } from 'swiper';
 import {v4 as uuidv4} from "uuid";
 
-
+import { Navigation, Pagination, Scrollbar, A11y } from 'swiper';
 // Import Swiper React components
 import { Swiper, SwiperSlide } from 'swiper/react';
 
@@ -25,6 +24,8 @@ function Movie() {
             console.log(res.data);
             setMovie(res.data);
             window.scrollTo(0,0);
+        }).catch( (error) =>{
+            console.error(error.response.data);
         })
     },[title])
 
@@ -56,7 +57,7 @@ function Movie() {
                 </div>
 
                 <div className="directed-wrapper">
-                    <p className='directed'><b>Directed by: </b>{movie.director.name}</p>
+                    <p className='directed'><b>Directed by:</b> <Link to={"/people/"+movie.director.name}>{movie.director.name}</Link></p>
                 </div>
             </div>
 
@@ -74,7 +75,7 @@ function Movie() {
                 slidesPerView={5}
                 navigation
                 //   pagination={{ clickable: true }}
-                  scrollbar={{ draggable: true }}
+                //   scrollbar={{ draggable: true }}
                 onSwiper={(swiper) => console.log(swiper)}
                 onSlideChange={() => console.log('slide change')}
                 >
@@ -102,16 +103,18 @@ function Movie() {
                 slidesPerView={5}
                 navigation
                 //   pagination={{ clickable: true }}
-                  scrollbar={{ draggable: true }}
+                //   scrollbar={{ draggable: true }}
                 onSwiper={(swiper) => console.log(swiper)}
                 onSlideChange={() => console.log('slide change')}
                 >
                     {movie.writers.map( (writer) => (
                         <SwiperSlide>
-                            <div className='actor' key={uuidv4()}>
-                                <img src="/blankpfp.png"/>
-                                <p>{writer.name}</p>
-                            </div>   
+                            <Link to={"/people/" +writer.name}>
+                                <div className='actor' key={uuidv4()}>
+                                    <img src="/blankpfp.png"/>
+                                    <p>{writer.name}</p>
+                                </div>   
+                            </Link>
                         </SwiperSlide> 
                     ))}
                    
@@ -124,7 +127,7 @@ function Movie() {
                 // install Swiper modules
                 modules={[Navigation, Pagination, Scrollbar, A11y]}
                 spaceBetween={20}
-                slidesPerView={3}
+                slidesPerView={5}
                 navigation
                 //   pagination={{ clickable: true }}
                 //   scrollbar={{ draggable: true }}
@@ -148,7 +151,27 @@ function Movie() {
         </div>
 
         <div className='right-side'>
-            <h2>Ratings</h2>
+            <h2>Reviews</h2>
+            {/* <div className="reviews-wrapper">
+                {movie.reviews.map( (review) => (
+                    <div className='review' key={uuidv4()}>
+                        <div className='profile-picture-wrapper'>
+                            <img src="/blankpfp.png"/>
+                        </div>
+
+                        <div className='review-header'>
+                            <p><b>{review.reviewer}</b></p>
+                            <div className='rating'>
+                                <p>{review.rating}</p>
+                            </div>
+                        </div>
+
+                        <div className='review-text'>
+                            <p>{review.reviewText}</p>
+                        </div>
+                    </div>
+                ))}
+            </div> */}
 
         </div>
     </>

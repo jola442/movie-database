@@ -31,6 +31,7 @@
     align-items: center;
     height: 100%;
     margin-right: 50px;
+    min-width: 20%;
 }
 
 .movie-img img{
@@ -77,6 +78,11 @@
 
 .directed-wrapper{
     font-size: 1.5em;
+    color:var(--complementary-colour-white);
+}
+
+.directed a{
+    color: var(--complementary-colour-white);
 }
 
 .actors-slider{
@@ -93,6 +99,7 @@
 
 .actor img{
    max-width: 100%;
+   border-radius: 200px;
 }
 
 .actor p{
@@ -102,7 +109,7 @@
 }
 
 .left-side{
-    width: 50%;
+    width: 100%;
     padding:50px;
 }
 
@@ -113,6 +120,7 @@
 }
 
 .movie img{
-    height: 40vh;
+    height: 60vh;
     max-width: 100%;
+    min-width: 100%;
 }
