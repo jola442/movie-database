@@ -1,7 +1,21 @@
-import React from 'react'
-import { NavLink } from "react-router-dom"
+import React, { useContext, useState } from 'react'
+import { NavLink, useNavigate } from "react-router-dom"
+import axios from "axios";
 
 export default function NavLinks( {isMobile, isVisible}) {
+
+  const loggedInUser = JSON.parse(sessionStorage.getItem("user"));
+  console.log("This is the logged in user", loggedInUser)
+  const navigate = useNavigate();
+
+
+  function signOut(){
+    // axios.delete("/signOut").then( (response) =>{
+      sessionStorage.removeItem("user");
+      navigate.to("/");
+    // })
+  }
+
 
   const visibleNavLinkStyle = {
     transform:"translateY(0)",
@@ -34,12 +48,24 @@ export default function NavLinks( {isMobile, isVisible}) {
         </li>
 
         <li >
-            <NavLink className={ ({isActive})=>{return isActive?"active":""} } to= "/Movies">Movies</NavLink>
+            <NavLink className={ ({isActive})=>{return isActive?"active":""} } to= "/movies">Movies</NavLink>
         </li>
 
-        <li>
-            <NavLink className={ ({isActive})=>{return isActive?"active":""} } to= "/Login">Login</NavLink>
-        </li>
+        {loggedInUser?
+        <>
+          <li>
+            <NavLink className={ ({isActive})=>{return isActive?"active":""} } to={"/users/"+loggedInUser.username}>Profile</NavLink>
+          </li>
+          <li>
+            <NavLink className={ ({isActive})=>{return isActive?"active":""} } to= "/" onClick={signOut}>Sign Out</NavLink>
+          </li>
+        </>
+          :
+          <li>
+            <NavLink className={ ({isActive})=>{return isActive?"active":""} } to= "/login">Login</NavLink>
+          </li>
+}
+
 
     </ul>
   )

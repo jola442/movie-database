@@ -1,0 +1,54 @@
+.people-container{
+    margin-top:100px;
+    padding:50px;
+}
+
+.results-label{
+    font-size: 3.5em;
+    font-weight: bold;
+}
+
+.people-div{
+    display: flex;
+    flex-direction: column;
+}
+
+.person-div {
+    display: flex;
+    margin: 20px;
+}
+
+.person-name{
+    font-size: 2em;
+    font-weight: bold;
+}
+
+.person-roles{
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.person-movies{
+    font-size: 1.5em;
+    font-weight: bold;
+    color:var(--dominant-colour);
+}
+
+.people-container .person-img{
+    padding-right: 20px;
+}
+
+.people-container .person-img img{
+    height:10vh;
+    width:6vw;
+    border-radius: 50px;
+}
+
+.people-container a{
+    color:darkslateblue;
+    transition: all 0.4s ease-in;
+}
+
+.people-container a:hover{
+    color:var(--complementary-colour-white);
+}

@@ -50,8 +50,8 @@ h1{
 .mobile-navList{
   position:fixed;
   width:100%;
-  background-color:var(--complementary-colour-blue);
-  color:var(--dominant-colour);
+  background-color:var(--dominant-colour);
+  color:var(--complementary-colour-lavender);
   padding: 0;
   margin: 0;
   top:0.5em;
@@ -62,34 +62,22 @@ h1{
   align-items: center;
   z-index: 3;
   transition: display 0.3s ease ease-in-out;
+  list-style: none;
 }
 
 .mobile-navList li{
   font-size: 1.5em;
-  color:var(--dominant-colour);
 }
 
 .mobile-navList li:visited{
-  color:var(--dominant-colour);
+  color:var(--complementary-colour-lavender);
 }
 
 .mobile-navList a{
-  color:var(--dominant-colour);
+  color:var(--complementary-colour-lavender);
   font-size: 1.5em;
+  font-weight: bold;
 }
-
-/* 
-nav{
-  background-color:var(--dominant-colour);
-  display:flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  position: fixed;
-  width:100%;
-  /* padding-bottom: 10px; */
-  /* z-index: 4;
-  height: 64px;
-} */
 
 .mobile-nav{
   background-color:var(--dominant-colour);
@@ -115,6 +103,7 @@ nav{
   position:absolute;
   top:100%;
   background-color: var(--complementary-colour-blue);
+  font-weight: bold;
 }
 
 .mobile-nav li{
@@ -132,6 +121,7 @@ nav{
   transition:color 0.3s ease-in;
   border-radius: 5px;
 } */ */
+
 
 .logo{
   display: flex;
@@ -186,6 +176,17 @@ nav{
   border-left:none;
 }
 
+select{
+  font-family: var(--main-font);
+  padding-left:5px;
+  font-size:1.5em;
+}
+
+#search-textbox{
+  font-family: var(--main-font);
+  font-size: 1.5em;
+}
+
 .navbar button{
   min-width:40px;
   height:40px;
@@ -216,8 +217,6 @@ i{
   color:var(--complementary-colour-lavender);
 }
 
-
-
 .mobile-nav li a.active{
   background-color: var(--complementary-colour-grey);
   opacity: 0.8;
@@ -236,6 +235,10 @@ i{
   border-top-right-radius: 20px;
   border-bottom-right-radius: 20px;
   width:100%;
+}
+
+.nav-icon{
+  color:var(--complementary-colour-lavender)
 }
 
 
@@ -280,6 +283,7 @@ i{
     padding: 0;
     background-color: var(--complementary-colour-blue);
     margin-right: 10%;
+    font-weight: bold;
     /* gap:5em; */
   }
   

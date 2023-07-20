@@ -1,9 +1,10 @@
-import { useState, useEffect, useRef} from "react"
+import { useState, useEffect, useRef, useContext} from "react"
 import { NavLink } from "react-router-dom"
 import NavLinks from "../NavLinks"
 import SearchBar from "../SearchBar"
 
 export default function DesktopNavbar() {
+
   return (
     <nav className="desktop-nav">
         <div className="logo">

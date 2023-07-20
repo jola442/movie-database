@@ -1,8 +1,6 @@
-import { FaGithub, FaLinkedin, FaEnvelope, FaFilePdf } from "react-icons/fa"
 import { Link } from "react-router-dom"
 import "./index.css"
-import MobileNavbar from "../../components/MobileNavbar";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import axios from "axios"
 import { Navigation, Pagination, Scrollbar, A11y } from 'swiper';
 
@@ -18,17 +16,10 @@ import 'swiper/css/scrollbar';
 import {v4 as uuidv4} from "uuid";
 
 
+
 export default function Home(){
     const [movies, setMovies] = useState(null)
-
-    // useEffect( () =>{
-    //     fetch("/movies?&page=1").then( response => {console.log(response);
-    //         response.json()}
-    //         ).then(data =>{
-    //         console.log(data);
-    //     })
-    //     }, [])
-
+    let fakeUsers = ["Luffy", "Lelouch", "Dave", "Dave", "Dave", "Dave", "Dave"]
 
     useEffect( () => {
         axios.get("/movies?&page=1").then( res => {
@@ -40,18 +31,15 @@ export default function Home(){
     if(!movies){
         return null;
     }
-    let slides = []
-    for(let i = 0; i < movies.length; ++i){
-        slides.push({title: movies[i].title, url: movies[i].poster})
-    }
-
-
-
-
+  
     return (
         <>
-        <h1>Featured Movies</h1>
-        <div className="featured-movies">
+        <div className="welcome-wrapper home-dark">
+            <p className="home-label">Welcome</p>
+            <p>Millions of movies, TV shows and people to discover. Explore now.</p>
+        </div>
+        <p className="home-label">Featured Movies</p>
+        <div className="home-movies-slider home-light">
             <Swiper 
             // install Swiper modules
             modules={[Navigation, Pagination, Scrollbar, A11y]}
@@ -67,7 +55,7 @@ export default function Home(){
                     <SwiperSlide key={uuidv4()}>
                         <Link to={"/movies/" + movie.title}>
                             <img src={movie.poster}></img>
-                            <p>{movie.title}</p>
+                            <p className="movie-title">{movie.title}</p>
                         </Link>
                   
                     </SwiperSlide>
@@ -75,32 +63,88 @@ export default function Home(){
             </Swiper>
         </div>
 
-        </>
-        // <>
-        //     <main>
-        //         <article>
-        //             <h1>Featured Movies</h1>
-        //             <div className="featured-movies">
-        //                 {movies.map( (movie) => (
-        //                     <div className="featured-movie">
-        //                         <div className="label">
-        //                             <Link to={"/movies/"+movie.title}>
-        //                                 {movie.title}
-        //                             </Link>
-        //                         </div>
-        //                         <Link to={"/movies/"+movie.title}>
-        //                                 {movie.poster?<>
-        //                                 <img src={movie.poster}></img>
-        //                                 </>:
-        //                                 <img src="images/blankmovie.jpg" style={{width: "300px", height:"398px"}}/>
-        //                                 }
-        //                         </Link>
-        //                     </div>))
-        //                 }
-        //             </div>
+        <p className="home-label home-dark">Fan Favourites</p>
+        <div className="home-movies-slider home-dark">
+            <Swiper 
+            // install Swiper modules
+            modules={[Navigation, Pagination, Scrollbar, A11y]}
+            spaceBetween={50}
+            slidesPerView={5}
+            navigation
+            //   pagination={{ clickable: true }}
+            //   scrollbar={{ draggable: true }}
+            onSwiper={(swiper) => console.log(swiper)}
+            onSlideChange={() => console.log('slide change')}
+            >
+                {movies.map( (movie) => (
+                    <SwiperSlide key={uuidv4()}>
+                        <Link to={"/movies/" + movie.title}>
+                            <img src={movie.poster}></img>
+                            <p className="movie-title">{movie.title}</p>
+                        </Link>
+                  
+                    </SwiperSlide>
+                ))}
+            </Swiper>
+        </div>
 
-        //         </article>
-        //     </main>
-        // </>
+        <p className="home-label home-light">What's Popular</p>
+        <div className="home-movies-slider home-light">
+            <Swiper 
+            // install Swiper modules
+            modules={[Navigation, Pagination, Scrollbar, A11y]}
+            spaceBetween={50}
+            slidesPerView={5}
+            navigation
+            //   pagination={{ clickable: true }}
+            //   scrollbar={{ draggable: true }}
+            onSwiper={(swiper) => console.log(swiper)}
+            onSlideChange={() => console.log('slide change')}
+            >
+                {movies.map( (movie) => (
+                    <SwiperSlide key={uuidv4()}>
+                        <Link to={"/movies/" + movie.title}>
+                            <img src={movie.poster}></img>
+                            <p className="movie-title">{movie.title}</p>
+                        </Link>
+                  
+                    </SwiperSlide>
+                ))}
+            </Swiper>
+        </div>
+
+        {/* <div className='home-people-slider'>
+    <p className='home-label'>Most Followed Celebrities</p>
+    <Swiper 
+      // install Swiper modules
+      modules={[Navigation, Pagination, Scrollbar, A11y]}
+      spaceBetween={20}
+      slidesPerView={5}
+      navigation
+      //   pagination={{ clickable: true }}
+      //   scrollbar={{ draggable: true }}
+      onSwiper={(swiper) => console.log(swiper)}
+      onSlideChange={() => console.log('slide change')}
+      >
+          {fakeUsers.map( (collaborator) => (
+              <SwiperSlide key={uuidv4()}>
+                  <Link to={"/users/"+ collaborator}>
+                      <div className='home-person' key={uuidv4()}>
+                          <div className='home-person-image'>
+                            <img src="/blankpfp.png"/>
+                            <p>{collaborator}</p>
+                          </div>
+                          
+                          
+                      </div>   
+                  </Link>
+              </SwiperSlide> 
+          ))}
+      
+  </Swiper>
+  </div>  */}
+
+        </>
+
       )
 }

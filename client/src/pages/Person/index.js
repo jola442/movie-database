@@ -18,6 +18,7 @@ import 'swiper/css/scrollbar';
 function Person() {
   const {name} = useParams();
   const [person, setPerson] = useState(null)
+  let fakeUsers = ["Luffy", "Lelouch", "Dave", "Dave", "Dave", "Dave", "Dave"]
 
   useEffect( () => {
     axios.get("/people/" + name).then( res => {
@@ -36,16 +37,28 @@ if(!person){
   return (
     <>
     <div className='person-wrapper'>
-      <div className='person-img'>
-        <img src="/blankpfp.png"></img>
-        <div className='followers'>
-          <p className='follower-count'><b>Followers: </b> {person.followers.length}</p>
+      <div className='left'>
+        <div className='person-card'>
+          <div className='person-img'>
+            <img src="/blankpfp.png"></img>
+          </div>
+
+          <p className='name'><b>{person.name}</b></p>
+        
+          <div className='followers'>
+            <p className='follower-count'><b>Followers: </b> {person.followers.length}</p>
+          </div>  
+        </div>
+        <div className='follow-btn'>
           <button name='follow' className='follow'>Follow</button>
         </div>  
       </div>
 
+
+      
+
+
       <div className='person-info-wrapper'>
-          <p className='name'><b>{person.name}</b></p>
           <p className='appeared-in'>Appeared In ({person.movies.length})</p>
 
           <div className='movies-slider'>
@@ -76,37 +89,37 @@ if(!person){
       </div>
     </div>
 
-
-
-  
     
   <div className='collaborators-slider'>
-  {/* <p className='title'>Most Frequent collaborators</p>
-          <Swiper 
-          // install Swiper modules
-          modules={[Navigation, Pagination, Scrollbar, A11y]}
-          spaceBetween={20}
-          slidesPerView={5}
-          navigation
-          //   pagination={{ clickable: true }}
-            scrollbar={{ draggable: true }}
-          onSwiper={(swiper) => console.log(swiper)}
-          onSlideChange={() => console.log('slide change')}
-          >
-              {person.collaborators.map( (actor) => (
-                  <SwiperSlide>
-                      <Link to={"/people/" +actor.name}>
-                          <div className='actor' key={uuidv4()}>
-                              <img src="/blankpfp.png"/>
-                              <p>{actor.name}</p>
-                          </div>   
-                      </Link>
-          
-                  </SwiperSlide> 
-              ))}
-            
-          </Swiper> */}
-  </div>
+    <p className='title'>Most Frequent Collaborators</p>
+    <Swiper 
+      // install Swiper modules
+      modules={[Navigation, Pagination, Scrollbar, A11y]}
+      spaceBetween={20}
+      slidesPerView={5}
+      navigation
+      //   pagination={{ clickable: true }}
+      //   scrollbar={{ draggable: true }}
+      onSwiper={(swiper) => console.log(swiper)}
+      onSlideChange={() => console.log('slide change')}
+      >
+          {fakeUsers.map( (collaborator) => (
+              <SwiperSlide key={uuidv4()}>
+                  <Link to={"/users/"+ collaborator}>
+                      <div className='collaborator' key={uuidv4()}>
+                          <div className='collaborator-image'>
+                            <img src="/blankpfp.png"/>
+                            <p>{collaborator}</p>
+                          </div>
+                          
+                          
+                      </div>   
+                  </Link>
+              </SwiperSlide> 
+          ))}
+      
+  </Swiper>
+  </div> 
     </>
 
   )
