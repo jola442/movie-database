@@ -18,17 +18,17 @@ import {v4 as uuidv4} from "uuid";
 
 
 export default function Home(){
-    const [movies, setMovies] = useState(null)
-    let fakeUsers = ["Luffy", "Lelouch", "Dave", "Dave", "Dave", "Dave", "Dave"]
+    const [featuredMovies, setFeaturedMovies] = useState(null)
+    const [popularMovies, setPopularMovies] = useState(null)
+    const [fanFavourites, setFanFavourites] = useState(null)
 
     useEffect( () => {
-        axios.get("/movies?&page=1").then( res => {
-            console.log(res.data);
-            setMovies(res.data);
-        })
+        axios.get("movies/featured").then( res => {setFeaturedMovies(res.data);})
+        .then(axios.get("movies/fanFavourites").then(res => {setFanFavourites(res.data)}))
+        .then(axios.get("movies/popular").then(res => {setPopularMovies(res.data)}))
     },[])
 
-    if(!movies){
+    if(!featuredMovies || !popularMovies || !fanFavourites){
         return null;
     }
   
@@ -43,19 +43,17 @@ export default function Home(){
             <Swiper 
             // install Swiper modules
             modules={[Navigation, Pagination, Scrollbar, A11y]}
-            spaceBetween={50}
+            spaceBetween={20}
             slidesPerView={5}
             navigation
-            //   pagination={{ clickable: true }}
-            //   scrollbar={{ draggable: true }}
-            onSwiper={(swiper) => console.log(swiper)}
-            onSlideChange={() => console.log('slide change')}
             >
-                {movies.map( (movie) => (
+                {featuredMovies.map( (movie) => (
                     <SwiperSlide key={uuidv4()}>
                         <Link to={"/movies/" + movie.title}>
-                            <img src={movie.poster}></img>
-                            <p className="movie-title">{movie.title}</p>
+                            <div className='movie' key={uuidv4()}>
+                                <img src={movie.poster} onError={(event) => {event.target.src="/blankmovie.jpg"}}/>
+                                <p className='movie-title'>{movie.title}</p>
+                            </div>   
                         </Link>
                   
                     </SwiperSlide>
@@ -68,19 +66,17 @@ export default function Home(){
             <Swiper 
             // install Swiper modules
             modules={[Navigation, Pagination, Scrollbar, A11y]}
-            spaceBetween={50}
+            spaceBetween={20}
             slidesPerView={5}
             navigation
-            //   pagination={{ clickable: true }}
-            //   scrollbar={{ draggable: true }}
-            onSwiper={(swiper) => console.log(swiper)}
-            onSlideChange={() => console.log('slide change')}
             >
-                {movies.map( (movie) => (
+                {fanFavourites.map( (movie) => (
                     <SwiperSlide key={uuidv4()}>
-                        <Link to={"/movies/" + movie.title}>
-                            <img src={movie.poster}></img>
-                            <p className="movie-title">{movie.title}</p>
+                       <Link to={"/movies/" + movie.title}>
+                            <div className='movie' key={uuidv4()}>
+                                <img src={movie.poster} onError={(event) => {event.target.src="/blankmovie.jpg"}}/>
+                                <p className='movie-title'>{movie.title}</p>
+                            </div>   
                         </Link>
                   
                     </SwiperSlide>
@@ -93,57 +89,23 @@ export default function Home(){
             <Swiper 
             // install Swiper modules
             modules={[Navigation, Pagination, Scrollbar, A11y]}
-            spaceBetween={50}
+            spaceBetween={20}
             slidesPerView={5}
             navigation
-            //   pagination={{ clickable: true }}
-            //   scrollbar={{ draggable: true }}
-            onSwiper={(swiper) => console.log(swiper)}
-            onSlideChange={() => console.log('slide change')}
             >
-                {movies.map( (movie) => (
+                {popularMovies.map( (movie) => (
                     <SwiperSlide key={uuidv4()}>
-                        <Link to={"/movies/" + movie.title}>
-                            <img src={movie.poster}></img>
-                            <p className="movie-title">{movie.title}</p>
+                       <Link to={"/movies/" + movie.title}>
+                            <div className='movie' key={uuidv4()}>
+                                <img src={movie.poster} onError={(event) => {event.target.src="/blankmovie.jpg"}}/>
+                                <p className='movie-title'>{movie.title}</p>
+                            </div>   
                         </Link>
                   
                     </SwiperSlide>
                 ))}
             </Swiper>
         </div>
-
-        {/* <div className='home-people-slider'>
-    <p className='home-label'>Most Followed Celebrities</p>
-    <Swiper 
-      // install Swiper modules
-      modules={[Navigation, Pagination, Scrollbar, A11y]}
-      spaceBetween={20}
-      slidesPerView={5}
-      navigation
-      //   pagination={{ clickable: true }}
-      //   scrollbar={{ draggable: true }}
-      onSwiper={(swiper) => console.log(swiper)}
-      onSlideChange={() => console.log('slide change')}
-      >
-          {fakeUsers.map( (collaborator) => (
-              <SwiperSlide key={uuidv4()}>
-                  <Link to={"/users/"+ collaborator}>
-                      <div className='home-person' key={uuidv4()}>
-                          <div className='home-person-image'>
-                            <img src="/blankpfp.png"/>
-                            <p>{collaborator}</p>
-                          </div>
-                          
-                          
-                      </div>   
-                  </Link>
-              </SwiperSlide> 
-          ))}
-      
-  </Swiper>
-  </div>  */}
-
         </>
 
       )

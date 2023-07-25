@@ -85,7 +85,7 @@ async function updatePeopleFollowing(req, res){
 async function respondWithPerson(req, res){
     try{
         const person = await Person.findOne({name:req.params.name}).lean()
-        .populate({path:'movies', select:{"title":1, "_id":0}})
+        .populate({path:'movies', select:{"title":1, "poster":1, "_id":0}}).populate({path: 'collaborators', select:{"_id":0}})
 
         // console.log("Person found:",person);
   
@@ -126,6 +126,8 @@ async function respondWithPerson(req, res){
 }
 
 async function respondWithPeople(req, res){
+    let pageCount = 1;
+    let numResults = 0;
     try{
         queryObject = req.query;
         let results = [];
@@ -142,28 +144,28 @@ async function respondWithPeople(req, res){
 
         if(!req.query.name){
             req.query.name = "";
-            results = await Person.find({}).
-                            limit(ENTRIES_PER_PAGE).skip((req.query.page-1)*ENTRIES_PER_PAGE);
+            results = await Person.find({}).populate({path:'movies', select:{"title":1, "_id":0}});
+                            //.limit(ENTRIES_PER_PAGE).skip((req.query.page-1)*ENTRIES_PER_PAGE);
         }
     
     
         else{
             console.log(req.query.name);
-            results = await Person.find().byName(req.query.name).limit(ENTRIES_PER_PAGE).skip((req.query.page-1)*ENTRIES_PER_PAGE).lean().select({"name":1, "_id":0});
-            console.log(results);
+            results = await Person.find().byName(req.query.name).populate({path:'movies', select:{"title":1, "_id":0}});//.limit(ENTRIES_PER_PAGE).skip((req.query.page-1)*ENTRIES_PER_PAGE).lean().select({"name":1, "_id":0});
         }
+
+        numResults = results.length;
   
        
 
  
         
         if(results.length >= ENTRIES_PER_PAGE){
-            queryObject["hasNext"] = true;
+            pageCount = Math.floor(numResults/ENTRIES_PER_PAGE);
+            results = results.slice((req.query.page-1)*ENTRIES_PER_PAGE, (req.query.page-1)*ENTRIES_PER_PAGE + ENTRIES_PER_PAGE);
         }
-    
-        else{
-            queryObject["hasNext"] = false;
-        }
+        
+        results.push({pageCount});
     
         if(results.length == 0){
             res.status(404).send();

@@ -80,7 +80,9 @@ function People() {
 
   return (
     <div className='people-container'>
-        <div className='results-label'>Showing results for "{searchParams.get("name")}"</div>
+        {people.length > 1?<div className='results-label'>Showing results for "{searchParams.get("name")}"</div>:
+        <div className='results-label'>No results for "{searchParams.get("name")}"</div>}
+        
         <div className='people-div'>
             {people.map( (person) =>(
                 <div className='person-div'>

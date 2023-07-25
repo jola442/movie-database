@@ -1,5 +1,5 @@
 const express = require('express');
-const session = require("express-session");
+// const session = require("express-session");
 const path = require('path');
 const app = express();
 const model =  require("./businessLogic.js");
@@ -63,7 +63,7 @@ async function main(){
 
 main();
 
-app.use(session({secret:"pain"}));
+// app.use(session({secret:"pain"}));
 app.set("view engine", "pug");
 app.use(express.json());
 app.use(cors());
@@ -81,55 +81,43 @@ app.use(cors());
 
 
 app.post("/login", async function(req, res){
-    try{
-        // user = await User.findOne({username: req.body.username, password: req.body.password}).populate("usersFollowing").populate("peopleFollowing");
-        // user = await User.findOne({username:req.body.username, password: req.body.password}).lean()
-        // .populate('usersFollowing', 'username').populate('followers', 'username')
-        // .populate('peopleFollowing', 'name').populate({path: 'reviews', select:{"_id":0, "reviewer":0}, populate:{path:'movie', select:{"title":1, "_id":0}}})
+    User.findOne({username:req.body.username})
+    .populate('usersFollowing', 'username').populate('followers', 'username')
+    .populate('peopleFollowing', 'name').populate({path: 'reviews', select:{"_id":0, "reviewer":0}, populate:{path:'movie', select:{"title":1, "_id":0}}})
+    .exec( function(err, user){
+        if(err) throw err;
 
-        user = await model.getUser(req.body.username);
-        //Changing array of objects with usernames to array of usernames
-        // newUsersFollowing = user.usersFollowing.map(function(userFollowing){
-        //     return userFollowing.username;
-        // })
-
-        // //Changing array of objects with names to array of names
-        // newPeopleFollowing = user.peopleFollowing.map(function(personFollowing){
-        //     return personFollowing.name;
-        // })
-
-        // user.usersFollowing = newUsersFollowing;
-        // user.peopleFollowing = newPeopleFollowing;
-        // console.log(user);
         if(user){
-            //accessing the password attribute because the findOne method returns {id:, password:}
-            passwordObj = await User.findOne({username: req.body.username, password: req.body.password}).select("password");
-            password = passwordObj.password;
+            user.comparePassword(req.body.password, function(err, isMatch){
+                if(err) throw err;
+                if(isMatch){
+                    user = user.toObject();
+                    newUsersFollowing = user.usersFollowing.map((usr)=> {return usr.username});
+                    newFollowers = user.followers.map((usr)=> {return usr.username});
+                    newPeopleFollowing = user.peopleFollowing.map((p)=> {return p.name});
+                    user.usersFollowing = newUsersFollowing;
+                    user.peopleFollowing = newPeopleFollowing;
+                    user.followers = newFollowers;
+                    delete user.password;
+                    delete user.id;
+                    console.log(user)
+                    res.status(200).send(JSON.stringify(user));
 
-            if(password === req.body.password){
-                req.session.user = user;
-                req.session.username = req.session.user.username
-                res.status(200).send();
-            }
-            else{
-                res.status(401).send();
-            }
-          
-        }
+                }
     
+                else{
+                    res.status(401).send();
+                }
+            })
+        
+        }
+
         else{
             res.status(401).send();
         }
-    }
+        })
 
-    catch{
-        console.log(err);
-    }
-
-    finally{
-        return;
-    }
-
+    
 })
 
 
@@ -138,10 +126,10 @@ app.get("/index.html",renderHome);
 app.get("/home", renderHome);
 app.get("/contributor-options", renderContributorPage)
 app.get("/filter", renderFilterPage)
-app.delete("/signOut", function(req,res,next){
-    req.session.destroy();
-    res.status(200).send();
-});
+// app.delete("/signOut", function(req,res,next){
+//     req.session.destroy();
+//     res.status(200).send();
+// });
 
 app.use("/users", usersRouter);
 app.use("/movies", moviesRouter);

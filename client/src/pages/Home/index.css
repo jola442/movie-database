@@ -38,10 +38,10 @@
   padding-top: 20px;
 }
 
-.home-movies-slider .swiper-slide img{
+/* .home-movies-slider .swiper-slide img{
   width: 100%;
   height: 40vh;
-}
+} */
 
 .home-movies-slider .swiper-slide{
   cursor: pointer;

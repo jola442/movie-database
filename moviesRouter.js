@@ -4,8 +4,12 @@ const model =  require("./businessLogic.js");
 const Movie = require("./MovieModel");
 ENTRIES_PER_PAGE = 50;
 
+router.get("/featured", respondWithFeaturedMovies)
+router.get("/fanFavourites", respondWithFanFavourites)
+router.get("/popular", respondWithPopularMovies)
 router.get("/", [queryParser,respondWithMovies]);
 router.get("/:title", respondWithMovie);
+
 
 router.use(express.json());
 
@@ -16,6 +20,32 @@ router.post("/", addNewMovie)
 router.post("/:title/reviews", updateReviews);
 
 
+async function respondWithFeaturedMovies(req, res){
+    try{
+        let results = await Movie.find( {genres: {$in:["Adventure"]}}).limit(50);
+        res.status(200).json(results);
+    }
+
+    catch{
+        console.log(err);
+    }
+
+    finally{
+        return;
+    }
+
+}
+
+async function respondWithFanFavourites(req, res){
+    let results = await Movie.find( {genres: {$in:["Comedy"]}}).limit(50);
+    res.status(200).json(results);
+}
+
+async function respondWithPopularMovies(req, res){
+    let results = await Movie.find( {genres: {$in:["Romance"]}}).limit(50);
+    console.log(results);
+    res.status(200).json(results);
+}
 
 
 async function addNewMovie(req, res){
@@ -176,6 +206,7 @@ async function respondWithMovie(req, res){
 
 //This function parses the provided query string so that movies can be matched to it
 function queryParser(req, res, next){
+
     const MAX_RATING = 10;
     const MIN_RATING = 0;
     if(!req.query.title){
@@ -234,7 +265,9 @@ function queryParser(req, res, next){
 }
 
 async function respondWithMovies(req, res){
-    movieQuery = Movie.find().lean().limit(ENTRIES_PER_PAGE).skip((req.query.page-1)*ENTRIES_PER_PAGE);
+    let movieQuery = Movie.find().lean()/*.skip((req.query.page-1)*ENTRIES_PER_PAGE);*/
+    let pageCount = 0;
+
     // movieQueryString = "Movie.find()"
     for(parameter in req.query){
         if(req.query[parameter] === ""){
@@ -266,15 +299,19 @@ async function respondWithMovies(req, res){
  
 
     results = await movieQuery.select({"title":1, "poster":1, "_id":0}).exec();
-    queryObject = req.query;
+    numResults = results.length;
 
-    if(results.length >= ENTRIES_PER_PAGE){
-        queryObject["hasNext"] = true;
-    }
+    console.log("Results.length:", results.length);
+    // if(results.length >= ENTRIES_PER_PAGE){
+    //     results.push({pageCount:Math.floor(results.length/ENTRIES_PER_PAGE)});
+    //     console.log(Math.floor(results.length/ENTRIES_PER_PAGE))
+    //     queryObject["hasNext"] = true;
+    // }
 
-    else{
-        queryObject["hasNext"] = false;
-    }
+    // else{
+    //     queryObject["hasNext"] = false;
+    //     results.push({pageCount:1});
+    // }
   
     // console.log(queryObject)
 
@@ -283,13 +320,28 @@ async function respondWithMovies(req, res){
     }
 
     else{
+        if(numResults > ENTRIES_PER_PAGE){
+            if(req.query.page >= 1){
+                console.log("Page:" +req.query.page);
+                console.log("Page type:", typeof(req.query.page));
+                let pageCount = Math.floor(numResults/ENTRIES_PER_PAGE);
+                console.log("Page Count:", pageCount);
+                console.log("req.query.page-1", (req.query.page-1)*ENTRIES_PER_PAGE);
+                results = results.slice((req.query.page-1)*ENTRIES_PER_PAGE, (req.query.page-1)*ENTRIES_PER_PAGE + ENTRIES_PER_PAGE);
+                console.log("Results length", results.length);
+                results.push({pageCount}) 
+            }
+    
+        }
+
+        else{
+            results.push({pageCount:1})
+        }
         // currentPage = Number(req.query.page);
         
  
         res.format(
-            {"text/html": function(req, res){
-                res.status(200).render("pages/movies", {qObj: queryObject, username:req.session.username, movies:results})
-                },
+            {
             "application/json": function(req, res){
                 res.status(200).json(results);
             }

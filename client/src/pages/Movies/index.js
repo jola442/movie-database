@@ -124,7 +124,7 @@ if(!movies){
       </div>
 
       <div className='movies-right'>
-        {movies.length <= 1?<p>No Results</p>:
+        {movies.length <= 1?<p className="results-label">No Results</p>:
         movies.map( (movie) => (
             <Link to={"/movies/"+ movie.title} key={uuidv4()}>
                 <div className='movie'>

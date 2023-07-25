@@ -55,7 +55,9 @@ function updateNotifications(req, res){
 async function updateAccountType(req, res){
     try{
         if(await model.changeAccountType(req.params.username)){
-            res.status(200).send();
+            let user = await model.getUser(req.params.username);
+            console.log("After changing account type", user);
+            res.status(200).send(user);
         }
     
         else{
@@ -157,7 +159,9 @@ async function respondWithUser(req, res){
 }
 
 async function respondWithUsers(req, res){
-    console.log(req.query);
+    let pageCount = 1;
+    let numResults = 0;
+
     try{
         queryObject = req.query;
         let results = [];
@@ -175,25 +179,26 @@ async function respondWithUsers(req, res){
         
         if(!req.query.username){
             req.query.username = "";
-            results = await User.find({}).limit(ENTRIES_PER_PAGE).skip((req.query.page-1)*ENTRIES_PER_PAGE);
+            results = await User.find({});
             newResults = results.map((obj)=>{return obj.username});
             results = newResults;
         }
     
         else{
-            results = await User.find().byUsername(req.query.username).limit(ENTRIES_PER_PAGE).skip((req.query.page-1)*ENTRIES_PER_PAGE).lean().select({"username":1, "_id":0});
+            results = await User.find().byUsername(req.query.username);
             newResults = results.map((obj)=>{return obj.username});
             results = newResults;
             
         }
 
-        if(results.length > ENTRIES_PER_PAGE){
-            queryObject["hasNext"] = true;
+        numResults = results.length;
+  
+        if(results.length >= ENTRIES_PER_PAGE){
+            pageCount = Math.floor(numResults/ENTRIES_PER_PAGE);
+            results = results.slice((req.query.page-1)*ENTRIES_PER_PAGE, (req.query.page-1)*ENTRIES_PER_PAGE + ENTRIES_PER_PAGE);
         }
-    
-        else{
-            queryObject["hasNext"] = false;
-        }
+        
+        results.push({pageCount});
     
         if(results.length == 0){
             res.status(404).send();

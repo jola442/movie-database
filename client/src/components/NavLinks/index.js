@@ -4,14 +4,14 @@ import axios from "axios";
 
 export default function NavLinks( {isMobile, isVisible}) {
 
-  const loggedInUser = JSON.parse(sessionStorage.getItem("user"));
+  const loggedInUser = JSON.parse(localStorage.getItem("user"));
   console.log("This is the logged in user", loggedInUser)
   const navigate = useNavigate();
 
 
   function signOut(){
     // axios.delete("/signOut").then( (response) =>{
-      sessionStorage.removeItem("user");
+      localStorage.removeItem("user");
       navigate.to("/");
     // })
   }

@@ -119,6 +119,7 @@ async function getMovie(title){
     return movie;
 }
 
+//This function returns a javascript user object. It is not capable of using database functions
 async function getUser(username){
     const user = await User.findOne({username}).lean()
     .populate('usersFollowing', 'username').populate('followers', 'username')
@@ -131,6 +132,8 @@ async function getUser(username){
     user.usersFollowing = newUsersFollowing;
     user.peopleFollowing = newPeopleFollowing;
     user.followers = newFollowers;
+    delete user.id;
+    delete user.password;
     
     return user;
 }

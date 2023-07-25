@@ -21,16 +21,15 @@ import 'swiper/css/scrollbar';
 
 function User() {
   const {username} = useParams();
-  const loggedInUser = JSON.parse(sessionStorage.getItem("user"));
+  let loggedInUser = JSON.parse(localStorage.getItem("user"));
   const [user, setUser] = useState(null);
-  const [contributor, setContributor] = useState(null);
+  const [contributor, setContributor] = useState(loggedInUser.contributor);
   let fakeUsers = ["Luffy", "Lelouch", "Dave", "Dave", "Dave", "Dave", "Dave"]
 
   useEffect( () => {
     axios.get("/users/" + username).then( res => {
         console.log(res.data);
         setUser(res.data);
-        setContributor(res.data.contributor);
         window.scrollTo(0,0);
     }).catch( (error) =>{
         console.error(error.response.data);
@@ -42,7 +41,11 @@ if(!user){
 }
 
 function handleChange(){
-    setContributor(!contributor);
+    axios.put("/users/" + loggedInUser.username + "/accountType").then( (response) => {
+        localStorage.setItem("user", JSON.stringify(response.data));
+        loggedInUser = JSON.parse(localStorage.getItem("user"));
+        setContributor(loggedInUser.contributor);
+    })
 }
 
   return (
