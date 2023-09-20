@@ -32,24 +32,149 @@ Output: boolean representing whether the person was successfully added or not
 
 
 */
-async function addPerson(username, personObj){
-    const user = await User.findOne({ username });
-    if(user){
-        if(user.contributor){
-            person = await Person.create(personObj);
-            return true;
-        }
-        else{
-            console.log("Error. This user is not a contributor");
-            return false;
-        }
+// async function addPerson(username, personObj){
+//     const user = await User.findOne({ username });
+//     if(user){
+//         if(user.contributor){
+//             person = await Person.create(personObj);
+//             return true;
+//         }
+//         else{
+//             console.log("Error. This user is not a contributor");
+//             return false;
+//         }
+//     }
+
+//     else{
+//         console.log("Error. This user does not exist");
+//         return false;
+//     }
+
+// }
+
+async function addPerson(personObj){
+    try{
+        let person = await Person.create(personObj);
+        return true;
     }
 
-    else{
-        console.log("Error. This user does not exist");
+    catch(err){
+        console.log(err)
+        return false;
+    }
+}
+
+async function addActor(actorObj){
+    try{
+        let person = await Person.findOne({name:actorObj.name});
+      
+        if(!person){
+            let addedPerson = await addPerson({name:actorObj.name});
+            if(!addedPerson){
+                return false;
+            }
+
+            person = await Person.findOne({name:actorObj.name});
+        }
+            let movie = await Movie.findOne({title:actorObj.movie});
+            console.log("found this movie", movie);
+  
+    
+            if(movie){
+                movie.actors.push(person.id);
+                person.movies.push(movie.id);
+                person.actor = true;
+                await movie.save();
+                await person.save();
+                return true;
+            }
+
+            else{
+                return false;
+            }
+    
+        }
+
+    catch(err){
+        console.log(err);
         return false;
     }
 
+}
+
+async function addWriter(writerObj){
+    try{
+        let person = await Person.findOne({name:writerObj.name});
+        
+        if(!person){
+            let addedPerson = await addPerson({name:writerObj.name});
+            if(!addedPerson){
+                return false;
+            }
+
+            person = await Person.findOne({name:writerObj.name});
+        }
+            let movie = await Movie.findOne({title:writerObj.movie});
+            console.log("found this movie", movie);
+  
+    
+            if(movie){
+                movie.writers.push(person.id);
+                person.movies.push(movie.id);
+                person.writer = true;
+                await movie.save();
+                await person.save();
+                return true;
+            }
+
+            else{
+                return false;
+            }
+    
+        }
+
+    catch(err){
+        console.log(err);
+        return false;
+    }
+
+}
+
+async function changeDirector(directorObj){
+    try{
+        let person = await Person.findOne({name:directorObj.name});
+      
+        if(!person){
+            let addedPerson = await addPerson({name:directorObj.name});
+            if(!addedPerson){
+                return false;
+            }
+
+            person = await Person.findOne({name:directorObj.name});
+        }
+            let movie = await Movie.findOne({title:directorObj.movie});
+            console.log("found this movie", movie);
+  
+    
+            if(movie){
+                movie.director = person.id;
+                person.movies.push(movie.id);
+                person.director = true;
+                await movie.save();
+                await person.save();
+                return true;
+            }
+
+            else{
+                return false;
+            }
+    
+        }
+
+    catch(err){
+        console.log(err);
+        return false;
+    }
 }
 
 async function addReview(username, reviewObj){
@@ -166,8 +291,8 @@ async function addMovie(username, movieObj){
         
         try{
             returnVal = true;
-            userIsContributor = await isContributor(username);
-            if(userIsContributor){
+            // userIsContributor = await isContributor(username);
+            // if(userIsContributor){
                 movie = await getMovie(movieObj.title); 
                 if(!movie){
                     await directorAddition();
@@ -179,11 +304,11 @@ async function addMovie(username, movieObj){
                     }
                 }
 
-                else{
-                    returnVal = false;
-                }
+                // else{
+                //     returnVal = false;
+                // }
 
-            }
+            // }
 
             else{
                 returnVal = false;
@@ -824,6 +949,9 @@ function removeDuplicates(lst){
 module.exports = {
     addUser,
     addPerson,
+    addActor,
+    addWriter,
+    changeDirector,
     addMovie,
     addReview,
     getMovie, getPerson, getUser, isContributor,

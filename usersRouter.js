@@ -22,15 +22,14 @@ async function createUser(req, res){
 
         else{
             newUser = await User.create(req.body);
-            req.session.user = newUser;
-            req.session.username = newUser.username;
-            res.status(200).send();
+            res.status(201).send();
         }
 
     }   
 
     catch{
         console.log(err);
+        res.status(400).send();
     }
 
     finally{
@@ -81,7 +80,7 @@ async function updateUsersFollowing(req, res){
     console.log("request parameters:", req.params);
     try{
         if(req.body.follow == false){
-            success = await model.unfollowUser(req.session.username, req.params.username)
+            success = await model.unfollowUser(req.body.loggedInUser, req.params.username)
             if(success){
                 res.status(200).send();
             }
@@ -92,7 +91,7 @@ async function updateUsersFollowing(req, res){
         }
     
         else if(req.body.follow == true){
-            success = model.followUser(req.session.username, req.params.username);
+            success = model.followUser(req.body.loggedInUser, req.params.username);
             if(success){
                 res.status(200).send();
             }
@@ -132,13 +131,7 @@ async function respondWithUser(req, res){
         
 
         if(user){
-            res.format({"text/html": function(){
-                console.log(user);
-                res.status(200).render("pages/user", {username:req.session.username, user:user, reviews:user.reviews})
-            },
-            "application/json": function(){
-                res.status(200).json(user);
-            }});
+            res.status(200).json(user);
         }
     
         else{
@@ -205,14 +198,7 @@ async function respondWithUsers(req, res){
         }
     
         else{
-
-            res.format({
-            "text/html": function(req,res){
-                res.status(200).render("pages/users", {qObj:queryObject, username: req.session.username, users:results});
-            }, 
-            "application/json":function(req, res, next){
-                res.status(200).json(results);
-            }})
+            res.status(200).json(results);
         }
     }
 

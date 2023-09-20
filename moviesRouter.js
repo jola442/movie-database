@@ -49,13 +49,8 @@ async function respondWithPopularMovies(req, res){
 
 
 async function addNewMovie(req, res){
-    const user = await model.getUser(req.session.username);
     try{
-        if(!req.session.username || !(user.contributor)){
-            res.status(401).send();
-        }
-
-        else if(model.addMovie(req.session.username, req.body)){
+        if(model.addMovie(req.body)){
             res.status(201).send();
         }
 
@@ -76,69 +71,43 @@ async function addNewMovie(req, res){
 
 
 async function addNewActor(req, res){
-    const user = await model.getUser(req.session.username);
-    if(!req.session.username || !user.contributor){
-        res.status(401).send();
-    }
-
-    
-    else if(await model.addActor(req.session.username, req.body.name, req.body.title)){
-        res.status(200).send();
+    let addedActor = await model.addActor({name:req.body.name, movie:req.body.movie});
+    if(addedActor){
+        res.status(200).send("Added actor");
     }
 
     else{
-        res.status(400).send();
+        res.status(400).send("Could not add actor")
     }
 }
 
 async function changeDirector(req, res){
-    const user = await model.getUser(req.session.username);
-    if(!req.session.username || !user.contributor){
-        res.status(401).send();
-    }
+    let directorChanged = await model.changeDirector({name:req.body.name, movie:req.body.movie});
 
-    else if(await model.changeDirector(req.session.username, req.body.name, req.body.title)){
-        res.status(200).send();
+    if(directorChanged){
+        res.status(200).send("Changed director");
     }
 
     else{
-        res.status(400).send();
+        res.status(400).send("Could change director")
     }
 }
 
 async function addNewWriter(req, res){
-    const user = await model.getUser(req.session.username);
-    if(!req.session.username || !user.contributor){
-        res.status(401).send();
-    }
-
-    else if(await model.addWriter(req.session.username, req.body.name, req.body.title)){
-        res.status(200).send();
+    let addedWriter = await model.addWriter({name:req.body.name, movie:req.body.movie});
+    if(addedWriter){
+        res.status(200).send("Added actor");
     }
 
     else{
-        res.status(400).send();
+        res.status(400).send("Could not add actor")
     }
 }
 
 
 async function updateReviews(req, res){
     try{
-        if(req.session.username){
-            // req.body.reviewer = req.session.username;
-            if(await model.addReview(req.session.username, req.body)){
-                // res.redirect("/movies/"+req.body.movieTitle);
-                res.status(200).send();
-                // res.status(200).render("movie", {username:req.session.username, movie:model.movies[req.params.movieTitle], reviews:model.reviews});
-            }
-            else{
-                res.status(400).send();
-            }
-        }
-    
-        else{
-            res.status(401).send();
-        }
+        console.log("add review")
     }
 
     catch{

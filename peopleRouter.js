@@ -12,21 +12,8 @@ router.post("/", addNewPerson)
 
 
 async function addNewPerson(req, res){
-    // console.log(req.body);
-    const user = await model.getUser(req.session.username);
-
     try{
-        if(!req.session.username || !user.contributor){
-            res.status(401).send();
-        }
-    
-        else if(await model.addPerson(req.session.username, req.body)){
-            res.status(201).send();
-        }
-    
-        else{
-            res.status(400).send();
-        }
+        console.log("add person")
     }
 
     catch{
@@ -45,7 +32,7 @@ async function updatePeopleFollowing(req, res){
         if(req.body.follow == false){
             // console.log("Prior to unfollowing");
             // console.log(model.users[req.session.username].peopleFollowing);
-            if(await model.unfollowPerson(req.session.username, req.params.name)){
+            if(await model.unfollowPerson(req.body.loggedInUser, req.params.name)){
                 // console.log("After unfollowing");
                 // console.log(model.users[req.session.username].peopleFollowing);
                 res.status(200).send();
@@ -59,7 +46,7 @@ async function updatePeopleFollowing(req, res){
         else if(req.body.follow == true){
             // console.log("Prior to following");
             // console.log(model.users[req.session.username].usersFollowing);
-            if(await model.followPerson(req.session.username, req.params.name)){
+            if(await model.followPerson(req.body.loggedInUser, req.params.name)){
                 // console.log("After following");
                 // console.log(model.users[req.session.username].peopleFollowing);
                 res.status(200).send();
@@ -87,28 +74,16 @@ async function respondWithPerson(req, res){
         const person = await Person.findOne({name:req.params.name}).lean()
         .populate({path:'movies', select:{"title":1, "poster":1, "_id":0}}).populate({path: 'collaborators', select:{"_id":0}})
 
-        // console.log("Person found:",person);
+        console.log("Person found:",person);
   
-        let mostFrequentCollaborators = await model.getMostFrequentCollaborators(person)/*.entries();*/
+        // let mostFrequentCollaborators = await model.getMostFrequentCollaborators(person)/*.entries();*/
 
-        if(mostFrequentCollaborators.length > 5){
-            mostFrequentCollaborators = mostFrequentCollaborators.slice(0,5)
-        }
+        // if(mostFrequentCollaborators.length > 5){
+        //     mostFrequentCollaborators = mostFrequentCollaborators.slice(0,5)
+        // }
         // console.log("Most Frequent Collaborators", mostFrequentCollaborators);
         if(person){
-            let user;
-            if(req.session.username){
-                user = await model.getUser(req.session.username);
-            }
-            res.format({"text/html": 
-                function(){
-                    res.render("pages/person", {username: req.session.username, user, person, mostFrequentCollaborators});
-                },
-    
-                "application/json": 
-                function(){
-                    res.status(200).json(person);}
-                });
+            res.status(200).json(person);
         }
         else{
             res.status(404).send();
@@ -172,13 +147,7 @@ async function respondWithPeople(req, res){
         }
     
         else{
-            res.format({
-            "text/html": function(req,res){
-                res.status(200).render("pages/people", {qObj:queryObject, username: req.session.username, people:results});
-            }, 
-            "application/json":function(req, res){
-                res.status(200).json(results);
-            }})
+            res.status(200).json(results);
         }
     }
 

@@ -64,7 +64,7 @@ async function main(){
 main();
 
 // app.use(session({secret:"pain"}));
-app.set("view engine", "pug");
+
 app.use(express.json());
 app.use(cors());
 // app.use(function(req, res, next) {
@@ -121,11 +121,6 @@ app.post("/login", async function(req, res){
 })
 
 
-app.get("/", renderHome);
-app.get("/index.html",renderHome);
-app.get("/home", renderHome);
-app.get("/contributor-options", renderContributorPage)
-app.get("/filter", renderFilterPage)
 // app.delete("/signOut", function(req,res,next){
 //     req.session.destroy();
 //     res.status(200).send();
@@ -134,17 +129,5 @@ app.get("/filter", renderFilterPage)
 app.use("/users", usersRouter);
 app.use("/movies", moviesRouter);
 app.use("/people", peopleRouter);
-
-function renderHome(req, res){
-    res.status(200).render("pages/home", {username:req.session.username, movies:featuredMovies});
-}
-
-function renderContributorPage(req, res){
-    res.status(200).render("pages/contributor", {username:req.session.username, movies:featuredMovies});
-}
-
-function renderFilterPage(req, res){
-    res.status(200).render("pages/filter", {username:req.session.username});
-}
 
 
