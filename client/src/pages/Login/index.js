@@ -11,7 +11,7 @@ function Login() {
   function signIn(){
     axios.post("/login", {username, password}).then( (response) =>{
       console.log(response);
-      localStorage.setItem("user", JSON.stringify(response.data));
+      sessionStorage.setItem("user", JSON.stringify(response.data));
       // setLoggedInUser(response.data);
       navigate("/");
   }).catch( (err) =>{

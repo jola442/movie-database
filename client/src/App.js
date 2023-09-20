@@ -11,10 +11,6 @@ import People from "./pages/People";
 import Users from "./pages/Users";
 
 function App() {
-
-  window.onbeforeunload = function() {
-    localStorage.clear();
- }
   
 
   return (

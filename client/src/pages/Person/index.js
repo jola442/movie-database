@@ -22,6 +22,7 @@ function Person() {
 
   useEffect( () => {
     axios.get("/people/" + name).then( res => {
+        console.log("got here")
         console.log(res.data);
         setPerson(res.data);
         window.scrollTo(0,0);
@@ -77,7 +78,7 @@ if(!person){
                         <SwiperSlide key={uuidv4()}>
                             <Link to={"/movies/"+ movie.title}>
                                 <div className='movie' key={uuidv4()}>
-                                    <img src={movie.poster}/>
+                                    <img src={movie.poster} onError={(event) => {event.target.src="/blankmovie.jpg"}}/>
                                     <p>{movie.title}</p>
                                 </div>   
                             </Link>

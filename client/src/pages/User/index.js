@@ -21,7 +21,7 @@ import 'swiper/css/scrollbar';
 
 function User() {
   const {username} = useParams();
-  let loggedInUser = JSON.parse(localStorage.getItem("user"));
+  let loggedInUser = JSON.parse(sessionStorage.getItem("user"));
   const [user, setUser] = useState(null);
   const [contributor, setContributor] = useState(loggedInUser.contributor);
   let fakeUsers = ["Luffy", "Lelouch", "Dave", "Dave", "Dave", "Dave", "Dave"]
@@ -42,8 +42,8 @@ if(!user){
 
 function handleChange(){
     axios.put("/users/" + loggedInUser.username + "/accountType").then( (response) => {
-        localStorage.setItem("user", JSON.stringify(response.data));
-        loggedInUser = JSON.parse(localStorage.getItem("user"));
+        sessionStorage.setItem("user", JSON.stringify(response.data));
+        loggedInUser = JSON.parse(sessionStorage.getItem("user"));
         setContributor(loggedInUser.contributor);
     })
 }
@@ -182,7 +182,7 @@ function handleChange(){
                         <SwiperSlide key={uuidv4()}>
                             <Link to={"/movies/"+ movie.title}>
                                 <div className='movie' key={uuidv4()}>
-                                    <img src={movie.poster}/>
+                                    <img src={movie.poster} onError={(event) => {event.target.src="/blankmovie.jpg"}}/>
                                     <p>{movie.title}</p>
                                 </div>   
                             </Link>

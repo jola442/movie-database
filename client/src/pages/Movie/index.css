@@ -215,3 +215,12 @@
 .movie-review-summary{
     font-size: 2em;
 }
+
+.movie-icon {
+    margin-left: 0.5em;
+    vertical-align: text-bottom;
+    cursor: pointer;
+    font-size: 1.5em;
+    padding: 5px;
+    color: var(--complementary-colour-white);
+}
