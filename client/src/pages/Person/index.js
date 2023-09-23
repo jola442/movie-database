@@ -14,6 +14,7 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
+import MobileNavbar from '../../components/MobileNavbar';
 
 function Person() {
   const {name} = useParams();
@@ -37,6 +38,7 @@ if(!person){
 
   return (
     <>
+    <MobileNavbar></MobileNavbar>
     <div className='person-wrapper'>
       <div className='left'>
         <div className='person-card'>

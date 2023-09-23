@@ -6,6 +6,7 @@ import "./index.css"
 import {v4 as uuidv4} from "uuid";
 import { FaPencilAlt, FaPlus, FaStar } from 'react-icons/fa'
 import Modal from '../../components/Modal';
+import MobileNavbar from "../../components/MobileNavbar"
 import { Navigation, Pagination, Scrollbar, A11y } from 'swiper';
 // Import Swiper React components
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -52,6 +53,7 @@ function Movie() {
 
   return (
     <>
+        <MobileNavbar></MobileNavbar>
         <div className='movie-wrapper'>
             <div className='movie-img'>
                 <img src={movie.poster} onError={(event) => {event.target.src="/blankmovie.jpg"}}></img>
@@ -121,11 +123,13 @@ function Movie() {
                     })}</p>
                     <p className='directed'><b>Directed by: </b>
                         <Link to={"/people/"+movie.director.name}>{movie.director.name}</Link>
-							<FaPencilAlt className='edit movie-icon' onClick={() => {
+                            {loggedInUser && loggedInUser.contributor && 
+                            <FaPencilAlt className='edit movie-icon' onClick={() => {
 													setModalSelection("director");
 													setIsModalOpen(true);
 												}}>					
-							</FaPencilAlt>
+							</FaPencilAlt> }
+			
                      </p>
 
                 </div>

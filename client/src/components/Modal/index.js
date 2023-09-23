@@ -26,27 +26,11 @@ const Modal = ( {title, isOpen, toggleModal, role, updateParentPage}) => {
             if(res.status === 200){
                 updateParentPage()
             }
-            // navigate(location.pathname + location.search);
-            // window.location.reload();
             }                
-        );
+        ).catch((err) => {
+            alert("Could not add the new " + role)
+        });
     
-        // if(input != null){
-        //     let data = {name:input, title:movieTitle};
-        //     var xhttp = new XMLHttpRequest();
-        //     xhttp.onreadystatechange = function() {
-        //     if (this.readyState == 4 && this.status == 200) {
-        //         alert("Writer added successfully");
-        //         window.location.reload();
-        //     }
-        //     else if(this.readyState == 4 && this.status == 400){
-        //         alert("Unable to add writer");
-        //     }
-        //     };
-        //     xhttp.open("POST", "/movies/"+movieTitle+"/writers", true);
-        //     xhttp.setRequestHeader("Content-type","application/json");
-        //     xhttp.send(JSON.stringify(data));
-        // }
     }
 
   return ReactDom.createPortal(

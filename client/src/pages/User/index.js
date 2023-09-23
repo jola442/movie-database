@@ -17,6 +17,7 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
+import MobileNavbar from '../../components/MobileNavbar';
 
 
 function User() {
@@ -48,8 +49,25 @@ function handleChange(){
     })
 }
 
+function follow(){
+    axios.put("/users/" + username + "/followers", {loggedInUser, follow:!loggedInUser.usersFollowing.includes(username)}).then( (res) =>{
+        if(res.status === 200){
+            alert("Followed");
+            axios.get("/users/" + loggedInUser.username).then( (res) => {
+                console.log("loggedInUser",res.data)
+                if(res.status === 200){
+                    sessionStorage.setItem("user", JSON.stringify(res.data));
+                }
+            }).catch( (err) => {
+                console.log(err)
+            })
+        }
+    })
+}
+
   return (
     <>
+    <MobileNavbar></MobileNavbar>
     <div className='user-wrapper'>
       <div className='user-left'>
         <div className='user-card'>
@@ -66,7 +84,7 @@ function handleChange(){
         
         </div>
         <div className='follow-btn'>
-          <button name='follow' className='follow'>Follow</button>
+          <button name='follow' className='follow' onClick={follow}>{loggedInUser.usersFollowing.includes(username)?"Unfollow":"Follow"}</button>
         </div>  
       </div>
 

@@ -74,6 +74,110 @@
     top:50%;
 }
 
+.modal-container .title{
+    font-size: 2.5em;
+    margin: 0;
+    color:var(--dominant-colour);
+}
+
+
+.close-button{
+    width: 100%;
+    display: flex;
+    justify-content: end;
+    background-color: var(--complementary-colour-lavender);
+    color:var(--complementary-colour-white);
+    justify-self: flex-start;
+    /* display: flex; */
+    /* align-items: center;
+    position: absolute;
+    height: max-content;
+    top:0;
+    color:var(--complementary-colour-lavender);
+    font-size: 1em;
+    margin: 0;
+    right:0;
+    background-color:var(--dominant-colour); */
+}
+/* 
+.close-button svg{
+    position: absolute;
+    right:0;
+} */
+
+.modal-overlay{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0,0,0,0.5);
+    position:fixed;
+    top:0;
+    bottom:0;
+    right:0;
+    left:0;
+    z-index: 5;
+    overflow-y: scroll;
+}
+
+.modal-overlay::-webkit-scrollbar{
+    display: none;
+}
+
+
+
+.modal-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5em;
+    /* display: flex;
+    position: absolute;
+    top:20%;
+    animation:fadeInDown 0.5s;
+    padding:20px;
+    background-color:var(--complementary-colour-white);
+    box-shadow: 0px 0px 18px 0px rgba(0,0,0,0.75);    
+    z-index: 6;
+    overflow-y: auto; */
+    
+}
+
+.modal-container p{
+    margin:10px;
+}
+
+.modal-container input{
+    margin:10px;
+    font-size: 1em;
+    border-radius: 20px;
+    background-color: lightgray;
+    padding:10px;
+    text-align: center;
+} 
+
+.modal-container button{
+    display:block;
+    font-size: 1em;
+    padding:10px;
+    border-radius: 20px;
+    margin:10px;
+    font-family: var(--main-font);
+    font-weight: bold;
+    background-color: var(--complementary-colour-lavender);
+    color:var(--complementary-colour-white);
+    cursor: pointer;
+}
+
+.modal-container .title{
+    font-size: 2em;
+    margin: 0;
+    color:var(--dominant-colour);
+}
+
+.close-button svg{
+    cursor: pointer;
+}
 
 
 @media screen and (min-width: 768px){
@@ -86,9 +190,7 @@
 
 
 @media screen and (min-width: 1280px){
-    .close-button:hover{
-        cursor: pointer;
-    }
+
 
     .modal-container .title{
         font-size: 2.5em;
@@ -182,6 +284,7 @@
         font-weight: bold;
         background-color: var(--complementary-colour-lavender);
         color:var(--complementary-colour-white);
+        cursor: pointer;
     }
     
     .modal-container .title{

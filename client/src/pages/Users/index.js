@@ -3,6 +3,7 @@ import "./index.css"
 import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 import PaginatedLinks from '../../components/PaginatedLinks';
+import MobileNavbar from '../../components/MobileNavbar';
 
 
 function Users() {
@@ -31,7 +32,9 @@ function Users() {
 
 
   return (
-    <div className='people-container'>
+    <>
+        <MobileNavbar/>
+        <div className='people-container'>
         <div className='results-label'>Showing results for "{searchParams.get("username")}"</div>
         <div className='people-div'>
             {users.map( (user) =>(
@@ -52,6 +55,8 @@ function Users() {
 
         {location.search.includes("?") && pageCount > 1 && <PaginatedLinks url={location.pathname+location.search} pageCount={pageCount}/>}
     </div>
+    </>
+    
 
     
     

@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react'
 import "./index.css"
 import axios from 'axios'
 import { Navigate, useNavigate } from 'react-router-dom';
+import MobileNavbar from '../../components/MobileNavbar';
 
 function Login() {
   const [username, setUsername] = useState("");
@@ -35,6 +36,7 @@ function Login() {
 
   return (
     <>
+        <MobileNavbar></MobileNavbar>
         <div className='login-panel'>
             <h1>Welcome</h1>
             <input type="text" id = "username" name="username" placeholder="Username" required value={username} onChange={(e) => {setUsername(e.target.value)}}></input> 

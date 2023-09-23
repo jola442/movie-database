@@ -14,6 +14,7 @@ import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 
 import {v4 as uuidv4} from "uuid";
+import MobileNavbar from "../../components/MobileNavbar";
 
 
 
@@ -34,6 +35,7 @@ export default function Home(){
   
     return (
         <>
+        <MobileNavbar></MobileNavbar>
         <div className="welcome-wrapper home-dark">
             <p className="home-label">Welcome</p>
             <p>Millions of movies, TV shows and people to discover. Explore now.</p>

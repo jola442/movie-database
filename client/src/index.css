@@ -84,6 +84,7 @@ h1{
   background-color:var(--dominant-colour);
   display:flex;
   justify-content: space-between;
+  align-items: center;
   flex-wrap: wrap;
   position: fixed;
   width:100%;
@@ -152,8 +153,9 @@ h1{
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  width: 50%;
+  /* width: 50%; */
   font-size: 2em;
+  padding-right: 10px;
 }
 
 .search-bar{

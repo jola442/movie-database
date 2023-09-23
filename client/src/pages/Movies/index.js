@@ -90,6 +90,7 @@ if(!movies){
 
   return (
     <>
+    <MobileNavbar></MobileNavbar>
     {/* <div>Movies</div> */}
     <div className='movies-container'>
       <div className='movies-left'>
