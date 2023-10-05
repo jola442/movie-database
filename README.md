@@ -1,20 +1,25 @@
 ## Note
 This is an updated version of movie-database-without-db that is being scaled and refactored to use React.js and MongoDB. 
 
+## Run Instructions:
+Open a terminal and navigate to the server folder and run npm run dev
+Open another terminal and navigate to the client folder and run npm start 
+
+## Features still being refactored
+Follow/unfollow feature
+Recommended movies feature
+Movie review feature
+
+## Pages being redesigned
+User page
+Person page
+Contributor page
+
 ## Directory Structure:
 React files are contained in client/src
 CSS files are contained in public/css \
 Image files are contained in public/images \
 Server files are contained in server/src
-
-## Important files:
-businessLogic.js \
-server.js \
-moviesRouter.js \
-peopleRouter.js \
-usersRouter.js \
-package.json \
-package-lock.json 
 
 ## Image Sources
 Champions League.jpg:https://www.theguardian.com/football/2020/feb/23/chelsea-bayern-munich-champions-league-final-2012
