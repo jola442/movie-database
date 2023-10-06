@@ -2,18 +2,18 @@
 This is an updated version of movie-database-without-db that is being scaled and refactored to use React.js and MongoDB. 
 
 ## Run Instructions:
-Open a terminal and navigate to the server folder and run npm run dev
-Open another terminal and navigate to the client folder and run npm start 
+1. Open a terminal and navigate to the server folder and run npm run dev
+2. Open another terminal and navigate to the client folder and run npm start 
 
 ## Features still being refactored
-Follow/unfollow feature
-Recommended movies feature
-Movie review feature
+* Follow/unfollow feature
+* Recommended movies feature
+* Movie review feature
 
 ## Pages being redesigned
-User page
-Person page
-Contributor page
+1. User page
+2. Person page
+3. Contributor page
 
 ## Directory Structure:
 React files are contained in client/src
@@ -32,6 +32,7 @@ movie1.jpg: https://m.media-amazon.com/images/M/MV5BMDU2ZWJlMjktMTRhMy00ZTA5LWEz
 All other images are from IDMB
 
 ## Images
+# Sample page: Toy Story
 <img width="969" alt="image" src="https://github.com/jola442/movie-database/assets/51683551/b4575ba5-f3da-4ae8-ac50-b2a07a0f82ea">
 
 
