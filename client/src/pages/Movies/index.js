@@ -94,7 +94,8 @@ if(!movies){
     {/* <div>Movies</div> */}
     <div className='movies-container'>
       <div className='movies-left'>
-        <div className="filter-box">
+        <p>Filter box coming soon....</p>
+        {/* <div className="filter-box">
           <p className="filters">Filters</p>
 
           <div className='year filter-wrapper'>
@@ -121,17 +122,15 @@ if(!movies){
 
         <div className='movies-search-button'>
           <button onClick={search}>Search</button>
-        </div>
+        </div> */}
       </div>
 
       <div className='movies-right'>
         {movies.length <= 1?<p className="results-label">No Results</p>:
         movies.map( (movie) => (
-            <Link to={"/movies/"+ movie.title} key={uuidv4()}>
-                <div className='movie'>
-                    <img src={movie.poster} onError={(event) => {event.target.src="/blankmovie.jpg"}}/>
-                    <p className='movie-title'>{movie.title}</p>
-                </div>   
+            <Link to={"/movies/"+ movie.title} key={uuidv4()} className='movie'>
+                <img src={movie.poster} onError={(event) => {event.target.src="/blankmovie.jpg"}}/>
+                <p className='movie-title'>{movie.title}</p> 
             </Link>
         ))
         }

@@ -67,14 +67,14 @@
     cursor: pointer;
 }
 
-.movies-slider{
+.person-container .movies-slider{
     height: 80%;
     width: 100%;
     display: flex;
     align-items: center;
 }
 
-.movies-slider .swiper{
+.person-container .movies-slider .swiper{
     height: 100%;
     width: 100%;
 }
@@ -87,15 +87,15 @@
     top:40%;
 } */
 
-.movies-slider .movie{
+.person-container .movies-slider .movie{
     height: 100%;
 }
 
-.movies-slider .movie img{
+.person-container .movies-slider .movie img{
     height: 40vh;
 }
 
-.movies-slider .movie p{
+.person-container .movies-slider .movie p{
     height: 10%;
 }
 

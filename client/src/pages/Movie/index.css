@@ -1,8 +1,9 @@
+/* must change between screen sizes */
+
+/* flex direction, justify-content/align-items */
 .movie-wrapper{
-    margin-top: 64px;
-    /* background-color: black; */
     display: flex;
-    padding:20px 20px 20px 50px;
+    margin-top: 64px;
     color:var(--complementary-colour-white);
     background-repeat: no-repeat;
     background-size: 100%;
@@ -10,65 +11,67 @@
     font-weight: normal;
 }
 
-.movie-img{
+/* change: flex-direction, justify-content, align-items */
+.movie-container .movie-wrapper .movie-info-wrapper{
     display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 60vh;
-    margin-right: 50px;
-    min-width: 20%;
+    padding:15px 0 15px 0;
 }
 
-.movie-img img{
-    width: 100%;
-    height: 100%;
-}
-
-.movie-info-wrapper{
+/* width must change */
+.movie-container .movie-wrapper .movie-img{
     display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    width: max-content;
+    padding:15px 0 15px 0;
 }
 
-.movie-facts{
-    display: flex;
-    font-size: 1.25em;
-    /* justify-content: space-between; */
-    list-style:square;
-    text-align: center;
-    /* padding-left: 20px; */
-}
-
-.movie-facts li:first-child{
-    list-style: none;
-}
-
-
-
-/* .rated{
-    border:2px solid black
-} */
-
-.movie-facts li:first-child{
-    margin-left: 0;
-}
-
-.movie-facts li{
-    margin-left:50px;
-}
-.title{
-    font-size: 2.5em;
-    font-family: var(--main-font);
-    font-weight: bold;
-}
-
+/*plot actors writers directed by */
+/* change: font-size */
 .movie-personnel{
     font-size: 1.5em;
     display:flex;
     flex-direction: column;
     justify-content: space-evenly;
     height: 70%;
+}
+
+/* movie title */
+/* change: font-size */
+.title{
+    font-size: 2.5em;
+    font-family: var(--main-font);
+    font-weight: bold;
+}
+
+/* change: font-size */
+.directed-wrapper{
+    font-size: 1.5em;
+    color:var(--complementary-colour-white);
+}
+
+/* PG 1995 Genres... */
+.movie-facts{
+    display: flex;
+    list-style:square;
+    text-align: center;
+}
+
+/* MUST NOT CHANGE */
+.movie-facts li{
+    margin-left:50px;
+}
+
+.movie-facts li:first-child{
+    list-style: none;
+    margin:0
+}
+
+.movie-review-summary{
+    font-size: 2em;
+}
+
+/* slider img styles */
+.movie-container .movie img{
+    height: 80%;
+    width:95%;
 }
 
 .movie-personnel a{
@@ -84,80 +87,13 @@
     color:var(--complementary-colour-lavender);
 }
 
-
-
-.label{
-    font-size: 1.5em;
-    font-family: var(--main-font);
-    font-weight: bold;
-}
-
-.directed-wrapper{
-    font-size: 1.5em;
-    color:var(--complementary-colour-white);
-}
-
 .directed a{
     color: var(--complementary-colour-white);
 }
 
-.actors-slider{
-    margin-bottom: 50px;
-}
-
-.writers-slider{
-    margin-bottom: 50px;
-}
-
-.actors-slider .swiper-slide{
-    height:300px;
-    max-width: 200px;
-    /* width:100%; */
-}
-
-.writers-slider .swiper-slide{
-    height:300px;
-    max-width: 200px;
-    /* width:100%; */
-}
-
-.actor{
-    display: flex;
-    flex-direction: column;
-    background-color: var(--dominant-colour);
-    border-radius: 20px;
-    box-shadow:0 2px 5px 0 var(--dominant-colour);
-    height: 100%;
-}
-
-.actor-image{
-    width: 100%;
-    height: 70%;
-   /* border-radius: 200px; */
-   border-radius: 20px;
-}
-
-.actor-image img{
-    height:100%;
-    width: 100%;
-    border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
-}
-
-.actor p{
-    color:var(--complementary-colour-white);
-    font-size: 1.5em;
-    height: 30%;
-    width: 100%;
-    text-align: center;
-    word-wrap: break-word;
-    white-space: pre-wrap;
-    text-overflow: ellipsis;
-}
-
 .movie-bottom-page{
     width: 100%;
-    padding:50px;
+    padding:0 15px 0 15px
 }
 
 .movie p{
@@ -166,15 +102,10 @@
     font-size: 1.5em;
 }
 
-.movie img{
-    height: 60vh;
-    max-width: 100%;
-    min-width: 100%;
-}
-
 .movie-reviews{
     padding: 20px;
 }
+
 .movie-review{
     display: flex;
     background-color: var(--complementary-colour-white);
@@ -203,8 +134,6 @@
     border-radius: 200px;
 }
 
-
-
 .movie-review-rating{
     background-color: black;
     color:var(--complementary-colour-white);
@@ -212,20 +141,246 @@
     border-radius: 5px;
 }
 
-.movie-review-summary{
-    font-size: 2em;
+
+.movie-container .label{
+    padding-top: 20px;
+    font-size: 2.5em;
+    font-weight: bold;
+}
+    
+.movie-container .movie-title{
+    padding:20px;
+    font-weight: bold;
+}
+  
+  .movie-container .swiper {
+    height: 70vh;
+  }
+    
+  .movie-container .swiper-slide{
+    height: 100%;
+  }
+  
+  .movie-container .swiper .movie{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+  }
+
+
+@media screen and (min-width: 320px){
+    .movie-wrapper{
+        margin-top: 64px;
+        /* background-color: black; */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        color:var(--complementary-colour-white);
+        background-repeat: no-repeat;
+        background-size: 100%;
+        background-color: rgba(5, 4, 4, 0.75);
+        font-weight: normal;
+    }
+
+    .title{
+        font-size: 2em;
+    }
+
+    .movie-container .swiper {
+        height: 50vh;
+    }
+
+    .movie-facts{
+        font-size: 1.25em;
+    }
+    
+    .movie-container .movie-wrapper .movie-info-wrapper{
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 0 15px 15px 15px;
+        word-wrap: break-word; /* Allows long words to break onto the next line */
+        white-space: normal;
+        max-width: 100%;
+    }
+
+    .movie-container .movie-wrapper .movie-img img{
+        height: 100%;
+        width: 100%;
+    }
+
+    .movie-container .movie img {
+        height: 80%;
+        width: 70%;
+    }
+
+    .movie-review{
+        width: 100%;
+    }
 }
 
-.movie-icon {
-    margin-left: 0.5em;
-    vertical-align: text-bottom;
-    cursor: pointer;
-    font-size: 1.5em;
-    padding: 5px;
-    color: var(--complementary-colour-white);
-    transition: color 0.3s ease-in-out;
+@media screen and (min-width:620px){
+    .movie-container .movie img {
+        height: 80%;
+        width: 95%;
+    }
+
+    
 }
 
-.movie-icon:hover{
-    color:black;
+
+@media screen and (min-width: 900px){
+    .movie-wrapper{
+        margin: 64px 0 0 0;
+        /* background-color: black; */
+        display: flex;
+        flex-direction: row;
+        align-items: stretch;
+        color:var(--complementary-colour-white);
+        background-repeat: no-repeat;
+        background-size: 100%;
+        background-color: rgba(5, 4, 4, 0.75);
+        font-weight: normal;
+    }
+    
+    .movie-container .movie-wrapper .movie-img{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 60vh;
+        min-width: 25%;
+        max-width: 30%;
+        padding:15px 0 15px 15px;
+        margin: 0 50px 0 0;
+    }
+    
+    .movie-container .movie-wrapper .movie-img img{
+        width: 100%;
+        height: 100%;
+    }
+    
+    .movie-container .movie-wrapper .movie-info-wrapper{
+        display: flex;
+        flex-direction: column;
+        justify-content:flex-start;
+        width: max-content;
+        padding:15px 0 15px 0;
+        height: 60vh;
+    }
+    
+    .movie-facts{
+        font-size: 1.5em;
+    }
+
+    .movie-container .movie img {
+        height: 80%;
+        width: 95%;
+    }
+
+}
+
+
+@media screen and (min-width: 1280px){
+    .movie-wrapper{
+        flex-direction: row;
+        align-items: stretch;
+ 
+    }
+    
+    .movie-container .movie-wrapper .movie-img{
+        justify-content: center;
+        align-items: center;
+        height: 60vh;
+    }
+    
+    .movie-container .movie-wrapper .movie-info-wrapper{
+        display: flex;
+        flex-direction: column;
+        justify-content:flex-start;
+        width: max-content;
+        padding:15px 0 15px 0;
+    }
+    
+    .movie-facts{
+        display: flex;
+        font-size: 1.25em;
+    }
+
+    .movie-container .swiper {
+        height: 70vh;
+      }
+      
+    .movie-container .swiper-slide{
+        height: 100%;
+    }
+
+    .title{
+        font-size: 2.5em;
+    }
+    
+    .movie-personnel{
+        font-size: 1.5em;
+    }
+  
+    .directed-wrapper{
+        font-size: 1.5em;
+    }
+
+    
+    .actor-image{
+        width: 100%;
+        height: 70%;
+       /* border-radius: 200px; */
+       border-radius: 20px;
+    }
+    
+    .movie-reviews{
+        padding: 20px;
+    }
+    .movie-review{
+        display: flex;
+        background-color: var(--complementary-colour-white);
+        width: 50vw;
+        padding:20px;
+        align-items: center;
+        gap:2em;
+        box-shadow:0 2px 5px 0 var(--dominant-colour);
+    }
+    
+    .movie-review-left{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap:0.5em;
+        width:max-content;
+    }
+    
+    .movie-review-left p{
+        font-size: 2em;
+        text-align: center;
+    }
+    
+    .movie-reviewer-image img{
+        height: 20vh;
+        border-radius: 200px;
+    }
+    
+    
+    
+    .movie-review-rating{
+        background-color: black;
+        color:var(--complementary-colour-white);
+        width: max-content;
+        border-radius: 5px;
+    }
+    
+    .movie-review-summary{
+        font-size: 2em;
+    }
+
+    .movie-container .movie img {
+        height: 80%;
+        width: 95%;
+    }
+    
 }

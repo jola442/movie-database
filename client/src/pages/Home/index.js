@@ -36,77 +36,166 @@ export default function Home(){
     return (
         <>
         <MobileNavbar></MobileNavbar>
-        <div className="welcome-wrapper home-dark">
-            <p className="home-label">Welcome</p>
-            <p>Millions of movies, TV shows and people to discover. Explore now.</p>
-        </div>
-        <p className="home-label">Featured Movies</p>
-        <div className="home-movies-slider home-light">
-            <Swiper 
-            // install Swiper modules
-            modules={[Navigation, Pagination, Scrollbar, A11y]}
-            spaceBetween={20}
-            slidesPerView={5}
-            navigation
-            >
-                {featuredMovies.map( (movie) => (
-                    <SwiperSlide key={uuidv4()}>
+        <div className="home-container">
+            <div className="welcome-wrapper dark">
+                <p className="label">Welcome</p>
+                <p>All your favourite movies and people in one place! Explore now.</p>
+            </div>
+            <p className="label">Featured Movies</p>
+            <div className="movies-slider light">
+                <Swiper 
+                // install Swiper modules
+                modules={[Navigation, Pagination, Scrollbar, A11y]}
+                // spaceBetween={20}
+                // slidesPerView={5}
+                // autoHeight={true} // Allow Swiper to determine its height based on content
+                breakpoints={{
+                    // when window width >= 768px
+                    320: {
+                        slidesPerView: 1,
+                        spaceBetweenSlides: 10
+                    },
+
+                    520: {
+                        slidesPerView: 2,
+                        spaceBetweenSlides: 10
+                    },
+                    // when window width >= 768px
+                    700: {
+                        slidesPerView: 3,
+                        spaceBetweenSlides: 10
+                    },
+                    // when window width >= 768px
+                    1080: {
+                        slidesPerView: 4,
+                        spaceBetweenSlides: 10
+                    },
+                    // when window width is <= 1268px
+                    1268: {
+                        slidesPerView: 5,
+                        spaceBetweenSlides: 10
+                    } 
+                }}
+                navigation
+                
+                >
+                    {featuredMovies.map( (movie) => (
+                        <SwiperSlide key={uuidv4()}>
+                            <Link to={"/movies/" + movie.title} className='movie' key={uuidv4()}>
+            
+                                <img src={movie.poster} onError={(event) => {event.target.src="/blankmovie.jpg"}}/>
+                                <p className='movie-title'>{movie.title}</p>
+                
+                            </Link>
+                    
+                        </SwiperSlide>
+                    ))}
+                </Swiper>
+            </div>
+
+            <p className="label dark">Fan Favourites</p>
+            <div className="movies-slider dark">
+                <Swiper 
+                // install Swiper modules
+                modules={[Navigation, Pagination, Scrollbar, A11y]}
+                // spaceBetween={20}
+                // slidesPerView={5}
+                // autoHeight={true} // Allow Swiper to determine its height based on content
+                breakpoints={{
+                    // when window width >= 768px
+                    320: {
+                        slidesPerView: 1,
+                        spaceBetweenSlides: 10
+                    },
+
+                    600: {
+                        slidesPerView: 2,
+                        spaceBetweenSlides: 10
+                    },
+                    // when window width >= 768px
+                    900: {
+                        slidesPerView: 3,
+                        spaceBetweenSlides: 10
+                    },
+                    // when window width >= 768px
+                    1080: {
+                        slidesPerView: 4,
+                        spaceBetweenSlides: 10
+                    },
+                    // when window width is <= 1268px
+                    1268: {
+                        slidesPerView: 5,
+                        spaceBetweenSlides: 10
+                    } 
+                }}
+                navigation
+                
+                >
+                    {fanFavourites.map( (movie) => (
+                        <SwiperSlide key={uuidv4()}>
                         <Link to={"/movies/" + movie.title}>
-                            <div className='movie' key={uuidv4()}>
-                                <img src={movie.poster} onError={(event) => {event.target.src="/blankmovie.jpg"}}/>
-                                <p className='movie-title'>{movie.title}</p>
-                            </div>   
-                        </Link>
-                  
-                    </SwiperSlide>
-                ))}
-            </Swiper>
-        </div>
+                                <div className='movie' key={uuidv4()}>
+                                    <img src={movie.poster} onError={(event) => {event.target.src="/blankmovie.jpg"}}/>
+                                    <p className='movie-title'>{movie.title}</p>
+                                </div>   
+                            </Link>
+                    
+                        </SwiperSlide>
+                    ))}
+                </Swiper>
+            </div>
 
-        <p className="home-label home-dark">Fan Favourites</p>
-        <div className="home-movies-slider home-dark">
+            <p className="label light">What's Popular</p>
+            <div className="movies-slider light">
             <Swiper 
-            // install Swiper modules
-            modules={[Navigation, Pagination, Scrollbar, A11y]}
-            spaceBetween={20}
-            slidesPerView={5}
-            navigation
-            >
-                {fanFavourites.map( (movie) => (
-                    <SwiperSlide key={uuidv4()}>
-                       <Link to={"/movies/" + movie.title}>
-                            <div className='movie' key={uuidv4()}>
-                                <img src={movie.poster} onError={(event) => {event.target.src="/blankmovie.jpg"}}/>
-                                <p className='movie-title'>{movie.title}</p>
-                            </div>   
-                        </Link>
-                  
-                    </SwiperSlide>
-                ))}
-            </Swiper>
-        </div>
+                // install Swiper modules
+                modules={[Navigation, Pagination, Scrollbar, A11y]}
+                // spaceBetween={20}
+                // slidesPerView={5}
+                // autoHeight={true} // Allow Swiper to determine its height based on content
+                breakpoints={{
+                    // when window width >= 768px
+                    320: {
+                        slidesPerView: 1,
+                        spaceBetweenSlides: 10
+                    },
 
-        <p className="home-label home-light">What's Popular</p>
-        <div className="home-movies-slider home-light">
-            <Swiper 
-            // install Swiper modules
-            modules={[Navigation, Pagination, Scrollbar, A11y]}
-            spaceBetween={20}
-            slidesPerView={5}
-            navigation
-            >
-                {popularMovies.map( (movie) => (
-                    <SwiperSlide key={uuidv4()}>
-                       <Link to={"/movies/" + movie.title}>
-                            <div className='movie' key={uuidv4()}>
-                                <img src={movie.poster} onError={(event) => {event.target.src="/blankmovie.jpg"}}/>
-                                <p className='movie-title'>{movie.title}</p>
-                            </div>   
-                        </Link>
-                  
-                    </SwiperSlide>
-                ))}
-            </Swiper>
+                    600: {
+                        slidesPerView: 2,
+                        spaceBetweenSlides: 10
+                    },
+                    // when window width >= 768px
+                    900: {
+                        slidesPerView: 3,
+                        spaceBetweenSlides: 10
+                    },
+                    // when window width >= 768px
+                    1080: {
+                        slidesPerView: 4,
+                        spaceBetweenSlides: 10
+                    },
+                    // when window width is <= 1268px
+                    1268: {
+                        slidesPerView: 5,
+                        spaceBetweenSlides: 10
+                    } 
+                }}
+                navigation
+                
+                >
+                    {popularMovies.map( (movie) => (
+                        <SwiperSlide key={uuidv4()}>
+                        <Link to={"/movies/" + movie.title}>
+                                <div className='movie' key={uuidv4()}>
+                                    <img src={movie.poster} onError={(event) => {event.target.src="/blankmovie.jpg"}}/>
+                                    <p className='movie-title'>{movie.title}</p>
+                                </div>   
+                            </Link>
+                    
+                        </SwiperSlide>
+                    ))}
+                </Swiper>
+            </div>
         </div>
         </>
 

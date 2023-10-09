@@ -4,10 +4,10 @@
   padding-bottom:20px;
 }
 
-.home-label{
+.home-container .label{
   padding-top: 20px;
   padding-left: 20px;
-  font-size: 3.5em;
+  font-size: 2.5em;
   font-weight: bold;
 }
 
@@ -17,54 +17,97 @@
   padding-left:20px;
 } 
 
-.home-dark{
+.home-container .dark{
   background-color: rgba(5, 4, 4, 0.75);
   color:var(--complementary-colour-white);
 }
 
-.home-light{
+.home-container .light{
   color:var(--dominant-colour);
 }
 
-.movie-title{
+.home-container .movie-title{
   padding:20px;
   font-weight: bold;
 }
 
-.home-movies-slider .swiper{
-  width: 100%;
-  padding-left:50px;
-  padding-right: 50px;
-  padding-top: 20px;
+.home-container .swiper {
+  height: 70vh;
+}
+  
+.home-container .movies-slider{
+  padding: 0 15px 0 15px
 }
 
-/* .home-movies-slider .swiper-slide img{
-  width: 100%;
-  height: 40vh;
-} */
-
-.home-movies-slider .swiper-slide{
-  cursor: pointer;
+.home-container .swiper-slide{
+  height: 100%;
 }
 
-.home-movies-slider .swiper-slide p{
-  text-align: center;
-  font-family: var(--main-font);
-  font-size: 1.75em;
-  color: var(--complementary-colour-white);
-}
-
-.home-movies-slider{
-  /* margin-top:64px; */
-  width: 100%;
+.home-container .movie{
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
 }
 
-/* .home-movies-slider .swiper-button-prev{
-  top:40%;
+.home-container .movie img{
+  height: 80%;
+  width:95%;
 }
 
-.home-movies-slider .swiper-button-next{
-  top:40%;
-} */
+@media screen and (min-width: 1280px){
+  .welcome-wrapper{
+    /* text-align: center; */
+    margin-top: 64px;
+    padding-bottom:20px;
+  }
+  
+  .home-container .movies-slider{
+    padding: 0 15px 0 15px
+  }
+  .home-container .label{
+    padding: 10px 0 0 15px;
+    font-size: 3.5em;
+    font-weight: bold;
+  }
+  
+  
+  .welcome-wrapper p:last-child{
+    font-size: 2em;
+    padding-left:20px;
+  } 
+  
+  .home-container .dark{
+    background-color: rgba(5, 4, 4, 0.75);
+    color:var(--complementary-colour-white);
+  }
+  
+  .home-container .light{
+    color:var(--dominant-colour);
+  }
+  
+  .movie-title{
+    padding:20px;
+    font-weight: bold;
+  }
+  
+  .home-container .swiper {
+    height: 70vh;
+  }
+  
+  .home-container .swiper-slide{
+    height: 100%;
+  }
+  
+  .home-container .movie{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+  }
+  
+  .home-container .movie img{
+    height: 80%;
+    width:95%;
+  }
+}
