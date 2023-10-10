@@ -9,7 +9,9 @@ This is a web application designed to maintain a database of movie information, 
 2. Open another terminal and navigate to the client folder and run npm start 
 
 ## Features still being refactored
+* Search bar for mobile phones
 * Follow/unfollow feature
+* Movie filter
 * Recommended movies feature
 * Movie review feature
 * User notification feature
