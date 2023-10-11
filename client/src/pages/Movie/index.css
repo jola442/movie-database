@@ -26,7 +26,6 @@
 /*plot actors writers directed by */
 /* change: font-size */
 .movie-personnel{
-    font-size: 1.5em;
     display:flex;
     flex-direction: column;
     justify-content: space-evenly;
@@ -36,14 +35,12 @@
 /* movie title */
 /* change: font-size */
 .title{
-    font-size: 2.5em;
     font-family: var(--main-font);
     font-weight: bold;
 }
 
 /* change: font-size */
 .directed-wrapper{
-    font-size: 1.5em;
     color:var(--complementary-colour-white);
 }
 
@@ -69,10 +66,10 @@
 }
 
 /* slider img styles */
-.movie-container .movie img{
+/* .movie-container .movie img{
     height: 80%;
     width:95%;
-}
+} */
 
 .movie-personnel a{
     color:var(--complementary-colour-white);
@@ -168,6 +165,9 @@
     height: 100%;
   }
 
+.movie-container .movie-icon{
+    margin-left: 15px;
+}
 
 @media screen and (min-width: 320px){
     .movie-wrapper{
@@ -185,6 +185,10 @@
 
     .title{
         font-size: 2em;
+    }
+
+    .movie-personnel{
+        font-size: 1.5em;
     }
 
     .movie-container .swiper {
@@ -211,19 +215,72 @@
 
     .movie-container .movie img {
         height: 80%;
-        width: 70%;
+        width: 55%;
     }
 
-    .movie-review{
+    .movie-container .movie-reviews .movie-review{
         width: 100%;
+    }
+
+    .movie-container .movie-review-left{
+        align-self: flex-start;
+    }
+
+    .movie-container .movie-review{
+        flex-direction: column;
+        font-size: 1em;
+    }
+
+
+    .movie-container .movie-reviewer-image img{
+        height: 20vh;
+        border-radius: 200px;
+    }
+
+    .movie-review-left p{
+        font-size: 1.5em;
+        text-align: center;
+    }
+
+    .movie-review-right p{
+        font-size: 1.5em;
+    }
+
+
+
+    .movie-container .movie-reviewer-image img{
+        height: 10vh;
+        border-radius: 200px;
+    }
+}
+
+@media screen and (min-width: 520px){
+    .movie-container .movie img{
+      height: 80%;
+      width: 95%;
     }
 }
 
 @media screen and (min-width:620px){
-    .movie-container .movie img {
+    /* .movie-container .movie img {
         height: 80%;
         width: 95%;
+    } */
+
+    .movie-container .movie-reviews .movie-review{
+        display: flex;
+        flex-direction: row;
+        background-color: var(--complementary-colour-white);
+        width: 75vw;
+        padding:20px;
+        align-items: center;
+        gap:2em;
+        box-shadow:0 2px 5px 0 var(--dominant-colour);
     }
+
+    /* .movie-container .movie-review-left{
+        align-self: center;
+    } */
 
     
 }
@@ -277,6 +334,10 @@
         width: 95%;
     }
 
+    .movie-container .movie-reviews .movie-review{
+        width: 75vw;
+    }
+
 }
 
 
@@ -326,19 +387,13 @@
         font-size: 1.5em;
     }
 
-    
-    .actor-image{
-        width: 100%;
-        height: 70%;
-       /* border-radius: 200px; */
-       border-radius: 20px;
-    }
-    
     .movie-reviews{
         padding: 20px;
     }
-    .movie-review{
+
+    .movie-container .movie-reviews .movie-review{
         display: flex;
+        flex-direction: row;
         background-color: var(--complementary-colour-white);
         width: 50vw;
         padding:20px;
@@ -346,13 +401,15 @@
         gap:2em;
         box-shadow:0 2px 5px 0 var(--dominant-colour);
     }
-    
-    .movie-review-left{
+
+
+    .movie-container .movie-review .movie-review-left{
         display: flex;
         flex-direction: column;
         justify-content: center;
         gap:0.5em;
         width:max-content;
+        align-self: center;
     }
     
     .movie-review-left p{
@@ -360,7 +417,7 @@
         text-align: center;
     }
     
-    .movie-reviewer-image img{
+    .movie-container .movie-reviewer-image img{
         height: 20vh;
         border-radius: 200px;
     }

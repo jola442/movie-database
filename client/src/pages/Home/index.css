@@ -50,10 +50,22 @@
   height: 100%;
 }
 
-.home-container .movie img{
-  height: 80%;
-  width:95%;
+
+
+@media screen and (min-width: 320px){
+  .home-container .movie img{
+    height: 80%;
+    width:55%;
+  }
 }
+
+@media screen and (min-width: 520px){
+  .home-container .movie img{
+    height: 80%;
+    width: 95%;
+  }
+}
+
 
 @media screen and (min-width: 1280px){
   .welcome-wrapper{
@@ -105,9 +117,9 @@
     align-items: center;
     height: 100%;
   }
-  
+/*   
   .home-container .movie img{
     height: 80%;
     width:95%;
-  }
+  } */
 }

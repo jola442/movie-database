@@ -43,34 +43,31 @@ export default function Home(){
             </div>
             <p className="label">Featured Movies</p>
             <div className="movies-slider light">
-                <Swiper 
+            <Swiper 
                 // install Swiper modules
                 modules={[Navigation, Pagination, Scrollbar, A11y]}
-                // spaceBetween={20}
-                // slidesPerView={5}
-                // autoHeight={true} // Allow Swiper to determine its height based on content
                 breakpoints={{
-                    // when window width >= 768px
+                    // when window width >= 320px
                     320: {
                         slidesPerView: 1,
                         spaceBetweenSlides: 10
                     },
-
+                    //when window width >= 520px
                     520: {
                         slidesPerView: 2,
                         spaceBetweenSlides: 10
                     },
-                    // when window width >= 768px
+                    // when window width >= 700px
                     700: {
                         slidesPerView: 3,
                         spaceBetweenSlides: 10
                     },
-                    // when window width >= 768px
+                    // when window width >= 1080px
                     1080: {
                         slidesPerView: 4,
                         spaceBetweenSlides: 10
                     },
-                    // when window width is <= 1268px
+                    // when window width is >= 1268px
                     1268: {
                         slidesPerView: 5,
                         spaceBetweenSlides: 10
@@ -95,34 +92,31 @@ export default function Home(){
 
             <p className="label dark">Fan Favourites</p>
             <div className="movies-slider dark">
-                <Swiper 
+            <Swiper 
                 // install Swiper modules
                 modules={[Navigation, Pagination, Scrollbar, A11y]}
-                // spaceBetween={20}
-                // slidesPerView={5}
-                // autoHeight={true} // Allow Swiper to determine its height based on content
                 breakpoints={{
-                    // when window width >= 768px
+                    // when window width >= 320px
                     320: {
                         slidesPerView: 1,
                         spaceBetweenSlides: 10
                     },
-
-                    600: {
+                    //when window width >= 520px
+                    520: {
                         slidesPerView: 2,
                         spaceBetweenSlides: 10
                     },
-                    // when window width >= 768px
-                    900: {
+                    // when window width >= 700px
+                    700: {
                         slidesPerView: 3,
                         spaceBetweenSlides: 10
                     },
-                    // when window width >= 768px
+                    // when window width >= 1080px
                     1080: {
                         slidesPerView: 4,
                         spaceBetweenSlides: 10
                     },
-                    // when window width is <= 1268px
+                    // when window width is >= 1268px
                     1268: {
                         slidesPerView: 5,
                         spaceBetweenSlides: 10
@@ -150,31 +144,28 @@ export default function Home(){
             <Swiper 
                 // install Swiper modules
                 modules={[Navigation, Pagination, Scrollbar, A11y]}
-                // spaceBetween={20}
-                // slidesPerView={5}
-                // autoHeight={true} // Allow Swiper to determine its height based on content
                 breakpoints={{
-                    // when window width >= 768px
+                    // when window width >= 320px
                     320: {
                         slidesPerView: 1,
                         spaceBetweenSlides: 10
                     },
-
-                    600: {
+                    //when window width >= 520px
+                    520: {
                         slidesPerView: 2,
                         spaceBetweenSlides: 10
                     },
-                    // when window width >= 768px
-                    900: {
+                    // when window width >= 700px
+                    700: {
                         slidesPerView: 3,
                         spaceBetweenSlides: 10
                     },
-                    // when window width >= 768px
+                    // when window width >= 1080px
                     1080: {
                         slidesPerView: 4,
                         spaceBetweenSlides: 10
                     },
-                    // when window width is <= 1268px
+                    // when window width is >= 1268px
                     1268: {
                         slidesPerView: 5,
                         spaceBetweenSlides: 10
