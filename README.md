@@ -1,3 +1,6 @@
+## Live Demo
+[Click here for a live demo](https://jaymovies.up.railway.app)
+
 ## Note
 This is an updated version of movie-database-without-db that is being scaled and refactored to use React.js and MongoDB. 
 
